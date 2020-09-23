@@ -1,22 +1,4 @@
----
-tags: [Import-3f7a]
-title: NGS analysis for gene regulation and epigenomics
-created: '2020-08-19T16:54:29.570Z'
-modified: '2020-08-27T20:32:01.055Z'
-output:
-    distill::distill_article:
-        code_folding: show
-        df_print: tibble
-        toc: true
-        toc_float: true
----
-
 # NGS analysis for gene regulation and epigenomics
-
-```{sh, eval = FALSE}
-To compile this README into a HTML report, run: 
-Rscript -e "rmarkdown::render('./README.md')"
-```
 
 ## Dates
 11-15 January 2021
@@ -30,7 +12,7 @@ This course will be held online in response to the coronavirus outbreak.
 ## OVERVIEW
 
 This course will introduce biologists and bioinformaticians to the field of 
-regulatory genomics.We will cover a broad range of software and analysis 
+regulatory genomics. We will cover a broad range of software and analysis 
 workflows that extend over the spectrum from the best practices in the 
 quantitative analysis of ChIP-seq and ATAC-seq data to the analysis of the 
 chromatin 3D structure (such as A/B compartments, chromatin loops or TADs). 
@@ -44,9 +26,8 @@ Each day will include an brief introductory lecture of key concepts.
 The remainder of each day will consist in practical hands on sessions. 
 These sessions will involve a combination of both mirroring exercises with 
 the instructor to demonstrate a skill as well as applying these skills on 
-your own to complete individual exercises. 
-After and during each exercise, interpretation of results will be discussed 
-as a group.
+your own to complete individual exercises. After and during each exercise,
+interpretation of results will be discussed as a group.
 
 ## TARGETED AUDIENCE & ASSUMED BACKGROUND
 
@@ -61,7 +42,7 @@ Attendees should have a background in biology as well as be familiar with
 genomic data and common file formats from NGS sequencing experiments 
 (fastq, BAM, BED).
 
-Practical exercises will use command-line Linux, Python and R code. We will 
+Practical exercises will use the UNIX command line, Python and R code. We will 
 use Snakemake to ensure reproducible coding, and jupyter-notebook to generate 
 clear interactive reports. 
 
@@ -91,14 +72,14 @@ to extract information from genomic datasets such as Hi-C, ATAC-seq or ChIP-seq.
 
 ## PREREQUISITES: 
 
-* Unix command line: before the course, please go over the following tuto: ...
-* Python
-* R/Bioconductor
-* Snakemake
-* Jupyter
+Participants should have some familiarity with the following languages and frameworks. We encourage them to go over the links and tutorials linked below before the tutorial:
 
-
-[[TO COMPLETE]]
+* Unix command line: https://ubuntu.com/tutorials/command-line-for-beginners
+* Python: https://docs.python.org/3/tutorial/
+* R: https://www.r-tutor.com/r-introduction
+* Bioconductor: https://bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesIntroduction.html
+* Snakemake: https://snakemake.readthedocs.io/
+* Jupyter: https://jupyter.org/
 
 --- 
 
@@ -125,7 +106,7 @@ to extract information from genomic datasets such as Hi-C, ATAC-seq or ChIP-seq.
 * Common analysis on Hi-C contact maps and their biological interpretation
 
 #### Lab2
-* Compute interpretable metrics on the Hi-C contact maps from last lesson
+* Compute interpretable metrics on the Hi-C contact maps from previous lesson
 * Use existing methods for signal detection in Hi-C data.
 * Compare the signals across samples
 * Visualization techniques for Hi-C derived signals in jupyter notebook
