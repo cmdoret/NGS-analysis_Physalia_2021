@@ -15,7 +15,7 @@ output:
 
 ```{sh, eval = FALSE}
 To compile this README into a HTML report, run: 
-Rscript -e "rmarkdown::render('./README.md', 'distill::distill_article')"
+Rscript -e "rmarkdown::render('./README.md')"
 ```
 
 ## Dates
@@ -63,7 +63,7 @@ genomic data and common file formats from NGS sequencing experiments
 
 Practical exercises will use command-line Linux, Python and R code. We will 
 use Snakemake to ensure reproducible coding, and jupyter-notebook to generate 
-clear interactive reports.
+clear interactive reports. 
 
 We will start by introducing general concepts of chromatin biology. 
 From there, we will then continue to describe all major analysis steps 
@@ -86,7 +86,19 @@ to extract information from genomic datasets such as Hi-C, ATAC-seq or ChIP-seq.
 
 * We will use data from yeast and mouse genomes for Hi-C analyses
 * We'll use mouse and *C. elegans* data for the ATAC and ChIP-seq analyses.
-* We encourage the participants to bring, analyze (if possible) and discuss their own data
+* We encourage the participants to bring, analyze (if possible) and discuss 
+  their own data
+
+## PREREQUISITES: 
+
+* Unix command line: before the course, please go over the following tuto: ...
+* Python
+* R/Bioconductor
+* Snakemake
+* Jupyter
+
+
+[[TO COMPLETE]]
 
 --- 
 
@@ -157,6 +169,7 @@ to extract information from genomic datasets such as Hi-C, ATAC-seq or ChIP-seq.
   ChIP-seq
 
 #### Lab 5
+* Crossing results from ATAC-seq with chromHMM
 * Integration of ChIP-seq data and RNA-seq data
 * Analysis with external databases: 
   GO analysis, protein functional interactions, ...
