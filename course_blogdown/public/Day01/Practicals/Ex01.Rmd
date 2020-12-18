@@ -1,0 +1,18 @@
+---
+title: "Exercise 01: Processing NGS data"
+output:
+    html_document:
+        keep_md: yes
+---
+
+## Test 1
+
+```{r}
+print('hello')
+```
+
+## Test 2
+
+```{r}
+sessionInfo()
+```

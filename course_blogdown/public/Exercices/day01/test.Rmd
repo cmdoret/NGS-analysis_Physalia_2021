@@ -1,0 +1,43 @@
+---
+title: "Processing NGS data"
+output: 
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+This is a test. Let's see if it works. 
+
+## Printing 
+```{r}
+print('hello')
+```
+
+## Loading data 
+
+```{r echo = FALSE, include = FALSE}
+data(mtcars)
+library(tidyverse)
+```
+
+```{r}
+mtcars %>% knitr::kable()
+```
+
+## Plotting 
+
+```{r}
+ggplot(mtcars, aes(x = mpg, y = cyl)) +
+    geom_point() + 
+    theme_bw()
+```
+
+## Session info
+```{r}
+sessionInfo()
+```

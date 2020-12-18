@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Practicals on NGS analysis for gene regulation and epigenomics</title>
+    <link>/day01/practicals/</link>
+    <description>Recent content in Practicals on NGS analysis for gene regulation and epigenomics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/day01/practicals/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>/day01/practicals/ex01/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/day01/practicals/ex01/</guid>
+      <description>Exercise 01: Processing NGS data        code{white-space: pre-wrap;} span.smallcaps{font-variant: small-caps;} span.underline{text-decoration: underline;} div.column{display: inline-block; vertical-align: top; width: 50%;} div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;} ul.task-list{list-style: none;}  code{white-space: pre;} pre:not([class]) { background-color: white; }  if (window.hljs) { hljs.configure({languages: []}); hljs.initHighlightingOnLoad(); if (document.readyState &amp;&amp; document.readyState === &#34;complete&#34;) { window.setTimeout(function() { hljs.initHighlighting(); }, 0); } }  h1 { font-size: 34px; } h1.title { font-size: 38px; } h2 { font-size: 30px; } h3 { font-size: 24px; } h4 { font-size: 18px; } h5 { font-size: 16px; } h6 { font-size: 12px; } .</description>
+    </item>
+    
+    <item>
+      <title>Exercise 01: Processing NGS data</title>
+      <link>/day01/practicals/ex01/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/day01/practicals/ex01/</guid>
+      <description>Test 1 print(&#39;hello&#39;)  ## [1] &amp;quot;hello&amp;quot;  Test 2 sessionInfo()  ## R version 4.0.3 (2020-10-10) ## Platform: x86_64-apple-darwin13.4.0 (64-bit) ## Running under: macOS High Sierra 10.13.6 ## ## Matrix products: default ## BLAS/LAPACK: /Users/jacquesserizay/miniconda3/envs/physalia/lib/libopenblasp-r0.3.12.dylib ## ## locale: ## [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8 ## ## attached base packages: ## [1] stats graphics grDevices utils datasets methods base ## ## loaded via a namespace (and not attached): ## [1] compiler_4.0.3 magrittr_2.0.1 tools_4.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,23 @@
+baseURL = "/"
+languageCode = "en-US"
+defaultContentLanguage = "en"
+
+title = "NGS analysis for gene regulation and epigenomics"
+theme = "hugo-theme-learn"
+metaDataFormat = "yaml"
+defaultContentLanguageInSubdir= true
+
+[params]
+  description = "NGS analysis for gene regulation and epigenomics"
+  author = "Jacques Serizay"
+  showVisitedLinks = false
+  disableNextPrev = true
+  disableLandingPageButton = true
+  disableMermaid = false
+  customMermaidURL = "https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"
+  titleSeparator = "::"
+  themeVariant = "red"
+  ordersectionsby = "title"
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
