@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/day01/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/01_presentation/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/02_program/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/03_contacts/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/04_connect_to_aws/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/05_rstudio-and-jupyternotebooks/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
