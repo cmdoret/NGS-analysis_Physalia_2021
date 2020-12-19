@@ -1,13 +1,14 @@
 ---
 title: "1. Day 01"
+day: "Day 01"
 ---
 
-## Presentations for Day 01
+## Presentations for {{< param "day" >}}
 
-- Processing NGS data: <a href="/Presentations/processing_NGS_data.html" target="_blank">open HTML slides</a>
-- Why epigenomics matters...: <a href="/Presentations/epigenomics_matters.pdf" target="_blank">open PDF slides</a>
+- Processing NGS data: [HTML](/{{<myPackageUrl>}}Presentations/processing_NGS_data.html)
+- Why epigenomics matters...: [PDF](/{{<myPackageUrl>}}Presentations/epigenomics_matters.pdf)
 
-## Exercises for Day 01
+## Exercises for {{< param "day" >}}
 
-- Ex. 01: <a href="/Exercices/day01/test.html" target="_blank">open Rmd notebook</a>
-- Ex. 02: <a href="/Exercices/day01/ex.ipynb" target="_blank">open Jupyter notebook</a>
+- Ex. 01: [Rmd](/{{<myPackageUrl>}}Exercices/day01/ex01.html)
+- Ex. 02: [Jupyter](/{{<myPackageUrl>}}Exercices/day01/ex02.html)

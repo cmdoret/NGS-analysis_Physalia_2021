@@ -1,8 +1,9 @@
 ---
 title: "3. Day 03"
+day: "Day 03"
 ---
 
-## Presentations for Day 03
+## Presentations for {{< param "day" >}}
 
-## Exercises for Day 03
+## Exercises for {{< param "day" >}}
 

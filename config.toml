@@ -10,6 +10,7 @@ defaultContentLanguageInSubdir= true
 
 [params]
   editURL = "https://github.com/js2264/NGS-analysis_Physalia_2021/blob/master/content/"
+  packageBaseUrl = "NGS-analysis_Physalia_2021/"
   description = "NGS analysis for gene regulation and epigenomics"
   author = "Jacques Serizay"
   showVisitedLinks = true
@@ -22,3 +23,5 @@ defaultContentLanguageInSubdir= true
   themeVariant = "red"
   ordersectionsby = "title"
 
+[blackfriday]
+  hrefTargetBlank = true
