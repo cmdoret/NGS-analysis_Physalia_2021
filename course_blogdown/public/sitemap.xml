@@ -31,6 +31,10 @@
   </url>
   
   <url>
+    <loc>/introduction/05_rstudio-and-jupyternotebooks/</loc>
+  </url>
+  
+  <url>
     <loc>/categories/</loc>
     <priority>0</priority>
   </url>

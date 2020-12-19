@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/images/favicon.png" type="image/png">
 
-    <title> :: NGS analysis for gene regulation and epigenomics</title>
+    <title>5. Rstudio and Jupyter Notebooks :: NGS analysis for gene regulation and epigenomics</title>
 
     
     <link href="/css/nucleus.css?1608377029" rel="stylesheet">
@@ -36,7 +36,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/">
+  <body class="" data-url="/introduction/05_rstudio-and-jupyternotebooks/">
     <nav id="sidebar" class="">
 
 
@@ -86,7 +86,7 @@
   
     
     <li data-nav-id="/introduction/" title="0. Introduction" class="dd-item
-        
+        parent
         
         
         ">
@@ -196,7 +196,7 @@
  
   
     
-      <li data-nav-id="/introduction/05_rstudio-and-jupyternotebooks/" title="5. Rstudio and Jupyter Notebooks" class="dd-item ">
+      <li data-nav-id="/introduction/05_rstudio-and-jupyternotebooks/" title="5. Rstudio and Jupyter Notebooks" class="dd-item active">
         <a href="/introduction/05_rstudio-and-jupyternotebooks/">
         5. Rstudio and Jupyter Notebooks
         
@@ -264,29 +264,124 @@
         <div id="overlay"></div>
         <div class="padding highlightable">
               
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'></a> > <a href='/introduction/'>0. Introduction</a> > 5. Rstudio and Jupyter Notebooks
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#jupyter-notebooks">Jupyter Notebooks</a></li>
+<li><a href="#rstudio">RStudio</a></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
         <div id="head-tags">
         
         </div>
         
         <div id="body-inner">
           
+            <h1>
+              
+              5. Rstudio and Jupyter Notebooks
+            </h1>
+          
 
         
 
-<span id="sidebar-toggle-span">
-<a href="#" id="sidebar-toggle" data-sidebar-toggle=""><i class="fas fa-bars"></i> navigation</a>
-</span>
-
- 
 
 
-<h1 id="ngs-analysis-for-gene-regulation-and-epigenomics">NGS analysis for gene regulation and epigenomics</h1>
 
-<p>This repo contains the instructions related to the 2021 Physalia course entitled &ldquo;NGS analysis for gene regulation and epigenomics&rdquo;.</p>
+<p>Rstudio and Jupyter Notebooks offer graphical interfaces
+to facilitate the interaction between a user and an underlying
+programming language (this is sometimes called IDE, or
+integrated development environment). They can be very useful when a user is
+not necessarily proficent with command line-based computing. However, such graphical interfaces are not
+always able to connect to services such as AWS.</p>
 
-<p>Go <a href="/introduction/04_connect_to_aws/#connect-to-pre-configured-aws-machine">here</a> to see how to connect to the AWS machine.</p>
+<p>Since most of the preliminary analysis we do is on AWS,
+we&rsquo;d like to be able to use Jupyter Notebooks directly on AWS. Here is how we can do!</p>
+
+<h2 id="jupyter-notebooks">Jupyter Notebooks</h2>
+
+<ol>
+<li>Launch Jupyter Notebooks on AWS:</li>
+</ol>
+
+<pre><code class="language-sh">USER=ec2-user
+IP=15.236.92.139
+KEY=~/.ssh/aws.pem
+ssh -i ${KEY} ${USER}@${IP} 'jupyter notebook --no-browser --port=8888'
+</code></pre>
+
+<ol>
+<li>Tunnel the port from your local machine</li>
+</ol>
+
+<pre><code class="language-sh">ssh -i ${KEY} -L 8000:localhost:8888 ${USER}@${IP}
+</code></pre>
+
+<ol>
+<li>Enjoy!</li>
+</ol>
+
+<h2 id="rstudio">RStudio</h2>
+
+<p>Simply go to the following address:</p>
+
+<pre><code class="language-sh">&quot;http://ec2-${IP}.eu-west-3.compute.amazonaws.com:8787&quot;
+</code></pre>
+
+
+<footer class="footline">
 	
-  
+</footer>
+
         
         </div>
         
@@ -318,8 +413,6 @@
             
                 
                     
-                        
-                        
                     
                 
                 
@@ -333,6 +426,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -398,6 +494,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -416,6 +513,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 

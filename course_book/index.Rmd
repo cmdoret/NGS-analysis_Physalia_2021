@@ -1,5 +1,0 @@
----
-title: NGS analysis for gene regulation and epigenomics
-created: "`r Sys.Date()`"
----
-

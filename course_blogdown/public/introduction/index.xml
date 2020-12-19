@@ -53,5 +53,15 @@ AWS .pem file: file</description>
       <description>Connect to pre-configured AWS machine IP= # e.g. IP=255.255.255.255 USER= #e.g. user=ubuntu # key=&amp;quot;https://drive.google.com/u/0/uc?id=1a8cn_w7V1Z47qdZTG-bLJb4CWBYgHYw7&amp;amp;export=download&amp;quot; wget ${key} -O key.pem &amp;amp;&amp;amp; chmod 600 key.pem ssh -i key.pem ${USER}@${IP}  FOR INFORMATION: Setting up the AWS machine Install and set up Conda # Install Conda wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh bash Miniconda3-latest-Linux-x86_64.sh conda config --add channels conda-forge conda config --add channels bioconda # Create conda env. with python 3.8 and R 4.0.3 conda create -n physalia python=3.</description>
     </item>
     
+    <item>
+      <title>5. Rstudio and Jupyter Notebooks</title>
+      <link>/introduction/05_rstudio-and-jupyternotebooks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/introduction/05_rstudio-and-jupyternotebooks/</guid>
+      <description>Rstudio and Jupyter Notebooks offer graphical interfaces to facilitate the interaction between a user and an underlying programming language (this is sometimes called IDE, or integrated development environment). They can be very useful when a user is not necessarily proficent with command line-based computing. However, such graphical interfaces are not always able to connect to services such as AWS.
+Since most of the preliminary analysis we do is on AWS, we&amp;rsquo;d like to be able to use Jupyter Notebooks directly on AWS.</description>
+    </item>
+    
   </channel>
 </rss>
