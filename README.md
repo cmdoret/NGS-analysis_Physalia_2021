@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ---
 title: NGS analysis for gene regulation and epigenomics
 created: '2020-08-19T16:54:29.570Z'
@@ -23,8 +22,6 @@ blogdown::build_dir('static/')
 blogdown::build_site()
 blogdown::hugo_server(host="127.0.0.1", port = 4321)
 ```
-=======
->>>>>>> 315f29ed3ae8cc772ba66304a97d5cafa1a126b9
 
 ## Populating the book 
 
