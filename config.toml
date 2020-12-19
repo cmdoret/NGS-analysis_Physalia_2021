@@ -1,7 +1,7 @@
 baseURL = "https://js2264.github.io/NGS-analysis_Physalia_2021/"
+publishDir = "docs"
 languageCode = "en-US"
 defaultContentLanguage = "en"
-publishDir = "docs"
 
 title = "NGS analysis for gene regulation and epigenomics"
 theme = "hugo-theme-learn"
@@ -9,9 +9,11 @@ metaDataFormat = "yaml"
 defaultContentLanguageInSubdir= true
 
 [params]
+  editURL = "https://github.com/js2264/NGS-analysis_Physalia_2021/blob/master/content/"
   description = "NGS analysis for gene regulation and epigenomics"
   author = "Jacques Serizay"
-  showVisitedLinks = false
+  showVisitedLinks = true
+  disableBreadcrumb = false
   disableNextPrev = true
   disableLandingPageButton = true
   disableMermaid = false
@@ -20,5 +22,3 @@ defaultContentLanguageInSubdir= true
   themeVariant = "red"
   ordersectionsby = "title"
 
-[outputs]
-home = [ "HTML", "RSS", "JSON"]

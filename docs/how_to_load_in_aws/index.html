@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/NGS-analysis_Physalia_2021/images/favicon.png" type="image/png">
 
-    <title>1. Day 01 :: NGS analysis for gene regulation and epigenomics</title>
+    <title>How to log in to AWS :: NGS analysis for gene regulation and epigenomics</title>
 
     
     <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1608416072" rel="stylesheet">
@@ -36,7 +36,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/NGS-analysis_Physalia_2021/day01/">
+  <body class="" data-url="/NGS-analysis_Physalia_2021/how_to_load_in_aws/">
     <nav id="sidebar" class="showVisitedLinks">
 
 
@@ -206,8 +206,8 @@
   
     
     <li data-nav-id="/NGS-analysis_Physalia_2021/day01/" title="1. Day 01" class="dd-item
-        parent
-        active
+        
+        
         
         ">
       <a href="/NGS-analysis_Physalia_2021/day01/">
@@ -362,8 +362,8 @@
   
     
     <li data-nav-id="/NGS-analysis_Physalia_2021/how_to_load_in_aws/" title="How to log in to AWS" class="dd-item
-        
-        
+        parent
+        active
         
         ">
       <a href="/NGS-analysis_Physalia_2021/how_to_load_in_aws/">
@@ -425,7 +425,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/js2264/NGS-analysis_Physalia_2021/blob/master/content/Day01/_index.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/js2264/NGS-analysis_Physalia_2021/blob/master/content/How_to_load_in_AWS/_index.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -452,7 +452,7 @@
             
           
           
-            <a href='/NGS-analysis_Physalia_2021/'></a> > 1. Day 01
+            <a href='/NGS-analysis_Physalia_2021/'></a> > How to log in to AWS
           
         
           
@@ -467,8 +467,15 @@
 <ul>
 <li>
 <ul>
-<li><a href="#presentations-for-day-01">Presentations for Day 01</a></li>
-<li><a href="#exercises-for-day-01">Exercises for Day 01</a></li>
+<li><a href="#connect-to-pre-configured-aws-machine">Connect to pre-configured AWS machine</a></li>
+<li><a href="#for-information-setting-up-the-aws-machine">FOR INFORMATION: Setting up the AWS machine</a>
+<ul>
+<li><a href="#install-and-set-up-conda">Install and set up Conda</a></li>
+</ul></li>
+<li><a href="#install-filezilla">Install FileZilla</a>
+<ul>
+<li><a href="#install-r-packages">Install R packages</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -487,7 +494,7 @@
           
             <h1>
               
-              1. Day 01
+              How to log in to AWS
             </h1>
           
 
@@ -497,19 +504,42 @@
 
 	
 
-<h2 id="presentations-for-day-01">Presentations for Day 01</h2>
+<h2 id="connect-to-pre-configured-aws-machine">Connect to pre-configured AWS machine</h2>
 
-<ul>
-<li>Processing NGS data: <a href="/Presentations/processing_NGS_data.html" target="_blank">open HTML slides</a></li>
-<li>Why epigenomics matters&hellip;: <a href="/Presentations/epigenomics_matters.pdf" target="_blank">open PDF slides</a></li>
-</ul>
+<pre><code class="language-sh">KEY=&quot;https://drive.google.com/u/0/uc?id=1a8cn_w7V1Z47qdZTG-bLJb4CWBYgHYw7&amp;export=download&quot;
+wget ${KEY} -O key.pem &amp;&amp; chmod 600 key.pem
+#
+IP= # e.g. IP=255.255.255.255
+USER= #e.g. user=ubuntu
+#
+ssh -i key.pem ${USER}@${IP}
+</code></pre>
 
-<h2 id="exercises-for-day-01">Exercises for Day 01</h2>
+<h2 id="for-information-setting-up-the-aws-machine">FOR INFORMATION: Setting up the AWS machine</h2>
 
-<ul>
-<li>Ex. 01: <a href="/Exercices/day01/test.html" target="_blank">open Rmd notebook</a></li>
-<li>Ex. 02: <a href="/Exercices/day01/ex.ipynb" target="_blank">open Jupyter notebook</a></li>
-</ul>
+<h3 id="install-and-set-up-conda">Install and set up Conda</h3>
+
+<pre><code class="language-sh"># Install Conda
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+conda config --add channels conda-forge
+conda config --add channels bioconda
+# Create conda env. with python 3.8 and R 4.0.3
+conda create -n physalia python=3.8 conda-forge::r-base=4.0.3 r-essentials=4.0 -y
+# Activate env.
+conda activate physalia
+</code></pre>
+
+<h2 id="install-filezilla">Install FileZilla</h2>
+
+<pre><code class="language-sh">sudo apt-get update
+sudo apt-get install filezilla -y
+</code></pre>
+
+<h3 id="install-r-packages">Install R packages</h3>
+
+<pre><code class="language-sh">Rscript -e 'install.packages(&quot;devtools&quot;, repos = &quot;https://cloud.r-project.org&quot;)'
+</code></pre>
 
 
 
@@ -633,26 +663,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -732,6 +742,23 @@
             
             
                 
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                     
                 
                 

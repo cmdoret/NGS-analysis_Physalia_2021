@@ -1,5 +1,5 @@
 ---
-title: "5. Rstudio and Jupyter Notebooks"
+title: "4. Rstudio and Jupyter Notebooks"
 ---
 
 Rstudio and Jupyter Notebooks offer graphical interfaces 
@@ -17,8 +17,8 @@ we'd like to be able to use Jupyter Notebooks directly on AWS. Here is how we ca
 1. Launch Jupyter Notebooks on AWS: 
 
 ```sh
-USER=ec2-user
-IP=15.236.92.139
+IP= # e.g. IP=255.255.255.255
+USER= #e.g. user=ubuntu
 KEY=~/.ssh/aws.pem
 ssh -i ${KEY} ${USER}@${IP} 'jupyter notebook --no-browser --port=8888'
 ```

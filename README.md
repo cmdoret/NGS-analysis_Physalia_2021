@@ -21,10 +21,10 @@ To build the website, run:
 To serve the course book locally, one needs to: 
 
 ```r
-blogdown::build_dir('content/')
-blogdown::build_dir('static/')
-blogdown::build_site()
-blogdown::hugo_server(host="127.0.0.1", port = 4321)
+Rscript -e "blogdown::build_dir('content/')"
+Rscript -e "blogdown::build_dir('static/')"
+Rscript -e "blogdown::build_site()"
+Rscript -e "blogdown::hugo_server(host='127.0.0.1', port = 4321)"
 ```
 
 ## For information only: Populating the book 

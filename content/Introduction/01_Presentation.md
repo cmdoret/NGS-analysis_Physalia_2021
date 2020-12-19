@@ -73,7 +73,7 @@ to extract information from genomic datasets such as Hi-C, ATAC-seq or ChIP-seq.
 * We encourage the participants to bring, analyze (if possible) and discuss 
   their own data
 
-## Prerequisites: 
+## Prerequisites
 
 * Unix command line: before the course, please go over the following tuto: ...
 * Python

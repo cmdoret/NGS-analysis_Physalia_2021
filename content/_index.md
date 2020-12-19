@@ -7,5 +7,5 @@ Go [here](/introduction/04_connect_to_aws/#connect-to-pre-configured-aws-machine
 ## IP for today (2020-12-19): 
 
 ```sh
-${IP}
+IP="15.188.89.207"
 ```

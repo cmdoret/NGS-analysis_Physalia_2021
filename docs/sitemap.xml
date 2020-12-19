@@ -19,6 +19,10 @@
   </url>
   
   <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/day02/</loc>
+  </url>
+  
+  <url>
     <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/02_program/</loc>
   </url>
   
@@ -27,16 +31,32 @@
   </url>
   
   <url>
-    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/04_connect_to_aws/</loc>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/day03/</loc>
   </url>
   
   <url>
-    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/05_rstudio-and-jupyternotebooks/</loc>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/day04/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/04_rstudio-and-jupyternotebooks/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/day05/</loc>
   </url>
   
   <url>
     <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/categories/</loc>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/extra-resources/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/NGS-analysis_Physalia_2021/how_to_load_in_aws/</loc>
   </url>
   
   <url>
