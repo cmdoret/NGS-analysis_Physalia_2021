@@ -12,21 +12,21 @@
     <title>How to log in to AWS :: NGS analysis for gene regulation and epigenomics</title>
 
     
-    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1608423264" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1608423264" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1608593046" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1608593046" rel="stylesheet">
     
-    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1608423264" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1608593046" rel="stylesheet">
     
     
 
-    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1608423264"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1608593046"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -45,9 +45,7 @@
     <div id="header">
       <a id="logo">
 
-<svg id="grav-logo" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-	width="100%" height="100%"  viewBox="0 0 285.1 69.9" xml:space="preserve">
-</svg>
+
 
 </a>
 
@@ -164,6 +162,27 @@
       <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/04_rstudio-and-jupyternotebooks/" title="4. Rstudio and Jupyter Notebooks" class="dd-item ">
         <a href="/NGS-analysis_Physalia_2021/introduction/04_rstudio-and-jupyternotebooks/">
         4. Rstudio and Jupyter Notebooks
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/05_prerequisites/" title="5. Prerequisites and required local config" class="dd-item ">
+        <a href="/NGS-analysis_Physalia_2021/introduction/05_prerequisites/">
+        5. Prerequisites and required local config
         <i class="fas fa-check read-icon"></i>
         </a>
     </li>
@@ -450,16 +469,6 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#connect-to-pre-configured-aws-machine">Connect to pre-configured AWS machine</a></li>
-    <li><a href="#for-information-setting-up-the-aws-machine">FOR INFORMATION: Setting up the AWS machine</a>
-      <ul>
-        <li><a href="#install-and-set-up-conda">Install and set up Conda</a></li>
-      </ul>
-    </li>
-    <li><a href="#install-filezilla">Install FileZilla</a>
-      <ul>
-        <li><a href="#install-r-packages">Install R packages</a></li>
-      </ul>
-    </li>
   </ul>
 </nav>
     </div>
@@ -493,22 +502,6 @@ IP<span style="color:#f92672">=</span> <span style="color:#75715e"># e.g. IP=255
 USER<span style="color:#f92672">=</span> <span style="color:#75715e">#e.g. user=ubuntu</span>
 <span style="color:#75715e">#</span>
 ssh -i key.pem <span style="color:#e6db74">${</span>USER<span style="color:#e6db74">}</span>@<span style="color:#e6db74">${</span>IP<span style="color:#e6db74">}</span>
-</code></pre></div><h2 id="for-information-setting-up-the-aws-machine">FOR INFORMATION: Setting up the AWS machine</h2>
-<h3 id="install-and-set-up-conda">Install and set up Conda</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># Install Conda</span>
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-conda config --add channels conda-forge
-conda config --add channels bioconda
-<span style="color:#75715e"># Create conda env. with python 3.8 and R 4.0.3</span>
-conda create -n physalia python<span style="color:#f92672">=</span>3.8 conda-forge::r-base<span style="color:#f92672">=</span>4.0.3 r-essentials<span style="color:#f92672">=</span>4.0 -y
-<span style="color:#75715e"># Activate env.</span>
-conda activate physalia
-</code></pre></div><h2 id="install-filezilla">Install FileZilla</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo apt-get update
-sudo apt-get install filezilla -y
-</code></pre></div><h3 id="install-r-packages">Install R packages</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Rscript -e <span style="color:#e6db74">&#39;install.packages(&#34;devtools&#34;, repos = &#34;https://cloud.r-project.org&#34;)&#39;</span>
 </code></pre></div>
 
 
@@ -559,6 +552,22 @@ sudo apt-get install filezilla -y
                     
                     
 
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
                     
                         
             
@@ -755,19 +764,19 @@ sudo apt-get install filezilla -y
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1608423264"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1608423264"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1608423264"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1608423264"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1608423264"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1608423264"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1608593046"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1608593046"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1608593046"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1608593046"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1608593046"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1608593046"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1608423264"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1608423264"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1608423264"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1608593046"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1608593046"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1608593046"></script>
     
         
-            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1608423264"></script>
+            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1608593046"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

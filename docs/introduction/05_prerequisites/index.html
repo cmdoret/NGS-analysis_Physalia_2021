@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/NGS-analysis_Physalia_2021/images/favicon.png" type="image/png">
 
-    <title>2. Program :: NGS analysis for gene regulation and epigenomics</title>
+    <title>5. Prerequisites and required local config :: NGS analysis for gene regulation and epigenomics</title>
 
     
     <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1608593046" rel="stylesheet">
@@ -36,7 +36,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/NGS-analysis_Physalia_2021/introduction/02_program/">
+  <body class="" data-url="/NGS-analysis_Physalia_2021/introduction/05_prerequisites/">
     <nav id="sidebar" class="showVisitedLinks">
 
 
@@ -117,7 +117,7 @@
  
   
     
-      <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/02_program/" title="2. Program" class="dd-item active">
+      <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/02_program/" title="2. Program" class="dd-item ">
         <a href="/NGS-analysis_Physalia_2021/introduction/02_program/">
         2. Program
         <i class="fas fa-check read-icon"></i>
@@ -180,7 +180,7 @@
  
   
     
-      <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/05_prerequisites/" title="5. Prerequisites and required local config" class="dd-item ">
+      <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/05_prerequisites/" title="5. Prerequisites and required local config" class="dd-item active">
         <a href="/NGS-analysis_Physalia_2021/introduction/05_prerequisites/">
         5. Prerequisites and required local config
         <i class="fas fa-check read-icon"></i>
@@ -428,7 +428,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/js2264/NGS-analysis_Physalia_2021/blob/master/content/Introduction/02_Program.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/js2264/NGS-analysis_Physalia_2021/blob/master/content/Introduction/05_Prerequisites.md" target="blank">
                       <i class="fas fa-code-branch"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -459,7 +459,7 @@
             
           
           
-            <a href='/NGS-analysis_Physalia_2021/'>Home</a> > <a href='/NGS-analysis_Physalia_2021/introduction/'>0. Introduction</a> > 2. Program
+            <a href='/NGS-analysis_Physalia_2021/'>Home</a> > <a href='/NGS-analysis_Physalia_2021/introduction/'>0. Introduction</a> > 5. Prerequisites and required local config
           
         
           
@@ -474,34 +474,13 @@
     <div class="wrapper">
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#day-1---introduction-to-epigenomics-and-3d-organisation-of-genomes">Day 1 - Introduction to epigenomics, and 3D organisation of genomes.</a>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#local-configuration">Local configuration</a></li>
+    <li><a href="#aws-configuration">AWS configuration</a>
       <ul>
-        <li><a href="#lecture-1">Lecture 1</a></li>
-        <li><a href="#lab-1">Lab 1</a></li>
-      </ul>
-    </li>
-    <li><a href="#tuesday-application-and-analysis-of-hi-c-data">Tuesday: Application and analysis of Hi-C data</a>
-      <ul>
-        <li><a href="#lecture-2">Lecture 2</a></li>
-        <li><a href="#lab2">Lab2</a></li>
-      </ul>
-    </li>
-    <li><a href="#wednesday-2-8-pm-berlin-time-chip-seq-analysis">Wednesday: 2-8 pm Berlin time. ChIP-seq analysis</a>
-      <ul>
-        <li><a href="#lecture-3">Lecture 3</a></li>
-        <li><a href="#lab-3">Lab 3</a></li>
-      </ul>
-    </li>
-    <li><a href="#thursday-2-8-pm-berlin-time-atac-seq">Thursday: 2-8 pm Berlin time. ATAC-seq</a>
-      <ul>
-        <li><a href="#lecture-4">Lecture 4</a></li>
-        <li><a href="#lab-4">Lab 4</a></li>
-      </ul>
-    </li>
-    <li><a href="#friday-2-8-pm-berlin-time-integration-and-visualization-of-different-genomics-data">Friday: 2-8 pm Berlin time. Integration and visualization of different genomics data</a>
-      <ul>
-        <li><a href="#lecture-5">Lecture 5</a></li>
-        <li><a href="#lab-5">Lab 5</a></li>
+        <li><a href="#install-and-set-up-conda">Install and set up Conda</a></li>
+        <li><a href="#install-singularity-and-nextflow">Install Singularity and Nextflow</a></li>
+        <li><a href="#install-r-packages">Install R packages</a></li>
       </ul>
     </li>
   </ul>
@@ -521,94 +500,43 @@
           
             <h1>
               
-              2. Program
+              5. Prerequisites and required local config
             </h1>
           
 
         
 
 
-<p>Classes are from:</p>
+<h2 id="prerequisites">Prerequisites</h2>
 <ul>
-<li>2 to 8 pm Paris time.</li>
-<li>1 to 7 pm London time.</li>
-<li>8 am to 7 pm London time.</li>
-<li>8 am to 2 pm NY time.</li>
-<li>5 am to 11 am SF time.</li>
+<li>Unix command line: before the course, please go over the following tuto: &hellip;</li>
+<li>Python</li>
+<li>R/Bioconductor</li>
+<li>Snakemake</li>
+<li>Jupyter</li>
 </ul>
-<h2 id="day-1---introduction-to-epigenomics-and-3d-organisation-of-genomes">Day 1 - Introduction to epigenomics, and 3D organisation of genomes.</h2>
-<h3 id="lecture-1">Lecture 1</h3>
+<h2 id="local-configuration">Local configuration</h2>
 <ul>
-<li>Epigenomics introduction</li>
-<li>Hi-C protocol</li>
-<li>General processing of Hi-C data</li>
+<li>Configured SSH client (already installed on Linux/Mac machines)</li>
+<li>FileZilla</li>
+<li>IGV</li>
 </ul>
-<h3 id="lab-1">Lab 1</h3>
-<ul>
-<li>Step-by-step processing of Hi-C data and integration with snakemake.</li>
-<li>Use of existing Hi-C processing pipelines and common formats.</li>
-<li>Manipulation and visualisation of sparse matrices using the cooler package</li>
-</ul>
-<hr>
-<h2 id="tuesday-application-and-analysis-of-hi-c-data">Tuesday: Application and analysis of Hi-C data</h2>
-<h3 id="lecture-2">Lecture 2</h3>
-<ul>
-<li>Applications of Hi-C data (Scaffolding, 3D QTL, regulatory genomics)</li>
-<li>Common analysis on Hi-C contact maps and their biological interpretation</li>
-</ul>
-<h3 id="lab2">Lab2</h3>
-<ul>
-<li>Compute interpretable metrics on the Hi-C contact maps from last lesson</li>
-<li>Use existing methods for signal detection in Hi-C data.</li>
-<li>Compare the signals across samples</li>
-<li>Visualization techniques for Hi-C derived signals in jupyter notebook</li>
-</ul>
-<hr>
-<h2 id="wednesday-2-8-pm-berlin-time-chip-seq-analysis">Wednesday: 2-8 pm Berlin time. ChIP-seq analysis</h2>
-<h3 id="lecture-3">Lecture 3</h3>
-<ul>
-<li>Introduction to ChIP-Seq</li>
-<li>Main uses of ChIP-Seq</li>
-<li>General processing of ChIP-seq data</li>
-<li>Introduction to Bioconductor</li>
-</ul>
-<h3 id="lab-3">Lab 3</h3>
-<ul>
-<li>Step-by-step processing of ChIP-Seq data</li>
-<li>Identification of TF-binding site or epigenomic histone modification using
-ChIP-seq peak calling</li>
-<li>Identification of motifs and motif enrichment analysis</li>
-</ul>
-<h2 id="thursday-2-8-pm-berlin-time-atac-seq">Thursday: 2-8 pm Berlin time. ATAC-seq</h2>
-<h3 id="lecture-4">Lecture 4</h3>
-<ul>
-<li>Notion of local chromatin accessibility</li>
-<li>Assays to measure chromatin accessibility: a long story of nucleases</li>
-<li>Why peak callers should be carefully chosen</li>
-</ul>
-<h3 id="lab-4">Lab 4</h3>
-<ul>
-<li>Identification of ATAC-seq peaks on multiple samples using YAPC</li>
-<li>Differential binding analysis and clustering of ATAC-seq peaks</li>
-<li>Study of chromatin accessibility at promoters with V-plots</li>
-</ul>
-<hr>
-<h2 id="friday-2-8-pm-berlin-time-integration-and-visualization-of-different-genomics-data">Friday: 2-8 pm Berlin time. Integration and visualization of different genomics data</h2>
-<h3 id="lecture-5">Lecture 5</h3>
-<ul>
-<li>Types of questions: Classification, description, differential analysis</li>
-<li>Regulatory states from histone marks</li>
-<li>Identification of transcription factor target genes using RNA-seq and
-ChIP-seq</li>
-</ul>
-<h3 id="lab-5">Lab 5</h3>
-<ul>
-<li>Crossing results from ATAC-seq with chromHMM</li>
-<li>Integration of ChIP-seq data and RNA-seq data</li>
-<li>Analysis with external databases:
-GO analysis, protein functional interactions, &hellip;</li>
-</ul>
-
+<h2 id="aws-configuration">AWS configuration</h2>
+<h3 id="install-and-set-up-conda">Install and set up Conda</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># Install Conda</span>
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+conda config --add channels conda-forge
+conda config --add channels bioconda
+<span style="color:#75715e"># Create conda env. with python 3.8 and R 4.0.3</span>
+conda create -n physalia python<span style="color:#f92672">=</span>3.8 conda-forge::r-base<span style="color:#f92672">=</span>4.0.3 r-essentials<span style="color:#f92672">=</span>4.0 -y
+<span style="color:#75715e"># Activate env.</span>
+conda activate physalia
+</code></pre></div><h3 id="install-singularity-and-nextflow">Install Singularity and Nextflow</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">
+</code></pre></div><h3 id="install-r-packages">Install R packages</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Rscript -e <span style="color:#e6db74">&#39;install.packages(&#34;devtools&#34;, repos = &#34;https://cloud.r-project.org&#34;)&#39;</span>
+</code></pre></div>
 
 <footer class="footline">
 	
@@ -678,26 +606,6 @@ GO analysis, protein functional interactions, &hellip;</li>
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
                 
                 
 
@@ -741,6 +649,23 @@ GO analysis, protein functional interactions, &hellip;</li>
             
         
                     
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -748,6 +673,9 @@ GO analysis, protein functional interactions, &hellip;</li>
             
             
                 
+                    
+                        
+                        
                     
                 
                 
