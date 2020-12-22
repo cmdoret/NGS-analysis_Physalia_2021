@@ -60,20 +60,20 @@ write.csv(tab, 'ChIP-seq_design.csv', quote = FALSE, row.names = FALSE)
 tab
 ```
 
-#### Launch pipeline 
+#### Launch pipeline (for only one TF, for a matter of time)
 
 > Execute the nf-core/chipseq pipeline for a single TF. 
 
 ```{sh eval  = FALSE}
 NXF_OPTS='-Xms1g -Xmx4g'
+grep -P "^group|^Reb1|^control_ChIP-Exo" shared/ChIP-seq_design.csv > shared/ChIP-seq_subset_design.csv
 nextflow run nf-core/chipseq \
     -profile singularity \
-    -resume \
-    --input shared/ChIP-seq_design.csv \
+    --input shared/ChIP-seq_subset_design.csv \
     --genome 'R64-1-1' \
-    --max_cpus 4 \
-    --max_memory '28.GB' \
-    --save_trimmed true \
+    --max_cpus '1' \
+    --max_memory '8.GB' \
+    --save_trimmed false \
     --narrow_peak true \
     --skip_plot_fingerprint \
     --skip_spp
@@ -102,17 +102,29 @@ Is there any difference in the experimental approaches used to ChIP Hsf1 and Cse
 </p>
 </details>
 
-### ChIP-seq signal
+### ChIP-seq coverage
 
-When performing ChIP-seq, one usually tries to profile genome-wide transcription factor binding patterns. 
-One of the most important outputs of this pipeline is the `.bigwig` files. These files 
+#### bigWig files
 
-> How is `.bigWig` file structure? Is there a more "human-readable" version of `.bigWig` files? 
+When performing ChIP-seq, one usually tries to profile genome-wide transcription factor binding patterns.  
+One of the most important outputs of this pipeline is the `.bigwig` files. These files are essentially 
+a long array of numerical values representing the (normalized) genome-wide coverage of the ChIP-seq 
+library. 
+
+> How exactly is `.bigWig` file structure? Is there a more "human-readable" version of `.bigWig` files? 
 
 <details><summary>Clue</summary>
 <p>
 Check out documentation provided by UCSC:  
 See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http://genome.ucsc.edu/goldenPath/help/wiggle.html) documentation.
+</p>
+</details>
+
+> How comparable are `.bigwig` files from one to another? 
+
+<details><summary>Clue</summary>
+<p>
+Have a look at the content of the folder `results/bwa/mergedLibrary/bigwig/scale/`. 
 </p>
 </details>
 
@@ -125,14 +137,33 @@ See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http:
 </p>
 </details>
 
+#### Enrichment over gene features
+
+ChIP-seq coverage over specific gene features (e.g. TSS, TTS or gene bodies) is typically 
+plotted as average signal or as a heatmap. 
+
+> Have a look at the metaplots of different TFs. Can you observe differences in the enrichment profiles
+> for different factors? If so, comment on the differences. 
+
 ### ChIP-seq background
 
 You can also load the tracks directly in IGV and visually inspect them.  
 
 > Do you see differences in the background levels?  
-> Do you see 
+> Visually, can you detect specific peak patterns?
+
+<details><summary>Clue</summary>
+<p>
+Load all the tracks from Reja et al., 2015. Which type of genes have peaks? And which combinations of factors can you identify?  
+Now load Cse4 track. Is the coverage different? Where is it enriched at? Where is Cse4 supposed to be enriched in nuclei? 
+</p>
+</details>
 
 ### Conclusions 
+
+> Can you make preliminary conclusions on which factors are co-localizing on the chromatin? 
+
+> How can you decide whether a given ChIP-seq library was successful or not? 
 
 > Can you draw general conclusions on whether a specific ChIP-seq assay may be better than the others?
 

@@ -440,20 +440,20 @@ Have a look at each processing step and understand what each step does.</p>
 ## 10 control…         2 data/SRR5512037^Ch… data/SRR5512037^Ch… &quot;&quot;       &quot;&quot;       
 ## # … with 15 more rows</code></pre>
 </div>
-<div id="launch-pipeline" class="section level4">
-<h4>Launch pipeline</h4>
+<div id="launch-pipeline-for-only-one-tf-for-a-matter-of-time" class="section level4">
+<h4>Launch pipeline (for only one TF, for a matter of time)</h4>
 <blockquote>
 <p>Execute the nf-core/chipseq pipeline for a single TF.</p>
 </blockquote>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="dt">\</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-profile</span> singularity <span class="dt">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-resume</span> <span class="dt">\</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--input</span> shared/ChIP-seq_design.csv <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-P</span> <span class="st">&quot;^group|^Reb1|^control_ChIP-Exo&quot;</span> shared/ChIP-seq_design.csv <span class="op">&gt;</span> shared/ChIP-seq_subset_design.csv</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-profile</span> singularity <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--input</span> shared/ChIP-seq_subset_design.csv <span class="dt">\</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="dt">\</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_cpus</span> 4 <span class="dt">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_memory</span> <span class="st">&#39;28.GB&#39;</span> <span class="dt">\</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">--save_trimmed</span> true <span class="dt">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_memory</span> <span class="st">&#39;8.GB&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">--save_trimmed</span> false <span class="dt">\</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">--narrow_peak</span> true <span class="dt">\</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">--skip_plot_fingerprint</span> <span class="dt">\</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">--skip_spp</span></span></code></pre></div>
@@ -485,11 +485,14 @@ Is there any difference in the experimental approaches used to ChIP Hsf1 and Cse
 </p>
 </details>
 </div>
-<div id="chip-seq-signal" class="section level3">
-<h3>ChIP-seq signal</h3>
-<p>When performing ChIP-seq, one usually tries to profile genome-wide transcription factor binding patterns. One of the most important outputs of this pipeline is the <code>.bigwig</code> files. These files</p>
+<div id="chip-seq-coverage" class="section level3">
+<h3>ChIP-seq coverage</h3>
+<div id="bigwig-files" class="section level4">
+<h4>bigWig files</h4>
+<p>When performing ChIP-seq, one usually tries to profile genome-wide transcription factor binding patterns.<br />
+One of the most important outputs of this pipeline is the <code>.bigwig</code> files. These files are essentially a long array of numerical values representing the (normalized) genome-wide coverage of the ChIP-seq library.</p>
 <blockquote>
-<p>How is <code>.bigWig</code> file structure? Is there a more “human-readable” version of <code>.bigWig</code> files?</p>
+<p>How exactly is <code>.bigWig</code> file structure? Is there a more “human-readable” version of <code>.bigWig</code> files?</p>
 </blockquote>
 <details>
 <summary>
@@ -498,6 +501,17 @@ Clue
 <p>
 Check out documentation provided by UCSC:<br />
 See <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig</a> and <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wig</a> documentation.
+</p>
+</details>
+<blockquote>
+<p>How comparable are <code>.bigwig</code> files from one to another?</p>
+</blockquote>
+<details>
+<summary>
+Clue
+</summary>
+<p>
+Have a look at the content of the folder <code>results/bwa/mergedLibrary/bigwig/scale/</code>.
 </p>
 </details>
 <blockquote>
@@ -512,16 +526,39 @@ Check out rrtacklayer package from Bioconductor: See <a href="http://genome.ucsc
 </p>
 </details>
 </div>
+<div id="enrichment-over-gene-features" class="section level4">
+<h4>Enrichment over gene features</h4>
+<p>ChIP-seq coverage over specific gene features (e.g. TSS, TTS or gene bodies) is typically plotted as average signal or as a heatmap.</p>
+<blockquote>
+<p>Have a look at the metaplots of different TFs. Can you observe differences in the enrichment profiles for different factors? If so, comment on the differences.</p>
+</blockquote>
+</div>
+</div>
 <div id="chip-seq-background" class="section level3">
 <h3>ChIP-seq background</h3>
 <p>You can also load the tracks directly in IGV and visually inspect them.</p>
 <blockquote>
 <p>Do you see differences in the background levels?<br />
-Do you see</p>
+Visually, can you detect specific peak patterns?</p>
 </blockquote>
+<details>
+<summary>
+Clue
+</summary>
+<p>
+Load all the tracks from Reja et al., 2015. Which type of genes have peaks? And which combinations of factors can you identify?<br />
+Now load Cse4 track. Is the coverage different? Where is it enriched at? Where is Cse4 supposed to be enriched in nuclei?
+</p>
+</details>
 </div>
 <div id="conclusions" class="section level3">
 <h3>Conclusions</h3>
+<blockquote>
+<p>Can you make preliminary conclusions on which factors are co-localizing on the chromatin?</p>
+</blockquote>
+<blockquote>
+<p>How can you decide whether a given ChIP-seq library was successful or not?</p>
+</blockquote>
 <blockquote>
 <p>Can you draw general conclusions on whether a specific ChIP-seq assay may be better than the others?</p>
 </blockquote>
