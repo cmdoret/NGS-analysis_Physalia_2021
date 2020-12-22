@@ -1354,11 +1354,6 @@ opacity: 0;
 }
 @media print {
 
-@page {
-size: landscape;
-margin: 0;
-}
-
 slides slide {
 display: block !important;
 position: relative;
@@ -3106,13 +3101,6 @@ slide:not(.current) .plotly.html-widget{
   display: block;
 }
 
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-            
   </style>
 
 
@@ -3126,36 +3114,77 @@ slide:not(.current) .plotly.html-widget{
         <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
     <hgroup class="auto-fadein">
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
-      
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
             <p style="margin-top: 6px; margin-left: -2px;">January 11, 2020</p>
           </hgroup>
   </slide>
 
-<slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Epigenomics introduction</h2></hgroup><article  id="epigenomics-introduction">
+<slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Snakemake pipelines</h2></hgroup><article  id="snakemake-pipelines">
 
 <p>Day 1</p>
 
-</article></slide><slide class=""><hgroup><h2>Regulatory function of chromatin</h2></hgroup><article  id="regulatory-function-of-chromatin">
+</article></slide><slide class=""><hgroup><h2>Benefits of a workflow manager</h2></hgroup><article  id="benefits-of-a-workflow-manager">
 
 <ul>
-<li>Chromatin state regulates gene expression</li>
-<li>Use epigenomics to understand gene regulation</li>
+<li>Simple language to handle input/output</li>
+<li>Reusable code separated from data</li>
+<li>Generalize to multiple samples</li>
+<li>Platform comptability: HPC, cloud, local</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Types of chromatin information</h2></hgroup><article  id="types-of-chromatin-information">
+</article></slide><slide class=""><hgroup><h2>Basic snakemake example</h2></hgroup><article  id="basic-snakemake-example">
+
+<p>Writing chromosome names to a file</p>
+
+<pre class = 'prettyprint lang-python'>rule chrom_names:
+  input: &#39;data/in/genome.fa&#39;
+  output: &#39;data/out/chrom_names.txt&#39;
+  shell: &quot;grep &#39;&gt;&#39; {input} &gt; {output}&quot;
+
+rule all:
+  input: &#39;data/out/chrom_names.txt&#39;</pre>
+
+</article></slide><slide class=""><hgroup><h2>General concept</h2></hgroup><article  id="general-concept">
 
 <ul>
-<li>Chromosome conformation capture</li>
-<li>Histone marks ChIP-seq</li>
-<li>ATAC-seq</li>
+<li>Pipeline divided into rules</li>
+<li>Each rule can have input, output and parameters</li>
+<li>Rules can execute bash or python code</li>
+<li>Pipeline supports python syntax</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>A picture of the regulatory landscape</h2></hgroup><article  id="a-picture-of-the-regulatory-landscape">
+</article></slide><slide class=""><hgroup><h2>Separating data and code</h2></hgroup><article  id="separating-data-and-code">
+
+<p>Paths and sample names can be read from config files</p>
+
+<pre class = 'prettyprint lang-python'>import pandas as pd
+samples = pd.read_csv(&#39;samples.tsv&#39;, sep=&#39;\t&#39;)
+configfile: &#39;config.yaml&#39;
+
+rule align:
+  input: &#39;data/in/{sample}.fq.gz&#39;
+  output: &#39;data/out/{sample}.sam&#39;
+  params:
+    index = config[&#39;index&#39;]
+  shell: &quot;bowtie2 -x {params.index} -U {input} -S {output}&quot;
+
+rule all:
+  input: expand(&#39;data/out/{sample}.sam&#39;, sample=samples[&#39;name&#39;])</pre>
+
+</article></slide><slide class=""><hgroup><h2>Additional features</h2></hgroup><article  id="additional-features">
 
 <ul>
-<li>Gene expression tells us what genes are affected during e.g. differentiation, disease…</li>
-<li>Epigenetic tracks tell us how / why they are activated</li>
+<li>Multiple rules automatically run on separate CPUs in parallel</li>
+<li>Pipelines can be split into multiple files for modularity</li>
+<li>Much more: temporary files, report generation, logging…</li>
+</ul>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Exercises</h2></hgroup><article  id="exercises">
+
+<ul>
+<li>Write a Snakemake pipeline from the scripts in the previous exercise</li>
+<li>Allow it to run multiple samples</li>
 </ul></article></slide>
 
 

@@ -1354,11 +1354,6 @@ opacity: 0;
 }
 @media print {
 
-@page {
-size: landscape;
-margin: 0;
-}
-
 slides slide {
 display: block !important;
 position: relative;
@@ -3106,13 +3101,6 @@ slide:not(.current) .plotly.html-widget{
   display: block;
 }
 
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-            
   </style>
 
 
@@ -3126,36 +3114,133 @@ slide:not(.current) .plotly.html-widget{
         <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
     <hgroup class="auto-fadein">
       <h1 data-config-title><!-- populated from slide_config.json --></h1>
-      
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
       <p data-config-presenter><!-- populated from slide_config.json --></p>
             <p style="margin-top: 6px; margin-left: -2px;">January 11, 2020</p>
           </hgroup>
   </slide>
 
-<slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Epigenomics introduction</h2></hgroup><article  id="epigenomics-introduction">
+<slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Chromosome conformation capture</h2></hgroup><article  id="chromosome-conformation-capture">
 
 <p>Day 1</p>
 
-</article></slide><slide class=""><hgroup><h2>Regulatory function of chromatin</h2></hgroup><article  id="regulatory-function-of-chromatin">
+</article></slide><slide class=""><hgroup><h2>Capturing chromosome conformation</h2></hgroup><article  id="capturing-chromosome-conformation">
 
 <ul>
-<li>Chromatin state regulates gene expression</li>
-<li>Use epigenomics to understand gene regulation</li>
+<li>3C methods capture thre 3D structure of the genome</li>
+<li>Originally relied on qPCR, Hi-C is the NGS variant</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Types of chromatin information</h2></hgroup><article  id="types-of-chromatin-information">
+</article></slide><slide class=""><hgroup><h2>Interpreting chromosome contact maps</h2></hgroup><article  id="interpreting-chromosome-contact-maps">
 
 <ul>
-<li>Chromosome conformation capture</li>
-<li>Histone marks ChIP-seq</li>
-<li>ATAC-seq</li>
+<li>Contact frequency reflects spatial organization</li>
+<li>Various patterns correspond to 3D structures</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>A picture of the regulatory landscape</h2></hgroup><article  id="a-picture-of-the-regulatory-landscape">
+</article></slide><slide class=""><hgroup><h2>Derivative methods</h2></hgroup><article  id="derivative-methods">
+
+<p>3C-based methods:</p>
 
 <ul>
-<li>Gene expression tells us what genes are affected during e.g. differentiation, disease…</li>
-<li>Epigenetic tracks tell us how / why they are activated</li>
+<li>MicroC: DNAse instead of restriction enzyme</li>
+<li>Promoter capture: Hi-C with capture probes on promoters</li>
+</ul>
+
+<p>Others:</p>
+
+<ul>
+<li>GAM: Cryoslicing of nuclei followed by sequencing</li>
+<li>SPRITE: Serial dilution and barcoding</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>From reads to contact maps</h2></hgroup><article  id="from-reads-to-contact-maps">
+
+<p>Many &ldquo;end-to-end&rdquo; pipelines available:</p>
+
+<ul>
+<li><strong>nf-core/hic</strong></li>
+<li>Hi-C pro</li>
+<li>FanC</li>
+<li>hicstuff</li>
+<li>Juicer</li>
+<li>…</li>
+</ul>
+
+<p>Important to understand individual steps (biases, custom analyses, …)</p>
+
+</article></slide><slide class=""><hgroup><h2>Hi-C processing: Read alignment</h2></hgroup><article  id="hi-c-processing-read-alignment">
+
+<ul>
+<li>Standard short read mapping</li>
+<li>Separate single-end alignment for forward and reverse</li>
+<li>Longer reads -&gt; more chimeric reads
+
+<ul>
+<li>Iterative alignment to solve the problem</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Hi-C processing: Merging BAMs</h2></hgroup><article  id="hi-c-processing-merging-bams">
+
+<ul>
+<li>Merge forward and reverse reads by name</li>
+<li>Filter out ambiguous alignment (low mapQ)</li>
+<li>1 pair of reads = 1 contact</li>
+<li>The <a href='https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md' title=''>pairs</a> format is commonly used</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Hi-C processing: Fragment attribution</h2></hgroup><article  id="hi-c-processing-fragment-attribution">
+
+<ul>
+<li>Assign contacts to discrete segments (bins)</li>
+<li>Usually regular intervals of e.g. 10kb</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Hi-C processing: The Matrix</h2></hgroup><article  id="hi-c-processing-the-matrix">
+
+<ul>
+<li>Sum contact events for each combination of bins</li>
+<li>Most combinations have 0 contacts: &ldquo;sparse data&rdquo;</li>
+<li>Storing NxN matrix with mostly 0 is impractical
+
+<ul>
+<li>Use sparse format instead</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Hi-C processing: Additional filters</h2></hgroup><article  id="hi-c-processing-additional-filters">
+
+<p>Hi-C specific filters to remove uninformative events</p>
+
+<ul class = 'build'>
+<li>Self-religating fragments</li>
+<li>Undigested fragments</li>
+<li>Duplicates filter</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Hi-C processing: Balancing</h2></hgroup><article  id="hi-c-processing-balancing">
+
+<p>Hi-C is susceptible to many biases affecting local coverage such as:</p>
+
+<ul>
+<li>GC content</li>
+<li>Chromatin accessibility</li>
+<li>Restriction site density</li>
+</ul>
+
+<p>Matrix balancing is a normalization to reduce the impact of those biases</p>
+
+</article></slide><slide class=""><hgroup><h2>Hi-C processing: Balancing</h2></hgroup><article  id="hi-c-processing-balancing-1">
+
+<p>Assumption: All bins (regions) have the same contact probability.</p>
+
+<p>Divide each pixel by row x col iteratively.</p>
+
+</article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Exercises</h2></hgroup><article  id="exercises">
+
+<ul>
+<li>Generate your own contact map from the reads, normalize and visualize it</li>
 </ul></article></slide>
 
 
