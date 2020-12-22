@@ -1,5 +1,5 @@
 ---
-title: "Processing NGS data"
+title: "Processing Hi-C data"
 output: 
     rmarkdown::html_document: 
         theme: simplex
@@ -11,33 +11,88 @@ output:
         toc_float: true
 ---
 
-This is a test. Let's see if it works. 
+In this practice session, we go through the process of generating Hi-C contact maps from the reads.
+It is important to understand the individual steps, either to troubleshoot issues, or for specific / advanced analyses requiring custom data filtering / extraction steps.
 
-## Printing 
-```{r}
-print('hello')
+For example this would be necessary if you need to  isolatie multi-partner or strand-specific contacts.
+
+## Aligning reads
+
+We first need to align reads separately in single end mode.
+This is because paired end mode assumes a fixed insert size (e.g. 300bp) as in shotgun
+sequencing. In Hi-C there is no such apriori and the distance between forward and reverse reads can be anything.
+
+```bash
+bowtie2-build genome.fa genome
+bowtie2 -U for.fq.gz -x genome > for.sam
+bowtie2 -U rev.fq.gz -x genome > rev.sam
 ```
 
-## Loading data 
+## Processing alignments
 
-```{r echo = FALSE, include = FALSE}
-data(mtcars)
-library(tidyverse)
+Now, we need to sort reads by name (-n) after alignment so that they will have the same order in both files.
+We'll also want to filter out (-F) reads containing the tag 2048. This tag stands for supplementary alignment. This means that
+we only keep one alignment for each read so that each read will occur exactly once in the output.
+
+```bash
+samtools sort -n for.sam | samtools view -F 2048 > for_clean.sam
+samtools sort -n rev.sam | samtools view -F 2048 > rev_clean.sam
 ```
 
-```{r}
-mtcars %>% knitr::kable()
+## Merging BAM files
+
+Next, we need to merge reads from both files to get contact information. This step is made easy by the samtools view command.
+The SAM files it generated are sorted in the same way, they have exactly one occurence of each read and have no header.
+SAM files have many columns, but we only need a few here: the chromosome, position, tag and mapping quality.
+readname + 2x4 colums: tag,chrom,pos,mapQ
+
+```bash
+paste <(cut -f1-5 for_clean.sam) <(cut -f2-5 rev_clean.sam) > contacts.tsv
 ```
 
-## Plotting 
+## Filtering contacts
 
-```{r}
-ggplot(mtcars, aes(x = mpg, y = cyl)) +
-    geom_point() + 
-    theme_bw()
+We need to make sure we only keep contacts with good mapping quality on both reads.
+Since the contacts are in tabular text format, we can just use awk for that
+Formatting into: readname, chrom1, pos1, chrom2, pos2, tag1, tag2
+
+```bash
+awk '$5 >= 30 && $9 >= 30 {print $1,$3,$4,$7,$8,$2,$6}' > valid.pairs
 ```
 
-## Session info
-```{r}
-sessionInfo()
+> Note: If we want to generate a a proper ".pairs" file, we should prepend a header to the file.
+Pairs headers should look something like that:
+
+```
+## pairs format v1.0
+#sorted: readID
+#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+#chromsize: seq1 60000
+#chromsize: seq2 20000
+```
+
+So in our case, the header can be generated using the SAM file:
+
+```bash
+echo """
+## pairs format v1.0
+#sorted: readID
+#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+""" > valid.pairs
+samtools view -H phys/for.sam | awk '$1 == "@SQ" {print "#chromsize: ",substr($2,4),substr($3,4)}' >> valid.pairs
+```
+
+And then we would append the content using bash's appending redirection operator: `>>`.
+
+```bash
+awk '$5 >= 30 && $9 >= 30 {print $1,$3,$4,$7,$8,$2,$6}' >> valid.pairs
+```
+
+Next, we need to attribute each read to a restriction fragment or bin.
+
+Now is the time when we can apply a bunch of custom filters to the contacts before computing the matrix.
+For example, to filter out PCR duplicates, we would remove pairs where both reads have the exact same position:
+
+```bash
+awk '$0 ~ /^#/ {print; next}$2==chrom1 && $2==c1 && $3==p1 && $4==c2 && $5==p2 {print $0}{c1=$2;p1=$3;c2=$4;p2=$5}' > valid_pcrfree.pairs
 ```

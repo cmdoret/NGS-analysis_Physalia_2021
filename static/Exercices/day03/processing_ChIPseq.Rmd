@@ -27,9 +27,8 @@ nextflow run nf-core/chipseq -profile test,singularity
 ```
 
 > Check out the `results/` directory.  
-
-* What is the required input for the pipeline? Can you find it in the online documentation?
-* What are the outputs of the pipeline? 
+> What is the required input for the pipeline? Can you find it in the online documentation?  
+> What are the outputs of the pipeline? 
 
 ### Run pipeline on data 
 

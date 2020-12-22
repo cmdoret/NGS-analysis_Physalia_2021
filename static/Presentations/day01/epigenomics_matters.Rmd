@@ -1,0 +1,31 @@
+---
+title: "NGS analysis for gene regulation and epigenomics"
+author: "Jacques Serizay, Cyril Matthey-Doret"
+date: "January 11, 2020"
+output:
+  ioslides_presentation: default
+  slidy_presentation: default
+---
+
+# Epigenomics introduction
+
+Day 1
+
+
+## Regulatory function of chromatin
+
+* Chromatin state regulates gene expression
+* Use epigenomics to understand gene regulation
+
+## Types of chromatin information
+
+* Chromosome conformation capture
+* Histone marks ChIP-seq
+* ATAC-seq
+
+
+## A picture of the regulatory landscape
+
+* Gene expression tells us what genes are affected during e.g. differentiation, disease...
+* Epigenetic tracks tell us how / why they are activated
+
