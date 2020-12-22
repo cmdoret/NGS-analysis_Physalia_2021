@@ -54,7 +54,7 @@ Since most of the preliminary analysis we do is on AWS, we&amp;rsquo;d like to b
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/05_prerequisites/</guid>
-      <description>Prerequisites  Unix command line: before the course, please go over the following tuto: &amp;hellip; Python R/Bioconductor Snakemake Jupyter  Local configuration  Configured SSH client (already installed on Linux/Mac machines) FileZilla IGV  AWS configuration Install and set up Conda # Install Conda wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh bash Miniconda3-latest-Linux-x86_64.sh conda config --add channels conda-forge conda config --add channels bioconda # Create conda env. with python 3.8 and R 4.0.3 conda create -n physalia python=3.</description>
+      <description>Prerequisites  Unix command line: familiarity with command-line tools is expected. If a refresher is needed (hopefully not), please go over this tutorial and its companion cheatsheet . R/Bioconductor: Chapters 4 to 8 of the comprehensive book from Kasper D. Hansen available under the CC BY-NC-SA 4.0 license [PDF]  Python Snakemake Jupyter  Local configuration  Configured SSH client (already installed on Linux/Mac machines) FileZilla IGV  AWS configuration Install and set up Conda # Install Conda wget https://repo.</description>
     </item>
     
   </channel>

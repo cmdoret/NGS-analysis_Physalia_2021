@@ -392,6 +392,7 @@ Have a look at each processing step and understand what each step does.</p>
 <blockquote>
 <p>Use the samples information file located in <code>shared/</code> to build the required input datasheet.</p>
 </blockquote>
+<p>The following gist can be used to reformat the sample information into an input datasheet.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&#39;shared/ChIP-seq_samples.txt&#39;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\t</span><span class="st">&#39;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>samples</span></code></pre></div>
 <pre><code>## # A tibble: 25 x 9
@@ -420,21 +421,23 @@ Have a look at each processing step and understand what each step does.</p>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>tab[<span class="fu">is.na</span>(tab)] <span class="ot">=</span> <span class="st">&#39;&#39;</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>tab<span class="sc">$</span>control[tab<span class="sc">$</span>control <span class="sc">==</span> <span class="st">&#39;&#39;</span>] <span class="ot">&lt;-</span> <span class="st">&#39;control_ChIP-Exo&#39;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(tab, <span class="st">&#39;ChIP-seq_design.csv&#39;</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>tab</span></code></pre></div>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>tab<span class="sc">$</span>control[<span class="fu">grepl</span>(<span class="st">&#39;control&#39;</span>, tab<span class="sc">$</span>group)] <span class="ot">&lt;-</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>tab<span class="sc">$</span>antibody[<span class="fu">grepl</span>(<span class="st">&#39;control&#39;</span>, tab<span class="sc">$</span>group)] <span class="ot">&lt;-</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(tab, <span class="st">&#39;ChIP-seq_design.csv&#39;</span>, <span class="at">quote =</span> <span class="cn">FALSE</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>tab</span></code></pre></div>
 <pre><code>## # A tibble: 25 x 6
-##    group    replicate fastq_1            fastq_2            antibody   control  
-##    &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;              &lt;chr&gt;              &lt;chr&gt;      &lt;chr&gt;    
-##  1 Reb1             1 data/SRR6453183^S… data/SRR6453183^S… Reb1       control_…
-##  2 Abf1             1 data/SRR6453184^S… data/SRR6453184^S… Abf1       control_…
-##  3 Rap1             1 data/SRR6453185^S… data/SRR6453185^S… Rap1       control_…
-##  4 Spt3-TAP         1 data/SRR5511881^C… data/SRR5511881^C… Spt3-TAP   control_…
-##  5 Spt16-T…         1 data/SRR5511951^C… data/SRR5511951^C… Spt16-TAP  control_…
-##  6 Hsf1-TAP         1 data/SRR5511958^C… data/SRR5511958^C… Hsf1-TAP   control_…
-##  7 Hsf1-TAP         2 data/SRR5511959^C… data/SRR5511959^C… Hsf1-TAP   control_…
-##  8 Rsc9-TAP         1 data/SRR5511984^C… data/SRR5511984^C… Rsc9-TAP   control_…
-##  9 control…         1 data/SRR5512036^C… data/SRR5512036^C… control_C… control_…
-## 10 control…         2 data/SRR5512037^C… data/SRR5512037^C… control_C… control_…
+##    group    replicate fastq_1             fastq_2             antibody control  
+##    &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;    &lt;chr&gt;    
+##  1 Reb1             1 data/SRR6453183^SL… data/SRR6453183^SL… &quot;Reb1&quot;   &quot;control…
+##  2 Abf1             1 data/SRR6453184^SL… data/SRR6453184^SL… &quot;Abf1&quot;   &quot;control…
+##  3 Rap1             1 data/SRR6453185^SL… data/SRR6453185^SL… &quot;Rap1&quot;   &quot;control…
+##  4 Spt3-TAP         1 data/SRR5511881^Ch… data/SRR5511881^Ch… &quot;Spt3-T… &quot;control…
+##  5 Spt16-T…         1 data/SRR5511951^Ch… data/SRR5511951^Ch… &quot;Spt16-… &quot;control…
+##  6 Hsf1-TAP         1 data/SRR5511958^Ch… data/SRR5511958^Ch… &quot;Hsf1-T… &quot;control…
+##  7 Hsf1-TAP         2 data/SRR5511959^Ch… data/SRR5511959^Ch… &quot;Hsf1-T… &quot;control…
+##  8 Rsc9-TAP         1 data/SRR5511984^Ch… data/SRR5511984^Ch… &quot;Rsc9-T… &quot;control…
+##  9 control…         1 data/SRR5512036^Ch… data/SRR5512036^Ch… &quot;&quot;       &quot;&quot;       
+## 10 control…         2 data/SRR5512037^Ch… data/SRR5512037^Ch… &quot;&quot;       &quot;&quot;       
 ## # … with 15 more rows</code></pre>
 </div>
 <div id="launch-pipeline" class="section level4">
@@ -445,16 +448,83 @@ Have a look at each processing step and understand what each step does.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="dt">\</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-profile</span> singularity <span class="dt">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--input</span> shared/ChIP-seq_design.csv <span class="dt">\</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="dt">\</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_cpus</span> 4 <span class="dt">\</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_memory</span> <span class="st">&#39;28.GB&#39;</span> <span class="dt">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fingerprint_bins</span> 100000 <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-resume</span> <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--input</span> shared/ChIP-seq_design.csv <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="dt">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_cpus</span> 4 <span class="dt">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--max_memory</span> <span class="st">&#39;28.GB&#39;</span> <span class="dt">\</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">--save_trimmed</span> true <span class="dt">\</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">--narrow_peak</span> true <span class="dt">\</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">--skip_plot_fingerprint</span> <span class="dt">\</span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">--skip_spp</span></span></code></pre></div>
 </div>
+</div>
+</div>
+<div id="inspecting-output-of-nextflow-workflow" class="section level2">
+<h2>2. Inspecting output of Nextflow workflow</h2>
+<div id="efficiency-of-adaptor-trimming" class="section level3">
+<h3>Efficiency of adaptor trimming</h3>
+<p>Sequenced libraries can sometimes be contaminated with adapters, which are initially ligated to pulled-down DNA fragments to enable fragment hybridization on Illumina sequencing chips. <code>trim_galore</code> is a tool designed to remove suched contaminating adapter sequences. It scans <code>.fastq</code> files and trim each read if an adapter sequence is found in it.</p>
+<blockquote>
+<p>Have a look at the <code>Cse4</code> fastq QC reports before and after adapter trimming with <code>trim_galore</code>.<br />
+How efficient does <code>trim_galore</code> seem to be?</p>
+</blockquote>
+</div>
+<div id="other-contaminating-sequences" class="section level3">
+<h3>Other contaminating sequences</h3>
+<blockquote>
+<p>Inspect Hsf1 ChIP-seq library (replicate 2). Has <code>trim_galore</code> removed all the adapter sequences?<br />
+What about other contaminating sequences? Can you speculate on the origin of such sequences?</p>
+</blockquote>
+<details>
+<summary>
+Clue
+</summary>
+<p>
+Is there any difference in the experimental approaches used to ChIP Hsf1 and Cse4?
+</p>
+</details>
+</div>
+<div id="chip-seq-signal" class="section level3">
+<h3>ChIP-seq signal</h3>
+<p>When performing ChIP-seq, one usually tries to profile genome-wide transcription factor binding patterns. One of the most important outputs of this pipeline is the <code>.bigwig</code> files. These files</p>
+<blockquote>
+<p>How is <code>.bigWig</code> file structure? Is there a more “human-readable” version of <code>.bigWig</code> files?</p>
+</blockquote>
+<details>
+<summary>
+Clue
+</summary>
+<p>
+Check out documentation provided by UCSC:<br />
+See <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig</a> and <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wig</a> documentation.
+</p>
+</details>
+<blockquote>
+<p>How can you parse a <code>.bigWig</code> file in R?</p>
+</blockquote>
+<details>
+<summary>
+Clue
+</summary>
+<p>
+Check out rrtacklayer package from Bioconductor: See <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig</a> and <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wig</a> documentation.
+</p>
+</details>
+</div>
+<div id="chip-seq-background" class="section level3">
+<h3>ChIP-seq background</h3>
+<p>You can also load the tracks directly in IGV and visually inspect them.</p>
+<blockquote>
+<p>Do you see differences in the background levels?<br />
+Do you see</p>
+</blockquote>
+</div>
+<div id="conclusions" class="section level3">
+<h3>Conclusions</h3>
+<blockquote>
+<p>Can you draw general conclusions on whether a specific ChIP-seq assay may be better than the others?</p>
+</blockquote>
 </div>
 </div>
 

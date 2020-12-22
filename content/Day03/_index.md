@@ -12,10 +12,11 @@ day: "Day 03"
 
 ## Exercises for {{< param "day" >}}
 
-- Processing ChIP-seq datasets: from A to Z with Nextflow workflow manager **\[55min\]**: [Rmd](/{{<myPackageUrl>}}Exercices/day03/processing_ChIPseq.html)
+- Processing ChIP-seq datasets: from A to Z with Nextflow workflow manager **\[55min\]**: [[Rmd]](/{{<myPackageUrl>}}Exercices/day03/processing_ChIPseq.html)
 
-    > Data is collected from multiple research papers, in which ChIP-seq (or variants of) 
+    Data for this part of the course was collected from multiple research papers, in which ChIP-seq (or variants of) 
     experiments have been conducted in Yeast, in normal conditions (no specific treatment).  
+
     * 
     * 
     * 

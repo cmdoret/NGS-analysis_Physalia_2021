@@ -37,6 +37,8 @@ nextflow run nf-core/chipseq -profile test,singularity
 
 > Use the samples information file located in `shared/` to build the required input datasheet. 
 
+The following gist can be used to reformat the sample information into an input datasheet. 
+
 ```{r}
 samples <- read.table('shared/ChIP-seq_samples.txt', header = TRUE, sep = '\t')
 samples
@@ -52,6 +54,8 @@ tab <- data.frame(
 )
 tab[is.na(tab)] = ''
 tab$control[tab$control == ''] <- 'control_ChIP-Exo'
+tab$control[grepl('control', tab$group)] <- ''
+tab$antibody[grepl('control', tab$group)] <- ''
 write.csv(tab, 'ChIP-seq_design.csv', quote = FALSE, row.names = FALSE)
 tab
 ```
@@ -64,13 +68,71 @@ tab
 NXF_OPTS='-Xms1g -Xmx4g'
 nextflow run nf-core/chipseq \
     -profile singularity \
+    -resume \
     --input shared/ChIP-seq_design.csv \
     --genome 'R64-1-1' \
     --max_cpus 4 \
     --max_memory '28.GB' \
-    --fingerprint_bins 100000 \
     --save_trimmed true \
     --narrow_peak true \
     --skip_plot_fingerprint \
     --skip_spp
 ```
+
+## 2. Inspecting output of Nextflow workflow
+
+### Efficiency of adaptor trimming 
+
+Sequenced libraries can sometimes be contaminated with adapters, which are initially ligated to 
+pulled-down DNA fragments to enable fragment hybridization on Illumina sequencing chips. 
+`trim_galore` is a tool designed to remove suched contaminating adapter sequences. It scans `.fastq` files 
+and trim each read if an adapter sequence is found in it. 
+
+> Have a look at the `Cse4` fastq QC reports before and after adapter trimming with `trim_galore`.  
+> How efficient does `trim_galore` seem to be?
+
+### Other contaminating sequences
+
+> Inspect Hsf1 ChIP-seq library (replicate 2). Has `trim_galore` removed all the adapter sequences?  
+> What about other contaminating sequences? Can you speculate on the origin of such sequences?
+
+<details><summary>Clue</summary>
+<p>
+Is there any difference in the experimental approaches used to ChIP Hsf1 and Cse4?
+</p>
+</details>
+
+### ChIP-seq signal
+
+When performing ChIP-seq, one usually tries to profile genome-wide transcription factor binding patterns. 
+One of the most important outputs of this pipeline is the `.bigwig` files. These files 
+
+> How is `.bigWig` file structure? Is there a more "human-readable" version of `.bigWig` files? 
+
+<details><summary>Clue</summary>
+<p>
+Check out documentation provided by UCSC:  
+See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http://genome.ucsc.edu/goldenPath/help/wiggle.html) documentation.
+</p>
+</details>
+
+> How can you parse a `.bigWig` file in R? 
+
+<details><summary>Clue</summary>
+<p>
+Check out rrtacklayer package from Bioconductor:
+See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http://genome.ucsc.edu/goldenPath/help/wiggle.html) documentation.
+</p>
+</details>
+
+### ChIP-seq background
+
+You can also load the tracks directly in IGV and visually inspect them.  
+
+> Do you see differences in the background levels?  
+> Do you see 
+
+### Conclusions 
+
+> Can you draw general conclusions on whether a specific ChIP-seq assay may be better than the others?
+

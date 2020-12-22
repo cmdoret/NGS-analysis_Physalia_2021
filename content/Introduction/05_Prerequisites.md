@@ -4,9 +4,9 @@ title: "5. Prerequisites and required local config"
 
 ## Prerequisites
 
-* Unix command line: before the course, please go over the following tuto: ...
+* Unix command line: familiarity with command-line tools is expected. If a refresher is needed (hopefully not), please go over [this tutorial](https://ryanstutorials.net/linuxtutorial/) and its [companion cheatsheet](https://ryanstutorials.net/linuxtutorial/cheatsheet.php).
+* R/Bioconductor: Chapters 4 to 8 of the comprehensive book from Kasper D. Hansen available under the CC BY-NC-SA 4.0 license [[PDF]](/{{<myPackageUrl>}}docs/bioconductor.pdf)
 * Python
-* R/Bioconductor
 * Snakemake
 * Jupyter
 
