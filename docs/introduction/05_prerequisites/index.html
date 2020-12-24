@@ -12,21 +12,21 @@
     <title>5. Prerequisites and required local config :: NGS analysis for gene regulation and epigenomics</title>
 
     
-    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1608664031" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1608664031" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1608829518" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1608829518" rel="stylesheet">
     
-    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1608664031" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1608829518" rel="stylesheet">
     
     
 
-    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1608664031"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1608829518"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -67,13 +67,13 @@
  
   
     
-    <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/" title="0. Introduction" class="dd-item
+    <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/" title=" NGS analysis for gene regulation and epigenomics" class="dd-item
         parent
         
         
         ">
       <a href="/NGS-analysis_Physalia_2021/introduction/">
-          0. Introduction
+           NGS analysis for gene regulation and epigenomics
           
       </a>
       
@@ -376,6 +376,7 @@
     <section id="footer">
       <center>
 
+    <a href="https://github.com/js2264/NGS-analysis_Physalia_2021">Check this website source on Github</a>
     <p>Created by J. Serizay and C. Matthey-Doret</p>
     <p>Copyright 2021</p>
 
@@ -432,7 +433,7 @@
             
           
           
-            <a href='/NGS-analysis_Physalia_2021/'>Home</a> > <a href='/NGS-analysis_Physalia_2021/introduction/'>0. Introduction</a> > 5. Prerequisites and required local config
+            <a href='/NGS-analysis_Physalia_2021/'>Home</a> > <a href='/NGS-analysis_Physalia_2021/introduction/'> NGS analysis for gene regulation and epigenomics</a> > 5. Prerequisites and required local config
           
         
           
@@ -452,6 +453,7 @@
     <li><a href="#aws-configuration">AWS configuration</a>
       <ul>
         <li><a href="#install-and-set-up-conda">Install and set up Conda</a></li>
+        <li><a href="#install-some-important-tools">Install some important tools</a></li>
         <li><a href="#install-singularity-and-nextflow">Install Singularity and Nextflow</a></li>
         <li><a href="#install-r-packages">Install R packages</a></li>
       </ul>
@@ -509,6 +511,11 @@ conda config --add channels bioconda
 conda create -n physalia python<span style="color:#f92672">=</span>3.8 conda-forge::r-base<span style="color:#f92672">=</span>4.0.3 r-essentials<span style="color:#f92672">=</span>4.0 -y
 <span style="color:#75715e"># Activate env.</span>
 conda activate physalia
+</code></pre></div><h3 id="install-some-important-tools">Install some important tools</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># MEME bedtools</span>
+conda install -c bioconda bedtools
+<span style="color:#75715e"># MEME Suite</span>
+conda install -c bioconda meme
 </code></pre></div><h3 id="install-singularity-and-nextflow">Install Singularity and Nextflow</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">
 </code></pre></div><h3 id="install-r-packages">Install R packages</h3>
@@ -776,19 +783,19 @@ conda activate physalia
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1608664031"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1608664031"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1608664031"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1608664031"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1608664031"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1608664031"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1608829518"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1608829518"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1608829518"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1608829518"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1608829518"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1608829518"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1608664031"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1608664031"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1608664031"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1608829518"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1608829518"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1608829518"></script>
     
         
-            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1608664031"></script>
+            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1608829518"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

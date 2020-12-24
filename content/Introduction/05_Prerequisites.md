@@ -33,6 +33,15 @@ conda create -n physalia python=3.8 conda-forge::r-base=4.0.3 r-essentials=4.0 -
 conda activate physalia
 ```
 
+### Install some important tools 
+
+```sh
+# MEME bedtools
+conda install -c bioconda bedtools
+# MEME Suite
+conda install -c bioconda meme
+```
+
 ### Install Singularity and Nextflow
 
 ```sh

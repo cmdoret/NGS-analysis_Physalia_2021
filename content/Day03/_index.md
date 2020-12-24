@@ -1,12 +1,12 @@
 ---
 title: "3. Day 03"
 day: "Day 03"
-presentation1: " "
+presentation1: "day03/processing_NGS_data.html"
 presentation2: " "
 presentation3: " "
 presentation4: " "
 practical1: "day03/processing_ChIPseq.html"
-practical2: "day03/"
+practical2: "day03/meme.html"
 practical3: "day03/"
 ---
 
@@ -16,10 +16,13 @@ practical3: "day03/"
 
 - **\[35 min\]** ChIP-seq assays: Probing for epigenetic marks: 
 [[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
+
 - **\[15 min\]** Mapping peaks in ChIP-seq datasets: 
 [[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
-- **\[25 min\]** R/Bioconductor: comprehensive integration of genomic data: 
+
+- **\[25 min\]** R/Bioconductor crash course: comprehensive integration of genomic data: 
 [[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
+
 - **\[25 min\]** Nextflow: an efficient workflow manager for reproducible research in biological projects: 
 [[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation4" >}})
 
@@ -32,6 +35,7 @@ practical3: "day03/"
 
     > Data for this part of the course was collected from multiple research papers, in which ChIP-seq (or variants of) 
     experiments have been conducted in Yeast, in normal conditions (no specific treatment).  
+    In this practical, we will process multiple datasets from different experiments, using a unified pipeline. 
 
     * An efficient targeted nuclease strategy for high-resolution mapping of DNA binding sites [(Skene and Henikoff, eLife 2017)](https://elifesciences.org/articles/21856)
     * Molecular mechanisms of ribosomal protein gene coregulation [(Reja et al., Genes Dev. 2015)](http://genesdev.cshlp.org/content/29/18/1942)
@@ -41,9 +45,11 @@ practical3: "day03/"
 -  **\[55min\]** Motif enrichment analysis with MEME workflow: 
     [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}})
 
-    > Motifs enriched in TF-occupied loci can be identified using motif enrichment tools such as the [MEME suite](http://meme-suite.org/).
+    > Motifs enriched in TF-occupied loci can be identified using motif enrichment tools such as the [MEME suite](http://meme-suite.org/).  
+    Here, we will try to identify putative DNA sequence motifs that may be recognized by each factor studied in this practical.
 
 -  **\[55min\]** Integrating ChIP-seq results: 
     [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}})
 
-    > Depending on the biological question, TF ChIP-seq results can be integrated to test hypotheses and uncover biological insights. In this case, we will focus on the interactions between the different transcription factors ChIP-ed and analyzed in this course. 
+    > Depending on the biological question, ChIP-seq results can be integrated to test hypotheses and uncover biological insights.  
+    Here, we will focus on identifying potential interactions between the different transcription factors analyzed in this course. 
