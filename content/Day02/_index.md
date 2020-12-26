@@ -1,5 +1,5 @@
 ---
-title: "2. Hi-C analysis"
+title: "2. Day 02"
 day: "Day 02"
 ---
 
