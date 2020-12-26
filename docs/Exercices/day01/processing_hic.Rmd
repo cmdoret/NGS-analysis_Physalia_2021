@@ -1,0 +1,192 @@
+---
+title: "Processing Hi-C data"
+output: 
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+In this practice session, we go through the process of generating Hi-C contact maps from the reads.
+It is important to understand the individual steps, either to troubleshoot issues, or for specific / advanced analyses requiring custom data filtering / extraction steps.
+
+For example this would be necessary if you need to  isolatie multi-partner or strand-specific contacts.
+
+For simplicity purposes, we will be using specialized tools command line in this practice session, but all data manipulation steps can be performed or modified pretty easily using a scripting language. The tools that will be needed here are:
+
+* bowtie2
+* samtools
+* GNU coreutils
+* pairtools
+* cooler
+
+## Aligning reads
+
+We first need to align reads separately in single end mode.
+This is because paired end mode assumes a fixed insert size (e.g. 300bp) as in shotgun
+sequencing. In Hi-C there is no such apriori and the distance between forward and reverse reads can be anything.
+
+```bash
+bowtie2-build genome.fa genome
+bowtie2 -U for.fq.gz -x genome > for.sam
+bowtie2 -U rev.fq.gz -x genome > rev.sam
+```
+
+## Processing alignments
+
+Now, we need to sort reads by name (-n) after alignment so that they will have the same order in both files.
+We'll also want to filter out (-F) reads containing the tag 2048. This tag stands for supplementary alignment. This means that
+we only keep one alignment for each read so that each read will occur exactly once in the output.
+
+```bash
+samtools sort -n for.sam | samtools view -F 2048 > for_clean.sam
+samtools sort -n rev.sam | samtools view -F 2048 > rev_clean.sam
+```
+
+## Merging BAM files
+
+Next, we need to merge reads from both files to get contact information. This step is made easy by the samtools view command.
+The SAM files it generated are sorted in the same way, they have exactly one occurence of each read and have no header.
+SAM files have many columns, but we only need a few here: the chromosome, position, tag and mapping quality.
+readname + 2x4 colums: tag,chrom,pos,mapQ
+
+```bash
+paste <(cut -f1-5 for_clean.sam) <(cut -f2-5 rev_clean.sam) > contacts.tsv
+```
+
+## Filtering contacts
+
+We need to make sure we only keep contacts with good mapping quality on both reads.
+Since the contacts are in tabular text format, we can just use awk for that
+Formatting into: readname, chrom1, pos1, chrom2, pos2, tag1, tag2
+
+```bash
+awk '$5 >= 30 && $9 >= 30 {print $1,$3,$4,$7,$8,$2,$6}' contacts.tsv > valid.tsv
+```
+
+> Note: If we want to generate a proper ".pairs" file, we need to prepend a header to the file.
+Pairs headers should look something like that:
+
+```
+## pairs format v1.0
+#sorted: readID
+#columns: readID chrom1 pos1 chrom2 pos2 strand1 strand2
+#chromsize: seq1 60000
+#chromsize: seq2 20000
+```
+
+So in our case, the header can be generated using the SAM file:
+
+```bash
+echo -n """
+## pairs format v1.0
+#sorted: readID
+#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+""" > valid.pairs
+
+samtools view -H for.sam \
+    | awk '$1 == "@SQ" {print "#chromsize: ",substr($2,4),substr($3,4)}' \
+    >> valid.pairs
+```
+
+And then we would append the content using bash's appending redirection operator: `>>`.
+Note we use awk to convert SAM flags (0, 16, ...) into strands (+/-).
+> This is done by computing the bitwise AND of the flag and value 16 which means "reverse strand". If the bit corresponding to that value is set in the flag, the read is on the reverse strand.
+
+```bash
+awk 'BEGIN{OFS="\t"}{
+    if(and($6, 16)){ $6="-" } else $6="+";
+    if(and($7, 16)){ $7="-" } else $7="+";
+    print $0
+    }' valid.tsv >> valid.pairs
+```
+
+Next, we need to attribute each read to a restriction fragment or bin. The first step is to compute the restriction map of the genome.
+
+```bash
+# Generate chromsizes file
+samtools faidx genome.fa
+cut -f1,2 genome.fa.fai > chrom.sizes
+
+# Generate BED file of restriction fragments
+cooler digest chrom.sizes genome.fa DpnII > fragments.bed
+```
+
+We also want to format the pairs file consistently so that the left pair always have the lowest coordinate (flip), and sort pairs by coordinates.
+This can be done using awk or a scripting language, but pairtools makes it much more convenient to perform operations on pairs file.
+
+```bash
+pairtools flip -c chrom.sizes valid.pairs | pairtools sort > valid_sorted.pairs
+```
+
+Optionally, we can apply a bunch of custom filters to the contacts before computing the matrix.
+For example, to filter out PCR duplicates, we would remove pairs where both reads have the exact same position:
+
+```bash
+pairtools dedup valid_sorted.pairs > valid_pcrfree.pairs
+```
+
+## Building the matrix
+
+Building the matrix can be done easily using cooler:
+
+```bash
+cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 fragments.bed valid_pcrfree.pairs demo.cool
+```
+> Note: Since pairs files are text-based, both fragment attribution and building the matrix could be scripted from scratch in python, but this would require a bit more programming. 
+
+## Real life workflows
+
+There are multiple ways to achieve what we did. Instead of converting sam files to pairs by hand, it may be more convenient to do:
+
+```bash
+bwa mem -5SP genome.fasta for.fq rev.fq | samtools view -S -h -b -F 2316 > contacts.bam
+pairtools parse contacts.bam > contacts.pairs
+```
+
+This runs the bwa aligner in pair end mode, but disables the assumptions of mate distance. Samtools then removes supplementary alignments and filters out pairs where one mate is unmapped.
+
+When doing standard Hi-C analyses, you will most likely want to use an end-to-end pipeline, such as [nf-core/hic](https://github.com/nf-core/hic). Knowing each individual step allows you to design custom analyses by working with the intermediate pairs files generated by those pipelines.
+
+## Manipulating cool files
+
+The cool format is a standard file format to store Hi-C data. It is based on HDF5, a hierarchical archive format and comes with a convenient CLI and python API to manipulate Hi-C data.
+A cool file comprises 3 tables:
+
+* pixels: Sparse matrix storing contacts value
+* chroms: Chromosomes names and lengths
+* bins: Genomic coordinates of matrix bins
+
+You can have a general overview of your file structure using:
+
+```bash
+cooler tree demo.cool
+cooler info demo.cool
+```
+
+Although the file format is compressed, the data from each table can always be retrieved in text format using the dump command:
+
+```bash
+cooler dump -f pixels demo.cool
+cooler dump -f bins demo.cool
+cooler dump -f chroms demo.cool
+```
+This is useful when converting data to custom format or exporting some data for analysis.
+
+Another useful feature is the visualisation of the contact heatmap:
+
+```bash
+cooler show demo.cool chrom1
+```
+
+The matrix can also be balanced (normalized) and the normalized contact values are stored in place:
+
+```bash
+cooler balance demo.cool
+cooler show -b demo.cool 'chrom1:10000-4000000'
+```
+
