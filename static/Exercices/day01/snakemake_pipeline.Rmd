@@ -1,0 +1,112 @@
+---
+title: "Hi-C workflow with Snakemake"
+output: 
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+In this practice session, we use a workflow management system named Snakemake to automate and streamline the Hi-C pipeline from the previous exercices. This will allow to easily add or remove samples, or rerun part of the pipeline with different parameters.
+Workflow management tools have multiple benefits. First they reduce the amount of bash "glue" connecting the different steps in pipelines. This is achieved by having each pipeline step as a standard "rule" block with inputs and outputs, with the sample names abstracted away using "wildcards".
+
+
+## The Snakefile
+
+The main file of a snakemake pipeline is called "Snakefile". To execute the pipeline, one needs to type `snakemake` in the folder of the Snakefile.
+Snakefiles contain python code with additional rule blocks.
+
+There must be a final rule, often named "all" which requests the output files of your pipeline. Snakemake will then look for other rules that generate the input required by this rule and generate a graph of inputs and outputs to link rules with each other. Here is a basic example for paired-end read mapping of multiple samples:
+
+```python
+REF = 'data/in/genome.fa'
+
+rule all:
+    input:
+        expand('data/out/{sample}.bam', sample=['A', 'B'])
+
+rule align:
+    input:
+        idx = REF,
+        r1 = 'data/in/{sample}_1.fq',
+        r2 = 'data/in/{sample}_2.fq'
+    output: 'data/out/{sample}.bam'
+    shell: 'bwa mem {input.idx} {input.r1} {input.r2} > {output}'
+```
+
+The above rules work as follow:
+
+* Wildcards are expanded in `rule all`'s output, which resolves to `A.bam` and `B.bam`
+* `rule align` satisfies the wildcards requirement as it can generate `{sample}.bam`, matching both files. It will be run twice (once for each sample).
+* If the inputs of `rule align` already exist, the pipeline will run normally, but if they are missing, this will raise an error as there is no rule to generate them.
+
+> The example above requires that the input genome is already indexed. How would you modify it to build the index if needed ?
+
+<details><summary>Clue</summary>
+<p>
+Snakemake has a [touch()](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#flag-files) function that can be used to make placeholder "flag" files. This is useful when filenames are unknown or there are too many.
+</p>
+</details>
+
+> In our case, the "all" rule will request cool files. How would you write the Snakefile for the Hi-C pipeline from the previous session ?
+
+
+<details><summary>Clue</summary>
+<p>
+In terms of files, our workflow will follow the following transformations: fastq -> bam -> pairs -> cool
+</p>
+</details>
+
+```python
+rule all:
+    input: expand('{sample}.cool', sample=['G1', 'M'])
+
+rule index:
+    input: REF
+    output: touch('index.done')
+    shell: 'bwa index {input}'
+
+rule align:
+    input:
+        idx = 'index.done',
+        r1 = '{sample}_1.fq.gz',
+        r2 = '{sample}_2.fq.gz'
+    output: '{sample}.bam'
+    shell: 'bwa mem -5SP {input.idx} {input.r1} {input.r2} | samtools view -b -h -F 2316 > {output}'
+
+rule get_pairs:
+    input: '{sample}.bam'
+    output: '{sample}.pairs'
+    shell: 'pairtools parse {input} > {output}'
+
+rule digest:
+    input: REF
+    output: 'fragments.bed'
+    params:
+        enzyme = 'DpnII'
+    shell:
+        """
+        samtools faidx {input}
+        cut -f1,2 {input}.fai > chrom.sizes
+        # Generate BED file of restriction fragments
+        cooler digest chrom.sizes {input} {params.enzyme} > {output}
+        """
+
+rule get_cool:
+    input: '{sample}.pairs'
+    output: '{sample}.cool'
+    shell: 'cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 fragments.bed {input} {output}'
+```
+## Comparing conditions
+
+
+
+## Tips
+
+* Instead of writing sample names directly in the Snakefile, it is more convenient to have a dedicated CSV table with sample names and informations and load it using e.g. pandas.read_csv.
+* Snakemake rules can execute rules in dedicated conda environments described in YAML files. This is useful to force your pipeline to use specific software versions.
+* When the pipeline becomes more complex, you can split it into multiple files instead of having one long snakefile. The different files can then be imported in the snakefile using e.g. `include: 'rnaseq.smk'`
