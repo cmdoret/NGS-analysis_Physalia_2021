@@ -58,7 +58,7 @@ readname + 2x4 colums: tag,chrom,pos,mapQ
 paste <(cut -f1-5 for_clean.sam) <(cut -f2-5 rev_clean.sam) > contacts.tsv
 ```
 
-## Filtering contacts
+## Making a pairs file
 
 We need to make sure we only keep contacts with good mapping quality on both reads.
 Since the contacts are in tabular text format, we can just use awk for that
@@ -105,21 +105,13 @@ awk 'BEGIN{OFS="\t"}{
     }' valid.tsv >> valid.pairs
 ```
 
-Next, we need to attribute each read to a restriction fragment or bin. The first step is to compute the restriction map of the genome.
+We also want to format the pairs file consistently so that the left pair always have the lowest coordinate (flip), and sort pairs by coordinates.
+This can be done using awk or a scripting language, but pairtools makes it much more convenient to perform operations on pairs file.
 
 ```bash
 # Generate chromsizes file
 samtools faidx genome.fa
 cut -f1,2 genome.fa.fai > chrom.sizes
-
-# Generate BED file of restriction fragments
-cooler digest chrom.sizes genome.fa DpnII > fragments.bed
-```
-
-We also want to format the pairs file consistently so that the left pair always have the lowest coordinate (flip), and sort pairs by coordinates.
-This can be done using awk or a scripting language, but pairtools makes it much more convenient to perform operations on pairs file.
-
-```bash
 pairtools flip -c chrom.sizes valid.pairs | pairtools sort > valid_sorted.pairs
 ```
 
@@ -130,13 +122,18 @@ For example, to filter out PCR duplicates, we would remove pairs where both read
 pairtools dedup valid_sorted.pairs > valid_pcrfree.pairs
 ```
 
+
 ## Building the matrix
+
+Next, we need to attribute each read to a restriction fragment or bin to build the matrix. For now we will directly use a fixed bin size of 10kb, but as we will see later, we may want to filter pairs based on their restriction fragments before building the matrix.
+
 
 Building the matrix can be done easily using cooler:
 
 ```bash
-cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 fragments.bed valid_pcrfree.pairs demo.cool
+cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 chrom.sizes:10000 valid_pcrfree.pairs demo.cool
 ```
+
 > Note: Since pairs files are text-based, both fragment attribution and building the matrix could be scripted from scratch in python, but this would require a bit more programming. 
 
 ## Real life workflows
@@ -183,6 +180,8 @@ Another useful feature is the visualisation of the contact heatmap:
 cooler show demo.cool chrom1
 ```
 
+> What happens if you regenerate the cool file with a higher resolution (e.g. 1kb) ? Is the resulting matrix more clear ?
+
 The matrix can also be balanced (normalized) and the normalized contact values are stored in place:
 
 ```bash
@@ -190,3 +189,4 @@ cooler balance demo.cool
 cooler show -b demo.cool 'chrom1:10000-4000000'
 ```
 
+> Try printing (dump) the bins and pixels table, what changed compared to before ?
