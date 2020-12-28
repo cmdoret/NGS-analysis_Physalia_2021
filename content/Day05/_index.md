@@ -31,10 +31,15 @@ practical3: "day05/"
 
     > Data for this part of the course was collected from a variety of papers
 
--  **\[30 min\]** Crossing results from ATAC/ChIP-seq with RNA-seq
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}})
+-  **\[1 h\]** Intersecting ATAC-seq and ChIP-seq experiments:
+    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}})
 
-    > lorem ipsum 
+    > As genome-wide assays are increasingly more streamlined, 
+    integrating data from multi-omics experiments becomes a challenging step.  
+    Here, we will see an example of how to integrate 
+    ATAC-seq and ChIP-seq data together. 
+
+    * A Library of Yeast Transcription Factor Motifs Reveals a Widespread Function for Rsc3 in Targeting Nucleosome Exclusion at Promoters [(Badis et al., Mol. Cell 2008)](https://www.cell.com/fulltext/S1097-2765(08)00842-3)
 
 -  **\[1 h 30 min\]** Analysis with external databases: GO analysis, protein functional interactions, ...
     [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}})

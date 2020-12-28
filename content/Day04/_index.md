@@ -6,9 +6,9 @@ presentation2: " "
 presentation3: " "
 presentation4: " "
 presentation5: " "
-practical1: "day04/"
-practical2: "day04/"
-practical3: "day04/"
+practical1: "day04/processing_ATACseq.html"
+practical2: "day04/downstream_ATACseq_analysis.html"
+practical3: "day04/ATACseq_clustering.html"
 ---
 
 ---
@@ -49,14 +49,7 @@ practical3: "day04/"
     Here, we will try to characterize the sites which undergo 
     chromatin remodelling in such context. 
 
--  **\[1 h\]** Intersecting ATAC-seq and ChIP-seq experiments:
+-  **\[1 h\]** Clustering ATAC-seq peaks:
     [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}})
-
-    > As genome-wide assays are increasingly more streamlined, 
-    integrating data from multi-omics experiments becomes a challenging step.  
-    Here, we will see an example of how to integrate 
-    ATAC-seq and ChIP-seq data together. 
-
-    * A Library of Yeast Transcription Factor Motifs Reveals a Widespread Function for Rsc3 in Targeting Nucleosome Exclusion at Promoters [(Badis et al., Mol. Cell 2008)](https://www.cell.com/fulltext/S1097-2765(08)00842-3)
 
 

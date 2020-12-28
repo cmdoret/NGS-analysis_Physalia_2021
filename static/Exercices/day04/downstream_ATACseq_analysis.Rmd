@@ -1,0 +1,192 @@
+---
+title: "Ex. 04-2: Downstream ATAC-seq analysis"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../../custom.css
+    rmdformats::downcute: 
+        preserve_yaml: true
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+## 1. Import ATAC peaks from YAPC
+
+YAPC has mapped peaks with several different thresholds of significance. 
+
+> Check how many peaks were mapped at each threshold.  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh}
+wc -l _yapc-files/stress-response_*.bed
+```
+</p></details><br>
+
+> Which type of genomic locus does an ATAC peak corresponds to? A priori, which YAPC significance threshold seems to yield the most appropriate number of peaks?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+# Import ATAC peaks as GRanges
+library(tidyverse)
+ATAC_peaks <- read.table('_yapc-files/stress-response_0.05.bed') %>% 
+    as_tibble() %>% 
+    setNames(c('seqnames', 'start', 'end', 'yapc_scores', 'score', 'strand', 'summit', 'summit2')) %>%
+    GenomicRanges::makeGRangesFromDataFrame(keep.extra.columns = TRUE)
+ATAC_peaks
+```
+</p></details><br>
+
+## 2. Brief QC of ATAC peaks 
+
+> How far from TSSs each peak is?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+ChIPpeakAnno::genomicElementDistribution(
+    ATAC_peaks, 
+    TxDb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene,
+    labels = list(
+        geneLevel = c(
+            promoter = "Promoter", 
+            geneDownstream = "Downstream",
+            geneBody = "Gene body", 
+            distalIntergenic = "Distal Intergenic"
+        ), 
+        group = c(promoterLevel = "Prom. Level", geneLevel = "Gene Level")
+    ),
+    promoterLevel = list(
+        breaks = c(-2000, -1000, -500, -100, 0, 100),
+        labels = c("upstream 1-2Kb", "upstream 0.5-1Kb", "upstream 100-500bp", "-100 - TSS", "TSS - 100b"),
+        colors = c("#FFE5CC", "#FFCA99", "#FFAD65", "#FF8E32", "#bb5a0a")
+    )
+)
+```
+```{r}
+yeast_genes <- GenomicFeatures::genes(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+GenomeInfoDb::seqlevelsStyle(yeast_genes) <- GenomeInfoDb::seqlevelsStyle(ATAC_peaks)
+yeast_TSSs <- GenomicRanges::resize(yeast_genes, 1, 'start')
+dists <- IRanges::distanceToNearest(ATAC_peaks, yeast_TSSs, ignore.strand = TRUE)
+summary(mcols(dists)$distance)
+hist(log10(mcols(dists)$distance), breaks = 300)
+```
+</p></details><br>
+
+> Compare location of ATAC-seq peaks with that of ChIP-seq peaks
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+ChIP_peaks <- GenomicRanges::reduce(do.call(c, lapply(
+    list.files(pattern = '.*narrowPeak$', path = '../day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE), rtracklayer::import
+)))
+dists <- IRanges::distanceToNearest(ATAC_peaks, ChIP_peaks)
+summary(mcols(dists)$distance)
+hist(log10(mcols(dists)$distance), breaks = 300)
+```
+</p></details><br>
+
+## 3. Count ATAC fragments over ATAC peaks
+
+In R, we can leverage Bioconductor classes and their optimized access to `.bam` files to efficiently count 
+fragment coverage of ATAC-seq datasets over all the annotated ATAC-seq peaks. 
+
+```{r, echo = FALSE, results = FALSE}
+ATAC_counts <- readRDS('ATAC_counts.rds')
+```
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r, eval = FALSE}
+# Define sample sheet
+sampleTable <- data.frame(
+    sample = gsub('_SRR.*', '', list.files(pattern = '_noChrM_q10.bam$', path = '_bam-files/')), 
+    timepoint = gsub('SacCer3_|_rep.*', '', list.files(pattern = '_noChrM_q10.bam$', path = '_bam-files/')), 
+    replicate = rep(c(1, 2), 5), 
+    bam = list.files(pattern = '_noChrM_q10.bam$', path = '_bam-files/', full.names = TRUE)
+)
+# Import fragment counts over peaks 
+ATAC_counts <- GenomicAlignments::summarizeOverlaps(, 
+    features = ATAC_peaks, 
+    reads = Rsamtools::BamFileList(sampleTable$bam), 
+    ignore.strand = TRUE, 
+    singleEnd = FALSE
+)
+```
+```{r}
+ATAC_counts
+```
+</p></details><br>
+
+## 4. Perform DA analysis
+
+```{r, echo = FALSE, results = FALSE}
+ATAC_peaks <- readRDS('ATAC_peaks.rds')
+```
+
+DESeq2 is probably the most widely used package to compute differential coverage (expression) of chromatin loci 
+(genes). Using raw unnormalized counts, it performs the following steps: 
+
+* It estimates the size factors for each library 
+* It estimates the count-dependant dispersion 
+* It fits a negative binomial generalized linear model to internally normalized counts
+* Finally, it tests for differential coverage of genomic features (e.g. genes or peaks) and estimates the log2 fold-change between different conditions. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r, eval = FALSE}
+library(DESeq2)
+colData(ATAC_counts) <- DataFrame(sampleTable)
+dds <- DESeqDataSet(ATAC_counts, design = ~ timepoint) 
+dds <- DESeq(dds)
+out.l2fc <- data.frame(matrix(nrow = nrow(dds), ncol = 4))
+colnames(out.l2fc) <- paste0('L2FC_', c('15_v_00', '30_v_15', '45_v_30', '60_v_45'))
+out.padj <- data.frame(matrix(nrow = nrow(dds), ncol = 4))
+colnames(out.padj) <- paste0('padj_', c('15_v_00', '30_v_15', '45_v_30', '60_v_45'))
+contrasts <- list(
+    c('timepoint', '15', '00'), 
+    c('timepoint', '30', '15'), 
+    c('timepoint', '45', '30'), 
+    c('timepoint', '60', '45')
+)
+for (i in 1:length(contrasts)) {
+    ddr <- results(dds, contrast = contrasts[[i]])
+    metadata(ddr)$alpha <- 0.01
+    out <- as.data.frame(ddr)
+    out.l2fc[,i] <- out[,2]
+    out.padj[,i] <- out[,6]
+}
+rlog <- assay(rlog(dds, blind = FALSE))
+colnames(rlog) <- paste0(sampleTable$timepoint, "_rep", sampleTable$replicate)
+rlog <- matrix(unlist(lapply( 
+    unique(sampleTable$timepoint), 
+    function(x) { 
+        x <- rowMeans(matrix(rlog[,grep(x, colnames(rlog))], nrow = nrow(rlog))) 
+    }
+)), nrow = nrow(rlog))
+rownames(rlog) <- paste0('peak_', 1:nrow(rlog))
+colnames(rlog) <- paste0('rlog_', unique(sampleTable$timepoint))
+results <- cbind(rlog, out.l2fc, out.padj)
+mcols(ATAC_peaks) <- cbind(mcols(ATAC_peaks), results)
+```
+```{r}
+ATAC_peaks
+```
+</p></details><br>
+
+## 5. Filter DA peaks
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+yeast_IDs <- gprofiler2::gconvert(query = yeast_TSSs$gene_id, organism = 'scerevisiae')
+yeast_TSSs$gene_name <- yeast_IDs$name[match(yeast_TSSs$gene_id, yeast_IDs$input)]
+g <- ATAC_peaks[which(ATAC_peaks$L2FC_15_v_00 > log2(1.5) & ATAC_peaks$padj_15_v_00 < 0.01)]
+g$associated_gene <- yeast_TSSs$gene_name[nearest(g, yeast_TSSs)]
+g
+```
+</p></details><br>

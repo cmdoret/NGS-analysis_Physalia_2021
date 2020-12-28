@@ -1,6 +1,11 @@
 ---
-title: "Finding motifs in ChIP-seq peaks"
+title: "Ex. 03-2: Finding motifs in ChIP-seq peaks"
 output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
     rmarkdown::html_document: 
         theme: simplex
         highlight: tango
@@ -27,6 +32,9 @@ Have a look at MEME homepage:
 
 ### Running MEME to find *de novo* motifs in Reb1 peaks
 
+Let's run MEME on peaks mapped in Reb1 ChIP-seq assay. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
 genome='results/genome/genome.fa'
 peaks_folder='results/bwa/mergedLibrary/macs/narrowPeak/'
@@ -50,16 +58,16 @@ meme \
     -maxw ${max_width} \
     -V 
 ```
+</p></details><br>
 
 > What is the purpose of each argument here?   
+
 > Have a look at the output. How are the motifs identified? Where are they located in the MACS2 peaks?  
+
 > Can we avoid getting complementary motifs? 
 
-<details><summary>Clue</summary>
-<p>
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 Check meme options with meme --help
-</p>
-</details>
 
 ```{sh, eval = FALSE}
 output_dir="meme_out/${TF}_revcomp"
@@ -75,9 +83,12 @@ meme \
     -dna \
     -V 
 ```
+</p></details><br>
 
-> What happened to the original two motifs? 
-> Do you find other interesting motifs? What can you conclude about Reb1 binding to the DNA? 
+> What happened to the original two motifs?  
+
+> Do you find other interesting motifs? What can you conclude about Reb1 binding to the DNA?  
+
 > What is the proportion of peaks which contain the putative Reb1 binding motif? 
 Was Reb1 supposed to be a particularly successful ChIP-seq experiment, according to MultiQC reports? 
 What can you conclude about the meaning of a "bad quality" ChIP-seq library? 
@@ -88,6 +99,7 @@ STREME is the "newer" MEME. It is faster, more sensitive and its documentation i
 It alleviates the need to specify a cumbersome list of obscure parameters.  
 Let's have a go at it. 
 
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
 genome='results/genome/genome.fa'
 peaks_folder='results/bwa/mergedLibrary/macs/narrowPeak/'
@@ -107,14 +119,17 @@ streme \
     --minw ${min_width} \
     --maxw ${max_width} 
 ```
+</p></details><br>
 
 > Compare STREME and MEME outputs for Reb1_R1. What do you think?  
+
 > Timewhise, how long did each command take to execute? How many peaks were analyzed in this example? And how many peaks other TF ChIP-seq libraries have in average? Comment. 
 
 ### Running STREME to find *de novo* motifs for all TFs
 
 *De novo* motif analyses were conducted with `Streme` for all the ChIP-seq libraries sequenced, using the following gist: 
 
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
 genome='results/genome/genome.fa'
 peaks_folder='results/bwa/mergedLibrary/macs/narrowPeak/'
@@ -139,9 +154,13 @@ do
         --verbosity 1
 done
 ```
+</p></details><br>
 
-> Check out the gist hereabove. Do you understand all the parameters? Is there a reason for increasing nmotifs? What about min_width/max_width?
-> What can you say about the robustness of *de novo* motif analyses? Are they sensitive to ChIP-seq biological replicates? How would you deal with replicates in such case? 
+> Check out the gist hereabove. Do you understand all the parameters? Is there a reason for increasing nmotifs? What about min_width/max_width?  
+
+> What can you say about the robustness of *de novo* motif analyses? Are they sensitive to ChIP-seq biological replicates? How would you deal with replicates in such case?  
+
+> Have a look at the motifs found enriched in peaks for each TF. Can you find motifs shared amongst multiple TFs?  
 
 ## 2. Mapping site location relative to TSSs in the genome
 
@@ -152,16 +171,23 @@ To deal with peak annotations, we can import them in R using the `rtracklayer` p
 seamlessly import/export binarized or human-readable data, in or out of R, in most of 
 the common genomic file formats. 
 
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 Reb1_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak')
 ```
+</p></details><br>
 
 > How many peaks were found in the Reb1 ChIP-seq library? 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 length(Reb1_peaks)
 ```
+</p></details><br>
 
 > Where are Reb1 peaks located in the genome? How about Cse4 peaks? And relative to gene annotations?
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 ChIPseeker::covplot(Reb1_peaks, weightCol = "qValue")
 ChIPpeakAnno::genomicElementDistribution(
@@ -180,18 +206,25 @@ ChIPpeakAnno::genomicElementDistribution(
     geneDownstream = c(upstream = 0, downstream = 2000)
 )
 ```
+</p></details><br>
 
 > What is the distribution of peak widths?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 hist(GenomicRanges::width(Reb1_peaks))
 ```
+</p></details><br>
 
 > Where is the peak summit located within each peak?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 Reb1_peak_summits <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_summits.bed')
 pos <- {GenomicRanges::end(Reb1_peak_summits) - GenomicRanges::start(Reb1_peaks)} / {GenomicRanges::end(Reb1_peaks) - GenomicRanges::start(Reb1_peaks)}
 hist(pos)
 ```
+</p></details><br>
 
 ### Importing MEME motifs in R
 
@@ -204,6 +237,8 @@ To do so, we can leverage several packages:
 * `TFBSTools` is used to map a PWM of interest on a entire genome sequence. 
 
 > Let's import Reb1 and Abf1 motif PWMs and map their binding sites found in the genome. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 `%over%` <- IRanges::`%over%`
 genome <- BSgenome.Scerevisiae.UCSC.sacCer3::BSgenome.Scerevisiae.UCSC.sacCer3
@@ -266,20 +301,21 @@ Abf1_hits
 Abf1_hits <- Abf1_hits[Abf1_hits$relScore >= 0.80]
 Abf1_hits
 ```
+</p></details><br>
 
 > Compare the peaks found by MACS2 witht the binding motifs found 
 when mapping the STREME-derived PWMs onto the Yeast genome sequence. 
-Are they overlapping? How far from the nearest motif each peak is?  s
+Are they overlapping? How far from the nearest motif each peak is?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 table(Reb1_hits %over% Reb1_peaks)
 ```
+</p></details><br>
 
-<details><summary>Clue</summary>
-<p>
-Check the seqnames of the 2 GRanges objects. Are they strictly identical? 
-</p>
-</details>
+> Check the seqnames of the 2 GRanges objects. Are they strictly identical? 
 
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 GenomeInfoDb::seqlevelsStyle(Reb1_hits)
 GenomeInfoDb::seqlevelsStyle(Reb1_peaks)
@@ -294,17 +330,21 @@ table(Abf1_peaks %over% Abf1_hits)
 dist <- GenomicRanges::distanceToNearest(Abf1_peaks, Abf1_hits)@elementMetadata$distance
 hist(dist, breaks = 100)
 ```
+</p></details><br>
 
-> How far from each other are Abf1, Reb1 and Rap1 peaks? 
+> How far from each other are Abf1, Reb1 and Rap1 peaks?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 Rap1_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Rap1_R1_peaks.narrowPeak')
 table(Abf1_peaks %over% Rap1_peaks)
 ```
+</p></details><br>
 
-### Conclusions 
+## Conclusions 
 
 > How do PWM motif scanning and peak calling reconcile? Which one provides a 
-better estimation of the regions regulated by a given transcription factor? 
+better estimation of the regions regulated by a given transcription factor?  
 
 > How could you compare overlaps of multiple sets of TF peaks in a more 
-comprehensive manner? 
+comprehensive manner?  

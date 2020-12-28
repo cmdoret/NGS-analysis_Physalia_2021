@@ -1,0 +1,5 @@
+group,replicate,fastq_1,fastq_2,antibody,control
+Hog1,1,SRR500623_GSM936791_Hog1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Hog1,control_ChIP-seq
+Sko1,1,SRR500627_GSM936795_Sko1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Sko1,control_ChIP-seq
+Hot1,1,SRR500629_GSM936797_Hot1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Hot1,control_ChIP-seq
+control_ChIP-seq,1,SRR500633_GSM936801_input_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,,
