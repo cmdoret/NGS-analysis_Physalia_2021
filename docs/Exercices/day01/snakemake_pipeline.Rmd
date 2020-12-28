@@ -1,0 +1,237 @@
+---
+title: "Hi-C workflow with Snakemake"
+output: 
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+In this practice session, we use a workflow management system named Snakemake to automate and streamline the Hi-C pipeline from the previous exercices. This will allow to easily add or remove samples, or rerun part of the pipeline with different parameters.
+Workflow management tools have multiple benefits. First they reduce the amount of bash "glue" connecting the different steps in pipelines. This is achieved by having each pipeline step as a standard "rule" block with inputs and outputs, with the sample names abstracted away using "wildcards".
+
+
+## The Snakefile
+
+The main file of a snakemake pipeline is called "Snakefile". To execute the pipeline, one needs to type `snakemake` in the folder of the Snakefile.
+Snakefiles contain python code with additional rule blocks.
+
+There must be a final rule, often named "all" which requests the output files of your pipeline. Snakemake will then look for other rules that generate the input required by this rule and generate a graph of inputs and outputs to link rules with each other. Here is a basic example for paired-end read mapping of multiple samples:
+
+```python
+REF = 'data/in/genome.fa'
+
+rule all:
+    input:
+        expand('data/out/{sample}.bam', sample=['A', 'B'])
+
+rule align:
+    input:
+        idx = REF,
+        r1 = 'data/in/{sample}_1.fq',
+        r2 = 'data/in/{sample}_2.fq'
+    output: 'data/out/{sample}.bam'
+    shell: 'bwa mem {input.idx} {input.r1} {input.r2} > {output}'
+```
+
+The above rules work as follow:
+
+* Wildcards are expanded in `rule all`'s output, which resolves to `A.bam` and `B.bam`
+* `rule align` satisfies the wildcards requirement as it can generate `{sample}.bam`, matching both files. It will be run twice (once for each sample).
+* If the inputs of `rule align` already exist, the pipeline will run normally, but if they are missing, this will raise an error as there is no rule to generate them.
+
+> The example above requires that the input genome is already indexed. How would you modify it to build the index if needed ?
+
+<details><summary>Clue</summary>
+<p>
+Snakemake has a [touch()](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#flag-files) function that can be used to make placeholder "flag" files. This is useful when filenames are unknown or there are too many.
+</p>
+</details>
+
+> In our case, the "all" rule will request cool files. How would you write the Snakefile for the Hi-C pipeline from the previous session ?
+
+
+<details><summary>Clue</summary>
+<p>
+In terms of files, our workflow will follow the following transformations: fastq -> bam -> pairs -> cool
+</p>
+</details>
+
+```python
+REF = 'genome.fa'
+
+rule all:
+    input: expand('{sample}.cool', sample=['G1', 'M'])
+
+rule index:
+    input: REF
+    output: touch('index.done')
+    shell: 'bwa index {input}'
+
+rule align:
+    input:
+        idx_flag = 'index.done',
+        r1 = '{sample}_1.fq.gz',
+        r2 = '{sample}_2.fq.gz'
+    params:
+        idx_prefix = REF
+    output: '{sample}.bam'
+    shell: 'bwa mem -5SP {params.idx_prefix} {input.r1} {input.r2} | samtools view -b -h -F 2316 > {output}'
+
+rule chromsizes:
+    input: REF
+    output: 'chrom.sizes'
+    shell:
+        """
+        samtools faidx {input}
+        cut -f1,2 "{input}.fai" > {output}
+        """
+
+rule get_pairs:
+    input:
+        bam = '{sample}.bam',
+        chromsizes = 'chrom.sizes'
+    output: '{sample}.pairs'
+    shell: 'pairtools parse -c {input.chromsizes} {input.bam} > {output}'
+
+rule get_cool:
+    input:
+        pairs = '{sample}.pairs',
+        chromsizes = 'chrom.sizes'
+    output: '{sample}.cool'
+    params:
+        res = 10000
+    shell: 'cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 {input.chromsizes}:{params.res} {input.pairs} {output}'
+```
+
+## Filtering informative events
+
+Most pipelines filter informative Hi-C pairs. This allows to exclude self-religation events, such as when both reads are on a single fragments, or adjacent fragments that have not been digested.
+A good example is the `mapped_2hic_fragments.py` script from the [nf-core/hic](https://github.com/nf-core/hic) pipeline. We could add a pairs filtering rule that calls this script in out custom pipeline.
+
+> Download the `mapped_2hic_fragments.py` script and use it in the pipeline.
+
+
+<details><summary>clue</summary>
+<p>
+In addition to the pairs, the script will need a BED file with coordinates of restriction fragments. `cooler digest` can generate such a file.
+</p>
+</details>
+
+
+## Changing analysis parameters
+
+Some parameters in Hi-C processing will impact results, such as balancing options or matrix resolution. Of course we can change these parameters at our will by directly editing the Snakefile, but it can be tedious to sift through the pipeline to find relevant options. Snakemake makes it easy to put these relevant parameters in a dedicated file and reading it in the snakefile.
+
+This can be done by using the `configfile` directive. Writing `configfile: 'config.yaml'` at the top of the Snakefile will load the contents of `config.yaml` into a dictionary named config.
+
+For example, in our minimal mapping example, we could add a minimum mapping quality filter as an option:
+
+```python
+REF = 'data/in/genome.fa'
+configfile: 'config.yaml'
+
+rule all:
+    input:
+        expand('data/out/{sample}.bam', sample=['A', 'B'])
+
+rule align:
+    input:
+        idx = REF,
+        r1 = 'data/in/{sample}_1.fq',
+        r2 = 'data/in/{sample}_2.fq'
+    output: 'data/out/{sample}.bam'
+    params:
+        mapq = config["mapq"]
+    shell:
+        """
+        bwa mem {input.idx} {input.r1} {input.r2} \
+            | samtools view -q {params.mapq} > {output}
+        """
+```
+
+where the `mapq` parameter is read from the following `config.yaml` file:
+
+```
+mapq : 10
+```
+
+> What rules of the Hi-C pipeline do you think could benefit from tweaking parameters ? Try adding a config file to change them conveniently.
+
+<details><summary>clue</summary>
+<p>
+add a rule to balance the matrix using `cooler balance`, use `cooler balance -h` to check which parameters may be worth changing.
+</p>
+</details>
+
+```python
+rule balance:
+    input: '{sample}.cool'
+    output: touch('{sample}_balanced.done')
+    params:
+        ...
+    shell: 'cooler balance {input}'
+```
+
+## Comparing between samples
+
+For the sake of comparing our Hi-C matrices visually, we can add a rule to compute the log ration of the 2 Hi-C matrices. When coverage differs between condition, it is generally a good idea to subsample matrices to the same coverage.
+
+This can be done easily using the `cooltools` package. This software has several useful features for downstream processing of Hi-C data.
+
+> Add a rule to subsample matrices to the same coverage using `cooltools`.
+
+Matrices can be loaded from cool files using the cooler API. See a basic example below:
+
+```python
+import cooler
+clr = cooler.Cooler('G1.cool')
+mat = clr.matrix(balance=True)[:] # Load the whole balanced matrix
+mat_chr1 = clr.matrix().fetch('chrom1') # Load the raw matrix for chromosome 1
+```
+
+> Use the cooler python API to load the matrix of a region in both samples and plot the log ratio of the matrices. What are the main changes happening ?
+
+<details><summary>tip</summary>
+<p>
+Snakemake offers a convenient `script` directive to embed python (or R) scripts in pipelines. The task above could be added to the pipeline as follows:
+
+```python
+rule matrix_ratio:
+    input:
+        g1 = 'G1.cool',
+        m = 'M.cool'
+    output: 'ratio.png'
+    script: 'hic_ratio.py'
+```
+
+The `hic_ratio.py` script can access the input and outputs from snakemake using the `snakemake` object:
+
+```python
+import cooler
+import matplotlib.pyplot as plt
+
+region = 'chrom1'
+clr_g1 = cooler.Cooler(snakemake.input['G1'])
+clr_m = cooler.Cooler(snakemake.input['M'])
+
+mat_g1 = clr_g1.matrix(balance=True).fetch(region)
+mat_m = clr_m.matrix(balance=True).fetch(region)
+
+plt.imshow(np.log10(mat_m / mat_g1), cmap='afmhot_r')
+plt.savefig(snakemake.output)
+
+```
+</p>
+</details>
+
+
+## Tips
+
+* Instead of writing sample names directly in the Snakefile, it is more convenient to have a dedicated CSV table with sample names and informations and load it using e.g. `pandas.read_csv`.
+* Snakemake rules can execute rules in dedicated conda environments described in YAML files. This is useful to force your pipeline to use specific software versions.
+* When the pipeline becomes more complex, you can split it into multiple files instead of having one long snakefile. The different files can then be imported in the snakefile using e.g. `include: 'rnaseq.smk'`

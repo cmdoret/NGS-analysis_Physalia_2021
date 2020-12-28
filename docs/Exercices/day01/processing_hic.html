@@ -1699,8 +1699,8 @@ div.tocify {
 <p>Next, we need to merge reads from both files to get contact information. This step is made easy by the samtools view command. The SAM files it generated are sorted in the same way, they have exactly one occurence of each read and have no header. SAM files have many columns, but we only need a few here: the chromosome, position, tag and mapping quality. readname + 2x4 colums: tag,chrom,pos,mapQ</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="ex">paste</span> <span class="op">&lt;(</span><span class="fu">cut</span> -f1-5 for_clean.sam<span class="op">)</span> <span class="op">&lt;(</span><span class="fu">cut</span> -f2-5 rev_clean.sam<span class="op">)</span> <span class="op">&gt;</span> contacts.tsv</a></code></pre></div>
 </div>
-<div id="filtering-contacts" class="section level2">
-<h2>Filtering contacts</h2>
+<div id="making-a-pairs-file" class="section level2">
+<h2>Making a pairs file</h2>
 <p>We need to make sure we only keep contacts with good mapping quality on both reads. Since the contacts are in tabular text format, we can just use awk for that Formatting into: readname, chrom1, pos1, chrom2, pos2, tag1, tag2</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">awk</span> <span class="st">'$5 &gt;= 30 &amp;&amp; $9 &gt;= 30 {print $1,$3,$4,$7,$8,$2,$6}'</span> contacts.tsv <span class="op">&gt;</span> valid.tsv</a></code></pre></div>
 <blockquote>
@@ -1727,22 +1727,19 @@ div.tocify {
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">    if(and($7, 16)){ $7=&quot;-&quot; } else $7=&quot;+&quot;;</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">    print $0</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">    }'</span> valid.tsv <span class="op">&gt;&gt;</span> valid.pairs</a></code></pre></div>
-<p>Next, we need to attribute each read to a restriction fragment or bin. The first step is to compute the restriction map of the genome.</p>
+<p>We also want to format the pairs file consistently so that the left pair always have the lowest coordinate (flip), and sort pairs by coordinates. This can be done using awk or a scripting language, but pairtools makes it much more convenient to perform operations on pairs file.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># Generate chromsizes file</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="ex">samtools</span> faidx genome.fa</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="fu">cut</span> -f1,2 genome.fa.fai <span class="op">&gt;</span> chrom.sizes</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co"># Generate BED file of restriction fragments</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="ex">cooler</span> digest chrom.sizes genome.fa DpnII <span class="op">&gt;</span> fragments.bed</a></code></pre></div>
-<p>We also want to format the pairs file consistently so that the left pair always have the lowest coordinate (flip), and sort pairs by coordinates. This can be done using awk or a scripting language, but pairtools makes it much more convenient to perform operations on pairs file.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ex">pairtools</span> flip -c chrom.sizes valid.pairs <span class="kw">|</span> <span class="ex">pairtools</span> sort <span class="op">&gt;</span> valid_sorted.pairs</a></code></pre></div>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="ex">pairtools</span> flip -c chrom.sizes valid.pairs <span class="kw">|</span> <span class="ex">pairtools</span> sort <span class="op">&gt;</span> valid_sorted.pairs</a></code></pre></div>
 <p>Optionally, we can apply a bunch of custom filters to the contacts before computing the matrix. For example, to filter out PCR duplicates, we would remove pairs where both reads have the exact same position:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="ex">pairtools</span> dedup valid_sorted.pairs <span class="op">&gt;</span> valid_pcrfree.pairs</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ex">pairtools</span> dedup valid_sorted.pairs <span class="op">&gt;</span> valid_pcrfree.pairs</a></code></pre></div>
 </div>
 <div id="building-the-matrix" class="section level2">
 <h2>Building the matrix</h2>
+<p>Next, we need to attribute each read to a restriction fragment or bin to build the matrix. For now we will directly use a fixed bin size of 10kb, but as we will see later, we may want to filter pairs based on their restriction fragments before building the matrix.</p>
 <p>Building the matrix can be done easily using cooler:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="ex">cooler</span> cload pairs -c1 2 -p1 3 -c2 4 -p2 5 fragments.bed valid_pcrfree.pairs demo.cool</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="ex">cooler</span> cload pairs -c1 2 -p1 3 -c2 4 -p2 5 chrom.sizes:10000 valid_pcrfree.pairs demo.cool</a></code></pre></div>
 <blockquote>
 <p>Note: Since pairs files are text-based, both fragment attribution and building the matrix could be scripted from scratch in python, but this would require a bit more programming.</p>
 </blockquote>
@@ -1750,8 +1747,8 @@ div.tocify {
 <div id="real-life-workflows" class="section level2">
 <h2>Real life workflows</h2>
 <p>There are multiple ways to achieve what we did. Instead of converting sam files to pairs by hand, it may be more convenient to do:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ex">bwa</span> mem -5SP genome.fasta for.fq rev.fq <span class="kw">|</span> <span class="ex">samtools</span> view -S -h -b -F 2316 <span class="op">&gt;</span> contacts.bam</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="ex">pairtools</span> parse contacts.bam <span class="op">&gt;</span> contacts.pairs</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="ex">bwa</span> mem -5SP genome.fasta for.fq rev.fq <span class="kw">|</span> <span class="ex">samtools</span> view -S -h -b -F 2316 <span class="op">&gt;</span> contacts.bam</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="ex">pairtools</span> parse contacts.bam <span class="op">&gt;</span> contacts.pairs</a></code></pre></div>
 <p>This runs the bwa aligner in pair end mode, but disables the assumptions of mate distance. Samtools then removes supplementary alignments and filters out pairs where one mate is unmapped.</p>
 <p>When doing standard Hi-C analyses, you will most likely want to use an end-to-end pipeline, such as <a href="https://github.com/nf-core/hic">nf-core/hic</a>. Knowing each individual step allows you to design custom analyses by working with the intermediate pairs files generated by those pipelines.</p>
 </div>
@@ -1764,18 +1761,24 @@ div.tocify {
 <li>bins: Genomic coordinates of matrix bins</li>
 </ul>
 <p>You can have a general overview of your file structure using:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ex">cooler</span> tree demo.cool</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="ex">cooler</span> info demo.cool</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ex">cooler</span> tree demo.cool</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="ex">cooler</span> info demo.cool</a></code></pre></div>
 <p>Although the file format is compressed, the data from each table can always be retrieved in text format using the dump command:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="ex">cooler</span> dump -f pixels demo.cool</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="ex">cooler</span> dump -f bins demo.cool</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="ex">cooler</span> dump -f chroms demo.cool</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ex">cooler</span> dump -f pixels demo.cool</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="ex">cooler</span> dump -f bins demo.cool</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="ex">cooler</span> dump -f chroms demo.cool</a></code></pre></div>
 <p>This is useful when converting data to custom format or exporting some data for analysis.</p>
 <p>Another useful feature is the visualisation of the contact heatmap:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="ex">cooler</span> show demo.cool chrom1</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="ex">cooler</span> show demo.cool chrom1</a></code></pre></div>
+<blockquote>
+<p>What happens if you regenerate the cool file with a higher resolution (e.g. 1kb) ? Is the resulting matrix more clear ?</p>
+</blockquote>
 <p>The matrix can also be balanced (normalized) and the normalized contact values are stored in place:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="ex">cooler</span> balance demo.cool</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="ex">cooler</span> show -b demo.cool <span class="st">'chrom1:10000-4000000'</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="ex">cooler</span> balance demo.cool</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="ex">cooler</span> show -b demo.cool <span class="st">'chrom1:10000-4000000'</span></a></code></pre></div>
+<blockquote>
+<p>Try printing (dump) the bins and pixels table, what changed compared to before ?</p>
+</blockquote>
 </div>
 
 
