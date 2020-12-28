@@ -6,6 +6,7 @@ output:
         preserve_yaml: true
         df_print: tibble
         toc_depth: 4
+        css: ../../../custom.css
     rmarkdown::html_document: 
         theme: simplex
         highlight: tango

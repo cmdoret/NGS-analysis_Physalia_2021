@@ -12,21 +12,21 @@
     <title>4. Day 04 :: NGS analysis for gene regulation and epigenomics</title>
 
     
-    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1609122252" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1609122252" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1609172880" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1609172880" rel="stylesheet">
     
-    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1609122252" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1609172880" rel="stylesheet">
     
     
 
-    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1609122252"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1609172880"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -514,7 +514,7 @@ Exercices/day04/processing_ATACseq.html" target="_blank">[Rmd]</a>
 <blockquote>
 <p>Data for this part of the course was collected from a research paper from the <a href="https://greenleaf.stanford.edu/" target="_blank">Greenleaf lab</a>
 , the lab which pioneered ATAC-seq experiments. In this paper, ATAC-seq experiments have been conducted in Yeast, in normal conditions and under osmotic stress.<br>
-Here, we will process their data using a peak caller specifically designed for ATAC-seq data.</p>
+Here, we will process their data using a homemade bash script to highlight pros &amp; cons of using workflow managers.</p>
 </blockquote>
 <ul>
 <li>Structured nucleosome fingerprints enable high-resolution mapping of chromatin architecture within regulatory regions <a href="https://genome.cshlp.org/content/25/11/1757.short" target="_blank">(Schep et al., Genome Res. 2015)</a>
@@ -527,16 +527,28 @@ Here, we will process their data using a peak caller specifically designed for A
 Exercices/day04/downstream_ATACseq_analysis.html" target="_blank">[Rmd]</a>
 </p>
 <blockquote>
-<p>Chromatin accessibility changes under osmotic stress.<br>
-Here, we will try to characterize the sites which undergo
-chromatin remodelling in such context.</p>
+<p>Upon osmotic stress, chromatin accessibility dynamically changes at specific loci.<br>
+Here, we will try to identify the sites which undergo chromatin
+remodelling in such context. To map accessibility peaks, we will
+use a peak caller specifically designed for ATAC-seq data.</p>
 </blockquote>
+<ul>
+<li>Chromatin accessibility dynamics across C. elegans development and ageing <a href="https://elifesciences.org/articles/37344" target="_blank">(Jänes et al., eLife 2018)</a>
+</li>
+</ul>
 </li>
 <li>
 <p><strong>[1 h]</strong> Clustering ATAC-seq peaks:
 <a href="/NGS-analysis_Physalia_2021/
-Exercices/day04/ATACseq_clustering.html" target="_blank">[Rmd]</a>
+Exercices/day04/clustering_ATACseq.html" target="_blank">[Rmd]</a>
 </p>
+<blockquote>
+<p>Chromatin accessibility may be increasing <em>or</em> decreasing upon osmotic stress.<br>
+Here, we will characterize the different dynamic behaviors of chromatin accessibility
+when yeast cells undergo osmotic stress.<br>
+Following chromatin loci clustering, we will look at a subset of handpicked loci to understand the
+benefits and the pitfalls of such analysis.</p>
+</blockquote>
 </li>
 </ul>
 
@@ -811,19 +823,19 @@ Exercices/day04/ATACseq_clustering.html" target="_blank">[Rmd]</a>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1609122252"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1609122252"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1609122252"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1609122252"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1609122252"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1609122252"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1609172880"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1609172880"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1609172880"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1609172880"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1609172880"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1609172880"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1609122252"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1609122252"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1609122252"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1609172880"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1609172880"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1609172880"></script>
     
         
-            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1609122252"></script>
+            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1609172880"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

@@ -1,0 +1,26 @@
+---
+title: "Ex. 04-1: Processing ATAC-seq data, the 'hard' way"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../../custom.css
+    rmdformats::downcute: 
+        preserve_yaml: true
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+```{sh}
+echo HELLO 
+```
+
+wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2020/JASPAR2020_sacCer3.bb

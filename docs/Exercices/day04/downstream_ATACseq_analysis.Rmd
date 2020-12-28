@@ -41,16 +41,17 @@ ATAC_peaks <- read.table('_yapc-files/stress-response_0.05.bed') %>%
     as_tibble() %>% 
     setNames(c('seqnames', 'start', 'end', 'yapc_scores', 'score', 'strand', 'summit', 'summit2')) %>%
     GenomicRanges::makeGRangesFromDataFrame(keep.extra.columns = TRUE)
-ATAC_peaks
+ATAC_peaks$peakID <- paste0('peak_', 1:length(ATAC_peaks))
 ```
 </p></details><br>
 
 ## 2. Brief QC of ATAC peaks 
 
-> How far from TSSs each peak is?  
+> How far from a TSS each peak is?  
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
+# Use ChIPpeakAnno to see which genomic features ATAC peaks overlap
 ChIPpeakAnno::genomicElementDistribution(
     ATAC_peaks, 
     TxDb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene,
@@ -71,9 +72,17 @@ ChIPpeakAnno::genomicElementDistribution(
 )
 ```
 ```{r}
+# Get Yeast TSS annotations from TxDb
 yeast_genes <- GenomicFeatures::genes(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
 GenomeInfoDb::seqlevelsStyle(yeast_genes) <- GenomeInfoDb::seqlevelsStyle(ATAC_peaks)
 yeast_TSSs <- GenomicRanges::resize(yeast_genes, 1, 'start')
+# Convert Ensembl gene ID to human-readable gene names, using gprofiler2
+yeast_IDs <- gprofiler2::gconvert(query = yeast_TSSs$gene_id, organism = 'scerevisiae')
+head(yeast_IDs)
+yeast_TSSs$gene_name <- yeast_IDs$name[match(yeast_TSSs$gene_id, yeast_IDs$input)]
+# Annotate closest TSS for each ATAC peak
+ATAC_peaks$associated_gene <- yeast_TSSs$gene_name[nearest(ATAC_peaks, yeast_TSSs, ignore.strand = TRUE)]
+# Calculate distance to the nearest TSS for each ATAC peak
 dists <- IRanges::distanceToNearest(ATAC_peaks, yeast_TSSs, ignore.strand = TRUE)
 summary(mcols(dists)$distance)
 hist(log10(mcols(dists)$distance), breaks = 300)
@@ -141,26 +150,30 @@ DESeq2 is probably the most widely used package to compute differential coverage
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r, eval = FALSE}
 library(DESeq2)
+# Perform DE analysis
 colData(ATAC_counts) <- DataFrame(sampleTable)
 dds <- DESeqDataSet(ATAC_counts, design = ~ timepoint) 
 dds <- DESeq(dds)
-out.l2fc <- data.frame(matrix(nrow = nrow(dds), ncol = 4))
-colnames(out.l2fc) <- paste0('L2FC_', c('15_v_00', '30_v_15', '45_v_30', '60_v_45'))
-out.padj <- data.frame(matrix(nrow = nrow(dds), ncol = 4))
-colnames(out.padj) <- paste0('padj_', c('15_v_00', '30_v_15', '45_v_30', '60_v_45'))
-contrasts <- list(
-    c('timepoint', '15', '00'), 
-    c('timepoint', '30', '15'), 
-    c('timepoint', '45', '30'), 
-    c('timepoint', '60', '45')
-)
-for (i in 1:length(contrasts)) {
-    ddr <- results(dds, contrast = contrasts[[i]])
+# Prepare contrasts for timepoint pairwise comparison
+timepoints <- c('00', '15', '30', '45', '60')
+contrasts <- apply(combn(5, 2), 2, function(idx) {
+    c('timepoint', timepoints[idx[2]], timepoints[idx[1]])
+})
+colnames(contrasts) <- apply(contrasts, 2, function(col) paste0(col[2], '_v_', col[3]))
+contrasts
+# Extract differential accessibility results
+out.l2fc <- data.frame(matrix(nrow = nrow(dds), ncol = ncol(contrasts)))
+colnames(out.l2fc) <- paste0('L2FC_', colnames(contrasts))
+out.padj <- data.frame(matrix(nrow = nrow(dds), ncol = ncol(contrasts)))
+colnames(out.padj) <- paste0('padj_', colnames(contrasts))
+for (i in 1:ncol(contrasts)) {
+    ddr <- results(dds, contrast = contrasts[,i])
     metadata(ddr)$alpha <- 0.01
     out <- as.data.frame(ddr)
-    out.l2fc[,i] <- out[,2]
-    out.padj[,i] <- out[,6]
+    out.l2fc[,i] <- out[, 'log2FoldChange']
+    out.padj[,i] <- out[, 'padj']
 }
+# Get regularized log-normalized accessibility counts
 rlog <- assay(rlog(dds, blind = FALSE))
 colnames(rlog) <- paste0(sampleTable$timepoint, "_rep", sampleTable$replicate)
 rlog <- matrix(unlist(lapply( 
@@ -171,6 +184,7 @@ rlog <- matrix(unlist(lapply(
 )), nrow = nrow(rlog))
 rownames(rlog) <- paste0('peak_', 1:nrow(rlog))
 colnames(rlog) <- paste0('rlog_', unique(sampleTable$timepoint))
+# Compile and save results
 results <- cbind(rlog, out.l2fc, out.padj)
 mcols(ATAC_peaks) <- cbind(mcols(ATAC_peaks), results)
 ```
@@ -179,14 +193,47 @@ ATAC_peaks
 ```
 </p></details><br>
 
-## 5. Filter DA peaks
+## 5. Check peaks DA between 2 timepoints
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-yeast_IDs <- gprofiler2::gconvert(query = yeast_TSSs$gene_id, organism = 'scerevisiae')
-yeast_TSSs$gene_name <- yeast_IDs$name[match(yeast_TSSs$gene_id, yeast_IDs$input)]
+# Get peaks whose accessibility increases between 0 and 15 min
 g <- ATAC_peaks[which(ATAC_peaks$L2FC_15_v_00 > log2(1.5) & ATAC_peaks$padj_15_v_00 < 0.01)]
-g$associated_gene <- yeast_TSSs$gene_name[nearest(g, yeast_TSSs)]
 g
+# Get peaks whose accessibility increases between 0 and 60 min
+g <- ATAC_peaks[which(ATAC_peaks$L2FC_60_v_00 > log2(1.5) & ATAC_peaks$padj_60_v_00 < 0.01)]
+g
+```
+</p></details><br>
+
+## 6. Save analysis
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+# Export as RDS
+saveRDS(ATAC_peaks, 'ATAC_peaks.rds')
+# Export as GFF
+attrs <- paste0(
+    "ID=", ATAC_peaks$peakID,
+    ";associated-gene=", ATAC_peaks$associated_gene, 
+    ";rlog_00=", ATAC_peaks$rlog_00,
+    ";rlog_15=", ATAC_peaks$rlog_15,
+    ";rlog_30=", ATAC_peaks$rlog_30,
+    ";rlog_45=", ATAC_peaks$rlog_45,
+    ";rlog_60=", ATAC_peaks$rlog_60
+)
+GFF <- data.frame(
+    seqname = as.character(seqnames(ATAC_peaks)),
+    source = 'ATACseq_osmotic-stress-response', 
+    feature = 'peak', 
+    start = as.character(start(ATAC_peaks) + 1),
+    end = as.character(end(ATAC_peaks)),
+    score = '.', 
+    strand = '*', 
+    frame = '.',
+    attribute = attrs
+)
+writeLines("##gffTags=on\n##displayName=Name\n##gff-version 3", 'ATAC_peaks.gff')
+write.table(GFF, file = 'ATAC_peaks.gff', row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t", append = TRUE)
 ```
 </p></details><br>
