@@ -1,5 +1,5 @@
 ---
-title: "Ex. 04-1: Processing ATAC-seq data, the 'hard' way"
+title: "Ex. 05-1: Leveraging AnnotationHub to investigate epigenomics"
 output: 
     rmdformats::readthedown: 
         highlight: tango
@@ -19,8 +19,159 @@ output:
         toc_float: true
 ---
 
-```{sh}
-echo HELLO 
-```
+## 1. Probe AnnotationHub for yeast ChIP-seq profiles
 
-wget http://expdata.cmmt.ubc.ca/JASPAR/downloads/UCSC_tracks/2020/JASPAR2020_sacCer3.bb
+AnnotationHub provides access to a lot of pre-formated resources, 
+all of that well embedded within the R environment. We hope to find 
+more yeast ChIP-seq profiles referenced there.
+
+> What type of information does AnnotationHub has in Yeast?
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+library(AnnotationHub)
+ah = AnnotationHub()
+ah
+head(sort(table(ah$species), decreasing = TRUE), 25)
+ah_yeast <- query(ah, "Saccharomyces cerevisiae")
+ah_yeast
+table(ah_yeast$sourcetype)
+query(ah_yeast, c("FASTA"))$title
+query(ah_yeast, c("GTF"))$title
+query(ah_yeast, c("UCSC track"))$title
+```
+</p></details><br>
+
+> Can we recover Ensembl gene model from AnnotationHub? How does it compare to that 
+obtain from a TxDb from UCSC (which is the one we used previously when checking 
+overlap between ATAC peaks and genomic features)?
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+query(ah, c("Saccharomyces cerevisiae", "release-102"))
+yeast_gtf <- ah[['AH87694']]
+yeast_Ensembl_genes <- yeast_gtf[yeast_gtf$type == 'gene']
+sort(yeast_Ensembl_genes)
+query(ah, c("Saccharomyces cerevisiae", "UCSC", "TxDb"))
+yeast_UCSC_genes <- GenomicFeatures::genes(ah[['AH52272']])
+sort(yeast_UCSC_genes)
+```
+</p></details><br>
+
+> So is AnnotationHub really informative? In which organism/context could it be useful? 
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+ah_human_epigenome <- query(ah, c("Homo sapiens", "EpigenomeRoadMap"))
+table(ah_human_epigenome$rdataclass)
+head(query(ah_human_epigenome, 'BigWigFile')$title, 50)
+```
+</p></details><br>
+
+## 2. Compare HMM-based chromatin state annotations in two human cell lines
+
+Leveraging AnnotationHub, let's recover chromatin state annotations from ENCODE. 
+We can get annotation from two different cell lines and compare how these annotations vary 
+througout a differentiation process. 
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+library(tidyverse)
+epigenome_metadata <- query(ah_human_epigenome, 'data.frame')[[1]]
+epigenome_metadata[1:10, 1:10]
+query(ah_human_epigenome, c("chromhmmSegmentations", "cell line"))
+H1_states <- query(ah_human_epigenome, c("chromhmmSegmentations", "ESC.H1"))[[1]]
+NPC_states <- query(ah_human_epigenome, c("chromhmmSegmentations", "ESDR.H1.NEUR.PROG"))[[1]]
+H1_states <- resize(H1_states, 1, fix = 'center') # Resizing to make it easier to find overlap
+NPC_states <- resize(NPC_states, 1, fix = 'center') # Resizing to make it easier to find overlap
+H1_states$state_in_NPCs <- NPC_states[nearest(H1_states, NPC_states)]$name
+states <- c(
+    "Active TSS", 
+    "Flanking Active TSS", 
+    "Bivalent/Poised TSS", 
+    "Enhancers",
+    "Flanking Bivalent TSS/Enh", 
+    "Strong transcription",
+    "Transcr. at gene 5' and 3'", 
+    "Weak transcription",
+    "Bivalent Enhancer", 
+    "Genic enhancers",
+    "Quiescent/Low", 
+    "Heterochromatin", 
+    "Weak Repressed PolyComb", 
+    "Repressed PolyComb", 
+    "ZNF genes & repeats"
+)
+df <- data.frame(
+    stateInH1 = factor(H1_states$name, levels = states),
+    stateInNPCs = factor(H1_states$state_in_NPCs, levels = states)
+)
+p <- df %>% 
+    group_by(stateInH1, stateInNPCs) %>% 
+    summarize(count = n()) %>% 
+    ggplot(aes(x = stateInH1, y = stateInNPCs, fill = count)) + 
+    geom_tile(col = "black") + 
+    theme_bw() + 
+    scale_fill_gradientn(colours = c('white', 'orange', 'darkred')) + 
+    theme(
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        axis.ticks = element_blank()
+    ) + 
+    labs(
+        x = "Chromatin states in H1 cells", 
+        y = "Chromatin states in H1-derived\nneural progenitor cells", 
+        fill = '#'
+    ) + 
+    coord_fixed()
+p
+```
+</p></details><br>
+
+> Which transitions can you detect? 
+
+> Can you recover genomic loci which change from `Quiescent/Low` to `Enhancers` upon H1 differentiation into NPCs? 
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+H1_states <- query(ah_human_epigenome, c("chromhmmSegmentations", "ESC.H1"))[[1]]
+transitioning_loci <- H1_states[df$stateInH1 == 'Repressed PolyComb' & df$stateInNPCs == 'Enhancers']
+```
+</p></details><br>
+
+> What are the closest genes? 
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+query(ah, c("Homo sapiens", "release-75"))
+human_gtf <- ah[['AH10684']]
+human_Ensembl_genes <- human_gtf[human_gtf$type == 'gene' & human_gtf$gene_biotype == 'protein_coding']
+human_Ensembl_TSSs <- resize(human_Ensembl_genes, 1, 'start')
+human_Ensembl_TSSs
+#
+seqlevelsStyle(transitioning_loci) <- "NCBI"
+transitioning_loci <- keepStandardChromosomes(transitioning_loci, pruning.mode = 'coarse')
+human_Ensembl_TSSs <- keepStandardChromosomes(human_Ensembl_TSSs, pruning.mode = 'coarse')
+seqinfo(transitioning_loci) <- seqinfo(human_Ensembl_TSSs)
+transitioning_loci$nearest_gene <- human_Ensembl_TSSs[nearest(transitioning_loci, human_Ensembl_TSSs)]$gene_name
+transitioning_loci$distance_to_nearest_gene <- mcols(distanceToNearest(transitioning_loci, human_Ensembl_TSSs))$distance
+```
+</p></details><br>
+
+> Are the associated genes involved in a specific process? 
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+genes <- unique(transitioning_loci$nearest_gene[transitioning_loci$distance_to_nearest_gene <= 500]) 
+res <- gprofiler2::gost(genes, organism = 'hsapiens')
+res$result %>% arrange(p_value)
+```
+</p></details><br>
+
+## Conclusions 
+
+> Can you conclude on the importance of having universal processing 
+workflows to ensure the usefulness of a centralized database? 
+
