@@ -24,6 +24,3 @@ day: "Day 01"
     You will be streamlining the process from the previous exercise to make it more reproducible, easily tweak parameters or add new samples. We will be adding another dataset of yeast in M phase [Garcia-Luis, J. et al., 2019](https://www.nature.com/articles/s41594-019-0307-x) and doing basic comparisons between the conditions.
 
 
-- Interacting with the matrix **\[30min\]** [[HTML](/{{<myPackageUrl>}}Exercices/day01/interacting_matrix.html) | [Jupyter](/{{<myPackageUrl>}}Exercices/day01/interacting_matrix.ipynb)]
-
-    You will be using python scripting and leverage the cooler API to interact directly with Hi-C matrices. This can help querying specific regions, computing statistics and generating more advanced visualisations.
