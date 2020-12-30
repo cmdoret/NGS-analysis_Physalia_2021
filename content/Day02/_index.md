@@ -13,7 +13,7 @@ day: "Day 02"
 
 ## Exercises for {{< param "day" >}}
 
-- Interacting with the matrix **\[30min\]** [[HTML](/{{<myPackageUrl>}}Exercices/day01/interacting_matrix.html) | [Jupyter](/{{<myPackageUrl>}}Exercices/day01/interacting_matrix.ipynb)]
+- Interacting with the matrix **\[30min\]** [[HTML](/{{<myPackageUrl>}}Exercices/day02/matrix_interaction.html) | [Jupyter](/{{<myPackageUrl>}}Exercices/day02/matrix_interaction.ipynb)]
 
     You will be using python scripting and leverage the cooler API to interact directly with Hi-C matrices. This can help querying specific regions, computing statistics and generating more advanced visualisations.
 
