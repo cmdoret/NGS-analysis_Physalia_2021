@@ -71,14 +71,14 @@ cd ..
 
 > Have a look at the custom ATAC-seq processing pipeline. Do you understand each step of the pipeline?  
 
-> Execute the pipeline 
+> To execute the pipeline for all the samples, the following `for` loop is used:
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
 cores=4
 for sample in $(ls data/ | sed 's,_1.fastq.gz\|_2.fastq.gz,,' | uniq)
 do 
-    ./bin/ATAC_pipeline.sh "${sample}" "${cores}"
+    Share/day04/bin/ATAC_pipeline.sh "${sample}" "${cores}"
 done
 ```
 </p></details><br>
@@ -114,11 +114,11 @@ We will use YAPC to map peaks from ATAC-seq.
 conda install -c bioconda yapc
 mkdir _yapc-files/
 yapc _yapc-files/stress-response \
-    _bigwig-files/SacCer3_00_rep1_SRR1822155.bw _bigwig-files/SacCer3_00_rep2_SRR1822156.bw \
-    _bigwig-files/SacCer3_15_rep1_SRR1822157.bw _bigwig-files/SacCer3_15_rep2_SRR1822158.bw \
-    _bigwig-files/SacCer3_30_rep1_SRR1822159.bw _bigwig-files/SacCer3_30_rep2_SRR1822160.bw \
-    _bigwig-files/SacCer3_45_rep1_SRR1822161.bw _bigwig-files/SacCer3_45_rep2_SRR1822162.bw \
-    _bigwig-files/SacCer3_60_rep1_SRR1822163.bw _bigwig-files/SacCer3_60_rep2_SRR1822164.bw
+    Share/day04/_bigwig-files/SacCer3_00_rep1_SRR1822155.bw Share/day04/_bigwig-files/SacCer3_00_rep2_SRR1822156.bw \
+    Share/day04/_bigwig-files/SacCer3_15_rep1_SRR1822157.bw Share/day04/_bigwig-files/SacCer3_15_rep2_SRR1822158.bw \
+    Share/day04/_bigwig-files/SacCer3_30_rep1_SRR1822159.bw Share/day04/_bigwig-files/SacCer3_30_rep2_SRR1822160.bw \
+    Share/day04/_bigwig-files/SacCer3_45_rep1_SRR1822161.bw Share/day04/_bigwig-files/SacCer3_45_rep2_SRR1822162.bw \
+    Share/day04/_bigwig-files/SacCer3_60_rep1_SRR1822163.bw Share/day04/_bigwig-files/SacCer3_60_rep2_SRR1822164.bw
 ```
 </p></details><br>
 

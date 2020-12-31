@@ -1622,7 +1622,7 @@ background-color: #edf9ff
       <li><a href="#count-atac-fragments-over-atac-peaks">3. Count ATAC fragments over ATAC peaks</a></li>
       <li><a href="#perform-da-analysis">4. Perform DA analysis</a></li>
       <li><a href="#check-peaks-da-between-2-timepoints">5. Check peaks DA between 2 timepoints</a></li>
-      <li><a href="#save-analysis">6. Save analysis</a></li>
+      <li><a href="#save-analysis-output">6. Save analysis output</a></li>
       </ul>
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
@@ -1646,10 +1646,15 @@ background-color: #edf9ff
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">wc</span> -l _yapc-files/stress-response_*.bed</span></code></pre></div>
-<pre><code>##     6514 _yapc-files/stress-response_0.05.bed
-##    25032 _yapc-files/stress-response_peaksall.bed
-##    31546 total</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">wc</span> -l Share/day04/_yapc-files/stress-response_*.bed</span></code></pre></div>
+<pre><code>##     4419 Share/day04/_yapc-files/stress-response_0.001.bed
+##     5056 Share/day04/_yapc-files/stress-response_0.005.bed
+##     5384 Share/day04/_yapc-files/stress-response_0.01.bed
+##     6514 Share/day04/_yapc-files/stress-response_0.05.bed
+##     7439 Share/day04/_yapc-files/stress-response_0.1.bed
+##     9321 Share/day04/_yapc-files/stress-response_0.2.bed
+##    25032 Share/day04/_yapc-files/stress-response_peaksall.bed
+##    63165 total</code></pre>
 </p>
 </details>
 <p><br></p>
@@ -1671,7 +1676,7 @@ Show code
 <pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>ATAC_peaks &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;_yapc-files/stress-response_0.05.bed&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>ATAC_peaks &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;Share/day04/_yapc-files/stress-response_0.05.bed&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&#39;seqnames&#39;</span>, <span class="st">&#39;start&#39;</span>, <span class="st">&#39;end&#39;</span>, <span class="st">&#39;yapc_scores&#39;</span>, <span class="st">&#39;score&#39;</span>, <span class="st">&#39;strand&#39;</span>, <span class="st">&#39;summit&#39;</span>, <span class="st">&#39;summit2&#39;</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="st">    </span>GenomicRanges<span class="op">::</span><span class="kw">makeGRangesFromDataFrame</span>(<span class="dt">keep.extra.columns =</span> <span class="ot">TRUE</span>)</span>
@@ -1774,7 +1779,7 @@ Show code
 </summary>
 <p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a>ChIP_peaks &lt;-<span class="st"> </span>GenomicRanges<span class="op">::</span><span class="kw">reduce</span>(<span class="kw">do.call</span>(c, <span class="kw">lapply</span>(</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>    <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;.*narrowPeak$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;../day03/results/bwa/mergedLibrary/macs/narrowPeak&#39;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>), rtracklayer<span class="op">::</span>import</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>    <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;.*narrowPeak$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;Share/day03/results/bwa/mergedLibrary/macs/narrowPeak&#39;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>), rtracklayer<span class="op">::</span>import</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>)))</span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>dists &lt;-<span class="st"> </span>IRanges<span class="op">::</span><span class="kw">distanceToNearest</span>(ATAC_peaks, ChIP_peaks)</span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a><span class="kw">summary</span>(<span class="kw">mcols</span>(dists)<span class="op">$</span>distance)</span></code></pre></div>
@@ -1796,19 +1801,19 @@ Show code
 <p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="co"># Define sample sheet</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>sampleTable &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>    <span class="dt">sample =</span> <span class="kw">gsub</span>(<span class="st">&#39;_SRR.*&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;_noChrM_q10.bam$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;_bam-files/&#39;</span>)), </span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>    <span class="dt">timepoint =</span> <span class="kw">gsub</span>(<span class="st">&#39;SacCer3_|_rep.*&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;_noChrM_q10.bam$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;_bam-files/&#39;</span>)), </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>    <span class="dt">sample =</span> <span class="kw">gsub</span>(<span class="st">&#39;_SRR.*&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;_noChrM_q10.bam$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;Share/day04/_bam-files/&#39;</span>)), </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>    <span class="dt">timepoint =</span> <span class="kw">gsub</span>(<span class="st">&#39;SacCer3_|_rep.*&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;_noChrM_q10.bam$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;Share/day04/_bam-files/&#39;</span>)), </span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a>    <span class="dt">replicate =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dv">5</span>), </span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true"></a>    <span class="dt">bam =</span> <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;_noChrM_q10.bam$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;_bam-files/&#39;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true"></a>)</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true"></a><span class="co"># Import fragment counts over peaks </span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true"></a>ATAC_counts &lt;-<span class="st"> </span>GenomicAlignments<span class="op">::</span><span class="kw">summarizeOverlaps</span>(, </span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true"></a>    <span class="dt">features =</span> ATAC_peaks, </span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true"></a>    <span class="dt">reads =</span> Rsamtools<span class="op">::</span><span class="kw">BamFileList</span>(sampleTable<span class="op">$</span>bam), </span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true"></a>    <span class="dt">ignore.strand =</span> <span class="ot">TRUE</span>, </span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true"></a>    <span class="dt">singleEnd =</span> <span class="ot">FALSE</span></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a>ATAC_counts</span></code></pre></div>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true"></a>    <span class="dt">bam =</span> <span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;_noChrM_q10.bam$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;Share/day04/_bam-files/&#39;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="co"># Import fragment counts over peaks </span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>ATAC_counts &lt;-<span class="st"> </span>GenomicAlignments<span class="op">::</span><span class="kw">summarizeOverlaps</span>(, </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>    <span class="dt">features =</span> ATAC_peaks, </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a>    <span class="dt">reads =</span> Rsamtools<span class="op">::</span><span class="kw">BamFileList</span>(sampleTable<span class="op">$</span>bam), </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a>    <span class="dt">ignore.strand =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a>    <span class="dt">singleEnd =</span> <span class="ot">FALSE</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a>ATAC_counts</span></code></pre></div>
 <pre><code>## class: RangedSummarizedExperiment 
 ## dim: 6513 10 
 ## metadata(0):
@@ -1835,45 +1840,45 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="kw">library</span>(DESeq2)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="co"># Perform DE analysis</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a><span class="kw">colData</span>(ATAC_counts) &lt;-<span class="st"> </span><span class="kw">DataFrame</span>(sampleTable)</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>dds &lt;-<span class="st"> </span><span class="kw">DESeqDataSet</span>(ATAC_counts, <span class="dt">design =</span> <span class="op">~</span><span class="st"> </span>timepoint) </span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>dds &lt;-<span class="st"> </span><span class="kw">DESeq</span>(dds)</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true"></a><span class="co"># Prepare contrasts for timepoint pairwise comparison</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true"></a>timepoints &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;00&#39;</span>, <span class="st">&#39;15&#39;</span>, <span class="st">&#39;30&#39;</span>, <span class="st">&#39;45&#39;</span>, <span class="st">&#39;60&#39;</span>)</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true"></a>contrasts &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">combn</span>(<span class="dv">5</span>, <span class="dv">2</span>), <span class="dv">2</span>, <span class="cf">function</span>(idx) {</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true"></a>    <span class="kw">c</span>(<span class="st">&#39;timepoint&#39;</span>, timepoints[idx[<span class="dv">2</span>]], timepoints[idx[<span class="dv">1</span>]])</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true"></a>})</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true"></a><span class="kw">colnames</span>(contrasts) &lt;-<span class="st"> </span><span class="kw">apply</span>(contrasts, <span class="dv">2</span>, <span class="cf">function</span>(col) <span class="kw">paste0</span>(col[<span class="dv">2</span>], <span class="st">&#39;_v_&#39;</span>, col[<span class="dv">3</span>]))</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true"></a>contrasts</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true"></a><span class="co"># Extract differential accessibility results</span></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true"></a>out.l2fc &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">nrow =</span> <span class="kw">nrow</span>(dds), <span class="dt">ncol =</span> <span class="kw">ncol</span>(contrasts)))</span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true"></a><span class="kw">colnames</span>(out.l2fc) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;L2FC_&#39;</span>, <span class="kw">colnames</span>(contrasts))</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true"></a>out.padj &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">nrow =</span> <span class="kw">nrow</span>(dds), <span class="dt">ncol =</span> <span class="kw">ncol</span>(contrasts)))</span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true"></a><span class="kw">colnames</span>(out.padj) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;padj_&#39;</span>, <span class="kw">colnames</span>(contrasts))</span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(contrasts)) {</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true"></a>    ddr &lt;-<span class="st"> </span><span class="kw">results</span>(dds, <span class="dt">contrast =</span> contrasts[,i])</span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true"></a>    <span class="kw">metadata</span>(ddr)<span class="op">$</span>alpha &lt;-<span class="st"> </span><span class="fl">0.01</span></span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true"></a>    out &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(ddr)</span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true"></a>    out.l2fc[,i] &lt;-<span class="st"> </span>out[, <span class="st">&#39;log2FoldChange&#39;</span>]</span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true"></a>    out.padj[,i] &lt;-<span class="st"> </span>out[, <span class="st">&#39;padj&#39;</span>]</span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true"></a>}</span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true"></a><span class="co"># Get regularized log-normalized accessibility counts</span></span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true"></a>rlog &lt;-<span class="st"> </span><span class="kw">assay</span>(<span class="kw">rlog</span>(dds, <span class="dt">blind =</span> <span class="ot">FALSE</span>))</span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true"></a><span class="kw">colnames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(sampleTable<span class="op">$</span>timepoint, <span class="st">&quot;_rep&quot;</span>, sampleTable<span class="op">$</span>replicate)</span>
-<span id="cb37-28"><a href="#cb37-28" aria-hidden="true"></a>rlog &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>( </span>
-<span id="cb37-29"><a href="#cb37-29" aria-hidden="true"></a>    <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint), </span>
-<span id="cb37-30"><a href="#cb37-30" aria-hidden="true"></a>    <span class="cf">function</span>(x) { </span>
-<span id="cb37-31"><a href="#cb37-31" aria-hidden="true"></a>        x &lt;-<span class="st"> </span><span class="kw">rowMeans</span>(<span class="kw">matrix</span>(rlog[,<span class="kw">grep</span>(x, <span class="kw">colnames</span>(rlog))], <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlog))) </span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true"></a>    }</span>
-<span id="cb37-33"><a href="#cb37-33" aria-hidden="true"></a>)), <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlog))</span>
-<span id="cb37-34"><a href="#cb37-34" aria-hidden="true"></a><span class="kw">rownames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;peak_&#39;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(rlog))</span>
-<span id="cb37-35"><a href="#cb37-35" aria-hidden="true"></a><span class="kw">colnames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;rlog_&#39;</span>, <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint))</span>
-<span id="cb37-36"><a href="#cb37-36" aria-hidden="true"></a><span class="co"># Compile and save results</span></span>
-<span id="cb37-37"><a href="#cb37-37" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">cbind</span>(rlog, out.l2fc, out.padj)</span>
-<span id="cb37-38"><a href="#cb37-38" aria-hidden="true"></a><span class="kw">mcols</span>(ATAC_peaks) &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">mcols</span>(ATAC_peaks), results)</span></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a>ATAC_peaks</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="kw">library</span>(DESeq2)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a><span class="co"># Perform DE analysis</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a><span class="kw">colData</span>(ATAC_counts) &lt;-<span class="st"> </span><span class="kw">DataFrame</span>(sampleTable)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>dds &lt;-<span class="st"> </span><span class="kw">DESeqDataSet</span>(ATAC_counts, <span class="dt">design =</span> <span class="op">~</span><span class="st"> </span>timepoint) </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a>dds &lt;-<span class="st"> </span><span class="kw">DESeq</span>(dds)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true"></a><span class="co"># Prepare contrasts for timepoint pairwise comparison</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true"></a>timepoints &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;00&#39;</span>, <span class="st">&#39;15&#39;</span>, <span class="st">&#39;30&#39;</span>, <span class="st">&#39;45&#39;</span>, <span class="st">&#39;60&#39;</span>)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true"></a>contrasts &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="kw">combn</span>(<span class="dv">5</span>, <span class="dv">2</span>), <span class="dv">2</span>, <span class="cf">function</span>(idx) {</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true"></a>    <span class="kw">c</span>(<span class="st">&#39;timepoint&#39;</span>, timepoints[idx[<span class="dv">2</span>]], timepoints[idx[<span class="dv">1</span>]])</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true"></a>})</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true"></a><span class="kw">colnames</span>(contrasts) &lt;-<span class="st"> </span><span class="kw">apply</span>(contrasts, <span class="dv">2</span>, <span class="cf">function</span>(col) <span class="kw">paste0</span>(col[<span class="dv">2</span>], <span class="st">&#39;_v_&#39;</span>, col[<span class="dv">3</span>]))</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true"></a>contrasts</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true"></a><span class="co"># Extract differential accessibility results</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true"></a>out.l2fc &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">nrow =</span> <span class="kw">nrow</span>(dds), <span class="dt">ncol =</span> <span class="kw">ncol</span>(contrasts)))</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true"></a><span class="kw">colnames</span>(out.l2fc) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;L2FC_&#39;</span>, <span class="kw">colnames</span>(contrasts))</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true"></a>out.padj &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">matrix</span>(<span class="dt">nrow =</span> <span class="kw">nrow</span>(dds), <span class="dt">ncol =</span> <span class="kw">ncol</span>(contrasts)))</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true"></a><span class="kw">colnames</span>(out.padj) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;padj_&#39;</span>, <span class="kw">colnames</span>(contrasts))</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(contrasts)) {</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true"></a>    ddr &lt;-<span class="st"> </span><span class="kw">results</span>(dds, <span class="dt">contrast =</span> contrasts[,i])</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true"></a>    <span class="kw">metadata</span>(ddr)<span class="op">$</span>alpha &lt;-<span class="st"> </span><span class="fl">0.01</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true"></a>    out &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(ddr)</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true"></a>    out.l2fc[,i] &lt;-<span class="st"> </span>out[, <span class="st">&#39;log2FoldChange&#39;</span>]</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true"></a>    out.padj[,i] &lt;-<span class="st"> </span>out[, <span class="st">&#39;padj&#39;</span>]</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true"></a>}</span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true"></a><span class="co"># Get regularized log-normalized accessibility counts</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true"></a>rlog &lt;-<span class="st"> </span><span class="kw">assay</span>(<span class="kw">rlog</span>(dds, <span class="dt">blind =</span> <span class="ot">FALSE</span>))</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true"></a><span class="kw">colnames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(sampleTable<span class="op">$</span>timepoint, <span class="st">&quot;_rep&quot;</span>, sampleTable<span class="op">$</span>replicate)</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true"></a>rlog &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>( </span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true"></a>    <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint), </span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true"></a>    <span class="cf">function</span>(x) { </span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true"></a>        x &lt;-<span class="st"> </span><span class="kw">rowMeans</span>(<span class="kw">matrix</span>(rlog[,<span class="kw">grep</span>(x, <span class="kw">colnames</span>(rlog))], <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlog))) </span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true"></a>    }</span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true"></a>)), <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlog))</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true"></a><span class="kw">rownames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;peak_&#39;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(rlog))</span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true"></a><span class="kw">colnames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;rlog_&#39;</span>, <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint))</span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true"></a><span class="co"># Collate all results together</span></span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">cbind</span>(rlog, out.l2fc, out.padj)</span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true"></a><span class="kw">mcols</span>(ATAC_peaks) &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">mcols</span>(ATAC_peaks), results)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a>ATAC_peaks</span></code></pre></div>
 <pre><code>## GRanges object with 6513 ranges and 31 metadata columns:
 ##          seqnames        ranges strand |            yapc_scores     score
 ##             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |            &lt;character&gt; &lt;integer&gt;
@@ -1979,9 +1984,9 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="co"># Get peaks whose accessibility increases between 0 and 15 min</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>g &lt;-<span class="st"> </span>ATAC_peaks[<span class="kw">which</span>(ATAC_peaks<span class="op">$</span>L2FC_<span class="dv">15</span>_v_<span class="dv">00</span> <span class="op">&gt;</span><span class="st"> </span><span class="kw">log2</span>(<span class="fl">1.5</span>) <span class="op">&amp;</span><span class="st"> </span>ATAC_peaks<span class="op">$</span>padj_<span class="dv">15</span>_v_<span class="dv">00</span> <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.01</span>)]</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a>g</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="co"># Get peaks whose accessibility increases between 0 and 15 min</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a>g &lt;-<span class="st"> </span>ATAC_peaks[<span class="kw">which</span>(ATAC_peaks<span class="op">$</span>L2FC_<span class="dv">15</span>_v_<span class="dv">00</span> <span class="op">&gt;</span><span class="st"> </span><span class="kw">log2</span>(<span class="fl">1.5</span>) <span class="op">&amp;</span><span class="st"> </span>ATAC_peaks<span class="op">$</span>padj_<span class="dv">15</span>_v_<span class="dv">00</span> <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.01</span>)]</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>g</span></code></pre></div>
 <pre><code>## GRanges object with 217 ranges and 31 metadata columns:
 ##         seqnames        ranges strand |            yapc_scores     score
 ##            &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |            &lt;character&gt; &lt;integer&gt;
@@ -2076,9 +2081,9 @@ Show code
 ##   [217]    0.4495743           NA
 ##   -------
 ##   seqinfo: 16 sequences from an unspecified genome; no seqlengths</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="co"># Get peaks whose accessibility increases between 0 and 60 min</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a>g &lt;-<span class="st"> </span>ATAC_peaks[<span class="kw">which</span>(ATAC_peaks<span class="op">$</span>L2FC_<span class="dv">60</span>_v_<span class="dv">00</span> <span class="op">&gt;</span><span class="st"> </span><span class="kw">log2</span>(<span class="fl">1.5</span>) <span class="op">&amp;</span><span class="st"> </span>ATAC_peaks<span class="op">$</span>padj_<span class="dv">60</span>_v_<span class="dv">00</span> <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.01</span>)]</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a>g</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="co"># Get peaks whose accessibility increases between 0 and 60 min</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>g &lt;-<span class="st"> </span>ATAC_peaks[<span class="kw">which</span>(ATAC_peaks<span class="op">$</span>L2FC_<span class="dv">60</span>_v_<span class="dv">00</span> <span class="op">&gt;</span><span class="st"> </span><span class="kw">log2</span>(<span class="fl">1.5</span>) <span class="op">&amp;</span><span class="st"> </span>ATAC_peaks<span class="op">$</span>padj_<span class="dv">60</span>_v_<span class="dv">00</span> <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.01</span>)]</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>g</span></code></pre></div>
 <pre><code>## GRanges object with 84 ranges and 31 metadata columns:
 ##        seqnames        ranges strand |            yapc_scores     score
 ##           &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |            &lt;character&gt; &lt;integer&gt;
@@ -2177,38 +2182,38 @@ Show code
 </details>
 <p><br></p>
 </div>
-<div id="save-analysis" class="section level2">
-<h2>6. Save analysis</h2>
+<div id="save-analysis-output" class="section level2">
+<h2>6. Save analysis output</h2>
 <details>
 <summary style="color: #ff7f00; font-weight: bold">
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="co"># Export as RDS</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a><span class="kw">saveRDS</span>(ATAC_peaks, <span class="st">&#39;ATAC_peaks.rds&#39;</span>)</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a><span class="co"># Export as GFF</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>attrs &lt;-<span class="st"> </span><span class="kw">paste0</span>(</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a>    <span class="st">&quot;ID=&quot;</span>, ATAC_peaks<span class="op">$</span>peakID,</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a>    <span class="st">&quot;;associated-gene=&quot;</span>, ATAC_peaks<span class="op">$</span>associated_gene, </span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true"></a>    <span class="st">&quot;;rlog_00=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">00</span>,</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true"></a>    <span class="st">&quot;;rlog_15=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">15</span>,</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true"></a>    <span class="st">&quot;;rlog_30=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">30</span>,</span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true"></a>    <span class="st">&quot;;rlog_45=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">45</span>,</span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true"></a>    <span class="st">&quot;;rlog_60=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">60</span></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true"></a>)</span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true"></a>GFF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true"></a>    <span class="dt">seqname =</span> <span class="kw">as.character</span>(<span class="kw">seqnames</span>(ATAC_peaks)),</span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true"></a>    <span class="dt">source =</span> <span class="st">&#39;ATACseq_osmotic-stress-response&#39;</span>, </span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true"></a>    <span class="dt">feature =</span> <span class="st">&#39;peak&#39;</span>, </span>
-<span id="cb44-17"><a href="#cb44-17" aria-hidden="true"></a>    <span class="dt">start =</span> <span class="kw">as.character</span>(<span class="kw">start</span>(ATAC_peaks) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>),</span>
-<span id="cb44-18"><a href="#cb44-18" aria-hidden="true"></a>    <span class="dt">end =</span> <span class="kw">as.character</span>(<span class="kw">end</span>(ATAC_peaks)),</span>
-<span id="cb44-19"><a href="#cb44-19" aria-hidden="true"></a>    <span class="dt">score =</span> <span class="st">&#39;.&#39;</span>, </span>
-<span id="cb44-20"><a href="#cb44-20" aria-hidden="true"></a>    <span class="dt">strand =</span> <span class="st">&#39;*&#39;</span>, </span>
-<span id="cb44-21"><a href="#cb44-21" aria-hidden="true"></a>    <span class="dt">frame =</span> <span class="st">&#39;.&#39;</span>,</span>
-<span id="cb44-22"><a href="#cb44-22" aria-hidden="true"></a>    <span class="dt">attribute =</span> attrs</span>
-<span id="cb44-23"><a href="#cb44-23" aria-hidden="true"></a>)</span>
-<span id="cb44-24"><a href="#cb44-24" aria-hidden="true"></a><span class="kw">writeLines</span>(<span class="st">&quot;##gffTags=on</span><span class="ch">\n</span><span class="st">##displayName=Name</span><span class="ch">\n</span><span class="st">##gff-version 3&quot;</span>, <span class="st">&#39;ATAC_peaks.gff&#39;</span>)</span>
-<span id="cb44-25"><a href="#cb44-25" aria-hidden="true"></a><span class="kw">write.table</span>(GFF, <span class="dt">file =</span> <span class="st">&#39;ATAC_peaks.gff&#39;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">col.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">append =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="co"># Export as RDS</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a><span class="kw">saveRDS</span>(ATAC_peaks, <span class="st">&#39;ATAC_peaks.rds&#39;</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a><span class="co"># Export as GFF</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a>attrs &lt;-<span class="st"> </span><span class="kw">paste0</span>(</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a>    <span class="st">&quot;ID=&quot;</span>, ATAC_peaks<span class="op">$</span>peakID,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a>    <span class="st">&quot;;associated-gene=&quot;</span>, ATAC_peaks<span class="op">$</span>associated_gene, </span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a>    <span class="st">&quot;;rlog_00=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">00</span>,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true"></a>    <span class="st">&quot;;rlog_15=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">15</span>,</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true"></a>    <span class="st">&quot;;rlog_30=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">30</span>,</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true"></a>    <span class="st">&quot;;rlog_45=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">45</span>,</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true"></a>    <span class="st">&quot;;rlog_60=&quot;</span>, ATAC_peaks<span class="op">$</span>rlog_<span class="dv">60</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true"></a>)</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true"></a>GFF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true"></a>    <span class="dt">seqname =</span> <span class="kw">as.character</span>(<span class="kw">seqnames</span>(ATAC_peaks)),</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true"></a>    <span class="dt">source =</span> <span class="st">&#39;ATACseq_osmotic-stress-response&#39;</span>, </span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true"></a>    <span class="dt">feature =</span> <span class="st">&#39;peak&#39;</span>, </span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true"></a>    <span class="dt">start =</span> <span class="kw">as.character</span>(<span class="kw">start</span>(ATAC_peaks) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>),</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true"></a>    <span class="dt">end =</span> <span class="kw">as.character</span>(<span class="kw">end</span>(ATAC_peaks)),</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true"></a>    <span class="dt">score =</span> <span class="st">&#39;.&#39;</span>, </span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true"></a>    <span class="dt">strand =</span> <span class="st">&#39;*&#39;</span>, </span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true"></a>    <span class="dt">frame =</span> <span class="st">&#39;.&#39;</span>,</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true"></a>    <span class="dt">attribute =</span> attrs</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true"></a>)</span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true"></a><span class="kw">writeLines</span>(<span class="st">&quot;##gffTags=on</span><span class="ch">\n</span><span class="st">##displayName=Name</span><span class="ch">\n</span><span class="st">##gff-version 3&quot;</span>, <span class="st">&#39;ATAC_peaks.gff&#39;</span>)</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true"></a><span class="kw">write.table</span>(GFF, <span class="dt">file =</span> <span class="st">&#39;ATAC_peaks.gff&#39;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">col.names =</span> <span class="ot">FALSE</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">append =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 </p>
 </details>
 <p><br></p>

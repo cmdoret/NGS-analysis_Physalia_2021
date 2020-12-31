@@ -30,8 +30,8 @@ On the other hand, we have profiled the binding of transcription factors genome-
 ```{r}
 library(tidyverse)
 library(GenomicRanges)
-ATAC_peaks <- readRDS("ATAC_peaks_with_annots.rds")
-Reb1_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak')
+ATAC_peaks <- readRDS("Share/day05/ATAC_peaks_with_annots.rds")
+Reb1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak')
 ATAC_peaks$has_Reb1 <- ATAC_peaks %over% Reb1_peaks
 with(ATAC_peaks, table(annot, has_Reb1))
 ```
@@ -41,7 +41,7 @@ with(ATAC_peaks, table(annot, has_Reb1))
 
 <details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
 ```{r}
-Hog1_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Hog1_R1_peaks.narrowPeak')
+Hog1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Hog1_R1_peaks.narrowPeak')
 ATAC_peaks$has_Hog1 <- ATAC_peaks %over% Hog1_peaks
 with(ATAC_peaks, table(annot, has_Hog1))
 ```
@@ -51,10 +51,10 @@ with(ATAC_peaks, table(annot, has_Hog1))
 
 <details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
 ```{r}
-TFs <- list.files(pattern = '*.narrowPeak$', path = 'results/bwa/mergedLibrary/macs/narrowPeak')
+TFs <- list.files(pattern = '*.narrowPeak$', path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak')
 TFs <- unique(gsub('_.*', '', TFs))
 list_TF_peaks <- lapply(TFs, function(TF) {
-    TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = 'results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
+    TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
     peaks <- GenomicRanges::reduce(do.call(c, lapply(TF_files, rtracklayer::import)))
     return(peaks)
 })

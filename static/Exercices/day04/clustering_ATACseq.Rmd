@@ -28,7 +28,7 @@ This will require a bit of data wrangling and eventually, relying on `ggplot` to
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-ATAC_peaks <- readRDS('ATAC_peaks.rds')
+ATAC_peaks <- readRDS('Share/day04/ATAC_peaks.rds')
 ```
 </p></details><br>
 

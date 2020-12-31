@@ -33,7 +33,7 @@ we can merge and label clusters as follows:
 
 ```{r}
 library(tidyverse) 
-ATAC_peaks <- readRDS("ATAC_peaks_with_clusters.rds")
+ATAC_peaks <- readRDS("Share/day04/ATAC_peaks_with_clusters.rds")
 table(ATAC_peaks$cluster)
 cluster_names <- factor(c(
     "0" = "non-DA",
@@ -131,7 +131,7 @@ interest are predominently found at the top or at the bottom of the ranked list.
 
 <details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
 ```{r}
-df <- read.table('Gutin2019.txt', sep = '\t', header = TRUE) %>% 
+df <- read.table('Share/day05/Gutin2019.txt', sep = '\t', header = TRUE) %>% 
     dplyr::rename('gene' = 'X') %>% 
     mutate(ratio = WT.t10/WT.t00) %>% 
     filter(!is.infinite(ratio) & !is.na(ratio)) %>% 
@@ -139,7 +139,8 @@ df <- read.table('Gutin2019.txt', sep = '\t', header = TRUE) %>%
 ```
 </p></details><br>
 
-> Perform GSEA on that ranked list 
+> Perform GSEA on that ranked list. `gseGO()` is function to perform GSEA using Gene Ontology sets and 
+is included in the awesome `clusterProfiler` package. 
 
 <details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
 ```{r}

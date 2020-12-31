@@ -1702,7 +1702,7 @@ Show code
 <p>Have a look at the custom ATAC-seq processing pipeline. Do you understand each step of the pipeline?</p>
 </blockquote>
 <blockquote>
-<p>Execute the pipeline</p>
+<p>To execute the pipeline for all the samples, the following <code>for</code> loop is used:</p>
 </blockquote>
 <details>
 <summary style="color: #ff7f00; font-weight: bold">
@@ -1712,7 +1712,7 @@ Show code
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="va">cores=</span>4</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$(</span><span class="fu">ls</span> data/ <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,_1.fastq.gz\|_2.fastq.gz,,&#39;</span> <span class="kw">|</span> <span class="fu">uniq</span><span class="va">)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">do</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="ex">./bin/ATAC_pipeline.sh</span> <span class="st">&quot;</span><span class="va">${sample}</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">${cores}</span><span class="st">&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="ex">Share/day04/bin/ATAC_pipeline.sh</span> <span class="st">&quot;</span><span class="va">${sample}</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">${cores}</span><span class="st">&quot;</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="kw">done</span></span></code></pre></div>
 </p>
 </details>
@@ -1757,11 +1757,11 @@ Show code
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">conda</span> install -c bioconda yapc</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="fu">mkdir</span> _yapc-files/</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="ex">yapc</span> _yapc-files/stress-response <span class="kw">\</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="ex">_bigwig-files/SacCer3_00_rep1_SRR1822155.bw</span> _bigwig-files/SacCer3_00_rep2_SRR1822156.bw <span class="kw">\</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="ex">_bigwig-files/SacCer3_15_rep1_SRR1822157.bw</span> _bigwig-files/SacCer3_15_rep2_SRR1822158.bw <span class="kw">\</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="ex">_bigwig-files/SacCer3_30_rep1_SRR1822159.bw</span> _bigwig-files/SacCer3_30_rep2_SRR1822160.bw <span class="kw">\</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    <span class="ex">_bigwig-files/SacCer3_45_rep1_SRR1822161.bw</span> _bigwig-files/SacCer3_45_rep2_SRR1822162.bw <span class="kw">\</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    <span class="ex">_bigwig-files/SacCer3_60_rep1_SRR1822163.bw</span> _bigwig-files/SacCer3_60_rep2_SRR1822164.bw</span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="ex">Share/day04/_bigwig-files/SacCer3_00_rep1_SRR1822155.bw</span> Share/day04/_bigwig-files/SacCer3_00_rep2_SRR1822156.bw <span class="kw">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="ex">Share/day04/_bigwig-files/SacCer3_15_rep1_SRR1822157.bw</span> Share/day04/_bigwig-files/SacCer3_15_rep2_SRR1822158.bw <span class="kw">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="ex">Share/day04/_bigwig-files/SacCer3_30_rep1_SRR1822159.bw</span> Share/day04/_bigwig-files/SacCer3_30_rep2_SRR1822160.bw <span class="kw">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    <span class="ex">Share/day04/_bigwig-files/SacCer3_45_rep1_SRR1822161.bw</span> Share/day04/_bigwig-files/SacCer3_45_rep2_SRR1822162.bw <span class="kw">\</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    <span class="ex">Share/day04/_bigwig-files/SacCer3_60_rep1_SRR1822163.bw</span> Share/day04/_bigwig-files/SacCer3_60_rep2_SRR1822164.bw</span></code></pre></div>
 </p>
 </details>
 <p><br></p>

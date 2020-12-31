@@ -23,17 +23,17 @@ Let's load all the peaks in R, using `rtracklayer` package.
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-TFs <- list.files(pattern = '*.narrowPeak$', path = 'results/bwa/mergedLibrary/macs/narrowPeak')
+TFs <- list.files(pattern = '*.narrowPeak$', path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak')
 TFs <- unique(gsub('_.*', '', TFs))
 require(rtracklayer)
 list_TF_peaks <- lapply(TFs, function(TF) {
-    TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = 'results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
+    TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
     peaks <- GenomicRanges::reduce(do.call(c, lapply(TF_files, rtracklayer::import)))
     return(peaks)
 })
 names(list_TF_peaks) <- TFs
 all_peaks <- GenomicRanges::reduce(do.call(c, lapply(
-    list.files(pattern = '.*narrowPeak$', path = 'results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE), rtracklayer::import
+    list.files(pattern = '.*narrowPeak$', path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE), rtracklayer::import
 )))
 ```
 </p></details><br>
@@ -69,16 +69,16 @@ table(rowSums(df))
 
 ## 2. Calculating an enrichment of binding between pairs of TFs
 
-> Calculate the odds ratio of (1) binding of Abf1 and (2) binding of Reb1 over all the bound peaks  
+> Calculate the odds ratio of (1) binding of Hog1 and (2) binding of Hot1 over all the bound peaks  
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-TF1 <-'Abf1'
-TF2 <-'Reb1'
-peaks_with_both <- sum(df[, 'Abf1'] & df[, 'Reb1'])
-peaks_with_1 <- sum(df[, 'Abf1'] & !df[, 'Reb1'])
-peaks_with_2 <- sum(!df[, 'Abf1'] & df[, 'Reb1'])
-peaks_with_none <- sum(!df[, 'Abf1'] & !df[, 'Reb1'])
+TF1 <-'Hot1'
+TF2 <-'Hog1'
+peaks_with_both <- sum(df[, 'Hot1'] & df[, 'Hog1'])
+peaks_with_1 <- sum(df[, 'Hot1'] & !df[, 'Hog1'])
+peaks_with_2 <- sum(!df[, 'Hot1'] & df[, 'Hog1'])
+peaks_with_none <- sum(!df[, 'Hot1'] & !df[, 'Hog1'])
 mat <- matrix(c(peaks_with_both, peaks_with_1, peaks_with_2, peaks_with_none), ncol = 2)
 fisher.test(mat)
 ```
@@ -168,7 +168,6 @@ dd <- d_counts %>%
     filter(TF1 != 'Rsc9-TAP' & TF2 != 'Rsc9-TAP')
 gr <- igraph::graph_from_data_frame(dd, directed = FALSE)
 plot(gr)
-
 ```
 </p></details><br>
 

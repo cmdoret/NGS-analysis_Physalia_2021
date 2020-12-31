@@ -1,5 +1,5 @@
 ---
-title: "Ex. 05-2: Leveraging AnnotationHub to investigate epigenomics"
+title: "Ex. 05-3: Leveraging AnnotationHub to investigate epigenomics"
 output: 
     rmdformats::readthedown: 
         highlight: tango

@@ -1,13 +1,13 @@
 ---
 title: "3. Day 03"
 day: "Day 03"
-presentation1: "day03/processing_NGS_data.html"
-presentation2: " "
+presentation1: "day03/ChIPseq-intro.pdf"
+presentation2: "day03/mapping_peaks.pdf"
 presentation3: " "
-presentation4: " "
-practical1: "day03/processing_ChIPseq.html"
-practical2: "day03/meme.html"
-practical3: "day03/ChIP-integration.html"
+presentation4: "day03/nextflow.pdf"
+practical1: "day03/processing_ChIPseq"
+practical2: "day03/meme"
+practical3: "day03/ChIP-integration"
 ---
 
 ---
@@ -15,23 +15,23 @@ practical3: "day03/ChIP-integration.html"
 ## Presentations for {{< param "day" >}}
 
 - **\[35 min\]** ChIP-seq assays: Probing for epigenetic marks: 
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
 
-- **\[15 min\]** Mapping peaks in ChIP-seq datasets: 
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
+- **\[20 min\]** Mapping peaks in ChIP-seq datasets: 
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
 
-- **\[25 min\]** R/Bioconductor crash course: comprehensive integration of genomic data: 
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
+- **\[30 min\]** R/Bioconductor crash course: comprehensive integration of genomic data: 
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
 
-- **\[25 min\]** Nextflow: an efficient workflow manager for reproducible research in biological projects: 
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation4" >}})
+- **\[15 min\]** Nextflow: an efficient workflow manager for reproducible research in biological projects: 
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation4" >}})
 
 ---
 
 ## Exercises for {{< param "day" >}}
 
 -  **\[55min\]** Processing ChIP-seq datasets: from A to Z with Nextflow workflow manager: 
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}})
+    [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}}.Rmd)]
 
     > Data for this part of the course was collected from multiple research papers, in which ChIP-seq (or variants of) 
     experiments have been conducted in Yeast, in normal conditions (no specific treatment).  
@@ -44,13 +44,13 @@ practical3: "day03/ChIP-integration.html"
     * Hog1 Controls Global Reallocation of RNA Pol II upon Osmotic Shock in Saccharomyces cerevisiae [(Cook et al., G3 2012)](https://www.g3journal.org/content/2/9/1129)
 
 -  **\[55min\]** Motif enrichment analysis with MEME workflow: 
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}})
+    [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}}.Rmd)]
 
     > Motifs enriched in TF-occupied loci can be identified using motif enrichment tools such as the [MEME suite](http://meme-suite.org/).  
     Here, we will try to identify putative DNA sequence motifs that may be recognized by each factor studied in this practical.
 
 -  **\[55min\]** Aggregating ChIP-seq results: 
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}})
+    [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}}.Rmd)]
 
     > Depending on the biological question, ChIP-seq results can be integrated to test hypotheses and uncover biological insights.  
     Here, we will focus on identifying potential interactions between the different transcription factors analyzed in this course. 

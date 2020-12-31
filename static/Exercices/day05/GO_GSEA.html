@@ -1655,7 +1655,7 @@ Show code
 <pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>ATAC_peaks &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;ATAC_peaks_with_clusters.rds&quot;</span>)</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>ATAC_peaks &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;Share/day04/ATAC_peaks_with_clusters.rds&quot;</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">table</span>(ATAC_peaks<span class="op">$</span>cluster)</span></code></pre></div>
 <pre><code>## Loading required package: GenomicRanges</code></pre>
 <pre><code>## Loading required package: stats4</code></pre>
@@ -1936,7 +1936,7 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a>df &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;Gutin2019.txt&#39;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a>df &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;Share/day05/Gutin2019.txt&#39;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="st">&#39;gene&#39;</span> =<span class="st"> &#39;X&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">ratio =</span> WT.t10<span class="op">/</span>WT.t00) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.infinite</span>(ratio) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(ratio)) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1945,7 +1945,7 @@ Show code
 </details>
 <p><br></p>
 <blockquote>
-<p>Perform GSEA on that ranked list</p>
+<p>Perform GSEA on that ranked list. <code>gseGO()</code> is function to perform GSEA using Gene Ontology sets and is included in the awesome <code>clusterProfiler</code> package.</p>
 </blockquote>
 <details>
 <summary style="color: #ff7f00; font-weight: bold">
@@ -1966,7 +1966,7 @@ Show code
 <pre><code>## GSEA analysis...</code></pre>
 <pre><code>## Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize, gseaParam, : There are ties in the preranked stats (55.4% of the list).
 ## The order of those tied genes will be arbitrary, which may produce unexpected results.</code></pre>
-<pre><code>## Warning in fgseaMultilevel(...): There were 52 pathways for which P-values were
+<pre><code>## Warning in fgseaMultilevel(...): There were 63 pathways for which P-values were
 ## not calculated properly due to unbalanced (positive and negative) gene-level
 ## statistic values. For such pathways pval, padj, NES, log2err are set to NA. You
 ## can try to increase the value of the argument nPermSimple (for example set it
@@ -1976,13 +1976,18 @@ Show code
 <pre><code>## leading edge analysis...</code></pre>
 <pre><code>## done...</code></pre>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a>gsea_results<span class="op">@</span>result[, <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(NES)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">20</span>)</span></code></pre></div>
-<pre><code>## # A tibble: 4 x 8
+<pre><code>## # A tibble: 9 x 8
 ##   ID     Description      setSize enrichmentScore   NES  pvalue p.adjust qvalues
 ##   &lt;chr&gt;  &lt;chr&gt;              &lt;int&gt;           &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
-## 1 GO:00… cellular carboh…      56           0.720  2.31 6.67e-6  0.00899 0.00859
-## 2 GO:00… trehalose metab…      12           0.866  2.27 5.78e-5  0.0271  0.0259 
-## 3 GO:00… cellular carboh…     153           0.552  1.88 9.66e-6  0.00899 0.00859
-## 4 GO:00… carbohydrate me…     238           0.503  1.74 1.44e-5  0.00899 0.00859</code></pre>
+## 1 GO:00… glycogen biosyn…      23           0.806  2.31 2.10e-4  0.0449  0.0434 
+## 2 GO:00… cellular carboh…      56           0.720  2.30 7.43e-6  0.00693 0.00671
+## 3 GO:00… monocarboxylic …      27           0.777  2.28 6.36e-5  0.0297  0.0287 
+## 4 GO:00… energy reserve …      34           0.736  2.24 9.55e-5  0.0345  0.0334 
+## 5 GO:00… response to osm…      85           0.613  2.02 1.11e-4  0.0345  0.0334 
+## 6 GO:00… carbohydrate bi…      87           0.592  1.95 2.17e-4  0.0449  0.0434 
+## 7 GO:00… cellular carboh…     153           0.552  1.89 2.11e-5  0.0131  0.0127 
+## 8 GO:00… carbohydrate me…     238           0.503  1.75 6.95e-6  0.00693 0.00671
+## 9 GO:00… response to abi…     185           0.497  1.71 1.37e-4  0.0365  0.0354</code></pre>
 </p>
 </details>
 <p><br></p>

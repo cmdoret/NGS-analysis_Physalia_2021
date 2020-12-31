@@ -1695,21 +1695,21 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>samples &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;shared/ChIP-seq_samples.txt&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>samples &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;Share/day03/ChIP-seq_samples.txt&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>samples</span></code></pre></div>
 <pre><code>## # A tibble: 25 x 9
 ##    Run   BioProject Transcription_f… Replicate Assay Study reads_1 reads_2 ctl  
 ##    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;                &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;
-##  1 SRR6… PRJNA4292… Reb1                     1 SLIM… Guti… data/S… data/S… &quot;&quot;   
-##  2 SRR6… PRJNA4292… Abf1                     1 SLIM… Guti… data/S… data/S… &quot;&quot;   
-##  3 SRR6… PRJNA4292… Rap1                     1 SLIM… Guti… data/S… data/S… &quot;&quot;   
-##  4 SRR5… PRJNA3855… Spt3-TAP                 1 ChIP… Vina… data/S… data/S… &quot;SRR…
-##  5 SRR5… PRJNA3855… Spt16-TAP                1 ChIP… Vina… data/S… data/S… &quot;SRR…
-##  6 SRR5… PRJNA3855… Hsf1-TAP                 1 ChIP… Vina… data/S… data/S… &quot;SRR…
-##  7 SRR5… PRJNA3855… Hsf1-TAP                 2 ChIP… Vina… data/S… data/S… &quot;SRR…
-##  8 SRR5… PRJNA3855… Rsc9-TAP                 1 ChIP… Vina… data/S… data/S… &quot;SRR…
-##  9 SRR5… PRJNA3855… Neg                      1 ChIP… Vina… data/S… data/S… &quot;SRR…
-## 10 SRR5… PRJNA3855… Neg                      2 ChIP… Vina… data/S… data/S… &quot;SRR…
+##  1 SRR6… PRJNA4292… Reb1                     1 SLIM… Guti… Share/… Share/… &quot;&quot;   
+##  2 SRR6… PRJNA4292… Abf1                     1 SLIM… Guti… Share/… Share/… &quot;&quot;   
+##  3 SRR6… PRJNA4292… Rap1                     1 SLIM… Guti… Share/… Share/… &quot;&quot;   
+##  4 SRR5… PRJNA3855… Spt3-TAP                 1 ChIP… Vina… Share/… Share/… &quot;SRR…
+##  5 SRR5… PRJNA3855… Spt16-TAP                1 ChIP… Vina… Share/… Share/… &quot;SRR…
+##  6 SRR5… PRJNA3855… Hsf1-TAP                 1 ChIP… Vina… Share/… Share/… &quot;SRR…
+##  7 SRR5… PRJNA3855… Hsf1-TAP                 2 ChIP… Vina… Share/… Share/… &quot;SRR…
+##  8 SRR5… PRJNA3855… Rsc9-TAP                 1 ChIP… Vina… Share/… Share/… &quot;SRR…
+##  9 SRR5… PRJNA3855… Neg                      1 ChIP… Vina… Share/… Share/… &quot;SRR…
+## 10 SRR5… PRJNA3855… Neg                      2 ChIP… Vina… Share/… Share/… &quot;SRR…
 ## # … with 15 more rows</code></pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>samples<span class="op">$</span>ctl &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;control_&quot;</span>, samples<span class="op">$</span>Assay)[<span class="kw">match</span>(samples<span class="op">$</span>ctl, samples<span class="op">$</span>Run)]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>samples<span class="op">$</span>Transcription_factor[samples<span class="op">$</span>Transcription_factor <span class="op">==</span><span class="st"> &#39;Neg&#39;</span>] =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;control_&quot;</span>, samples<span class="op">$</span>Assay)[samples<span class="op">$</span>Transcription_factor <span class="op">==</span><span class="st"> &#39;Neg&#39;</span>]</span>
@@ -1730,16 +1730,16 @@ Show code
 <pre><code>## # A tibble: 25 x 6
 ##    group    replicate fastq_1             fastq_2             antibody control  
 ##    &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;    &lt;chr&gt;    
-##  1 Reb1             1 data/SRR6453183^SL… data/SRR6453183^SL… &quot;Reb1&quot;   &quot;control…
-##  2 Abf1             1 data/SRR6453184^SL… data/SRR6453184^SL… &quot;Abf1&quot;   &quot;control…
-##  3 Rap1             1 data/SRR6453185^SL… data/SRR6453185^SL… &quot;Rap1&quot;   &quot;control…
-##  4 Spt3-TAP         1 data/SRR5511881^Ch… data/SRR5511881^Ch… &quot;Spt3-T… &quot;control…
-##  5 Spt16-T…         1 data/SRR5511951^Ch… data/SRR5511951^Ch… &quot;Spt16-… &quot;control…
-##  6 Hsf1-TAP         1 data/SRR5511958^Ch… data/SRR5511958^Ch… &quot;Hsf1-T… &quot;control…
-##  7 Hsf1-TAP         2 data/SRR5511959^Ch… data/SRR5511959^Ch… &quot;Hsf1-T… &quot;control…
-##  8 Rsc9-TAP         1 data/SRR5511984^Ch… data/SRR5511984^Ch… &quot;Rsc9-T… &quot;control…
-##  9 control…         1 data/SRR5512036^Ch… data/SRR5512036^Ch… &quot;&quot;       &quot;&quot;       
-## 10 control…         2 data/SRR5512037^Ch… data/SRR5512037^Ch… &quot;&quot;       &quot;&quot;       
+##  1 Reb1             1 Share/day03/data/S… Share/day03/data/S… &quot;Reb1&quot;   &quot;control…
+##  2 Abf1             1 Share/day03/data/S… Share/day03/data/S… &quot;Abf1&quot;   &quot;control…
+##  3 Rap1             1 Share/day03/data/S… Share/day03/data/S… &quot;Rap1&quot;   &quot;control…
+##  4 Spt3-TAP         1 Share/day03/data/S… Share/day03/data/S… &quot;Spt3-T… &quot;control…
+##  5 Spt16-T…         1 Share/day03/data/S… Share/day03/data/S… &quot;Spt16-… &quot;control…
+##  6 Hsf1-TAP         1 Share/day03/data/S… Share/day03/data/S… &quot;Hsf1-T… &quot;control…
+##  7 Hsf1-TAP         2 Share/day03/data/S… Share/day03/data/S… &quot;Hsf1-T… &quot;control…
+##  8 Rsc9-TAP         1 Share/day03/data/S… Share/day03/data/S… &quot;Rsc9-T… &quot;control…
+##  9 control…         1 Share/day03/data/S… Share/day03/data/S… &quot;&quot;       &quot;&quot;       
+## 10 control…         2 Share/day03/data/S… Share/day03/data/S… &quot;&quot;       &quot;&quot;       
 ## # … with 15 more rows</code></pre>
 </p>
 </details>
@@ -1770,27 +1770,41 @@ Show code
 </p>
 </details>
 <p><br></p>
-<blockquote>
-<p>Execute the nf-core/chipseq pipeline for a single TF (for a single-end CHIP-seq)</p>
-</blockquote>
+<p>This is what the nf-core/chipseq pipeline input datasheet looks like for a single-end ChIP-seq library</p>
 <details>
 <summary style="color: #ff7f00; font-weight: bold">
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="ex">-resume</span> <span class="kw">\</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="ex">--input</span> Share/day03/ChIP-seq_design_2.csv <span class="kw">\</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    <span class="ex">--single_end</span> <span class="kw">\</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;4.GB&#39;</span> <span class="kw">\</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>    <span class="ex">--skip_spp</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">cat</span> Share/day03/ChIP-seq_design_2.csv</span></code></pre></div>
+<pre><code>## group,replicate,fastq_1,fastq_2,antibody,control
+## Hog1,1,Share/day03/data/SRR500623_GSM936791_Hog1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Hog1,control_ChIP-seq
+## Sko1,1,Share/day03/data/SRR500627_GSM936795_Sko1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Sko1,control_ChIP-seq
+## Hot1,1,Share/day03/data/SRR500629_GSM936797_Hot1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Hot1,control_ChIP-seq
+## control_ChIP-seq,1,Share/day03/data/SRR500633_GSM936801_input_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,,</code></pre>
+</p>
+</details>
+<p><br></p>
+<p>The only modification to the Nextflow <code>run</code> command is the additional <code>--single_end</code> parameter. Easy!</p>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="fu">cat</span> Share/day03/ChIP-seq_design_2.csv</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    <span class="ex">-resume</span> <span class="kw">\</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>    <span class="ex">--input</span> Share/day03/ChIP-seq_design_2.csv <span class="kw">\</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>    <span class="ex">--single_end</span> <span class="kw">\</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;4.GB&#39;</span> <span class="kw">\</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a>    <span class="ex">--skip_spp</span></span></code></pre></div>
 </p>
 </details>
 <p><br></p>
@@ -1863,7 +1877,7 @@ Have a look at the content of the folder <code>results/bwa/mergedLibrary/bigwig/
 Clue
 </summary>
 <p>
-Check out rrtacklayer package from Bioconductor: See <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig</a> and <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wig</a> documentation.
+Check out rtacklayer package from Bioconductor: See <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig</a> and <a href="http://genome.ucsc.edu/goldenPath/help/wiggle.html">wig</a> documentation.
 </p>
 </details>
 </div>

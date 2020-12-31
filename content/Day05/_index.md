@@ -3,31 +3,30 @@ title: "5. Day 05"
 day: "Day 05"
 presentation1: " "
 presentation2: " "
-presentation3: " "
-practical1: "day05/GO_GSEA.html"
-practical2: "day05/integrating_ATACseq_ChIPseq.html"
-practical3: "day05/chromatin_states.html"
+practical1: "day05/GO_GSEA"
+practical2: "day05/integrating_ATACseq_ChIPseq"
+practical3: "day05/chromatin_states"
 ---
 
 ---
 
 ## Presentations for {{< param "day" >}}
 
-- **\[1 h\]** Advanced R/Bioconductor - AnnotationHub
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
-
 - **\[1 h\]** Gene ontology and gene set enrichment analyses
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
+[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
+
+- **\[1 h\]** Advanced R/Bioconductor - AnnotationHub, biomaRt, ...
+[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
 
 ---
 
 ## Exercises for {{< param "day" >}}
 
 -  **\[30 min\]** Intersecting ATAC-seq with GO databases:
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}})
+    [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}}.Rmd)]
 
 -  **\[1 h\]** Intersecting ATAC-seq with public TF motif databases:
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}})
+    [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}}.Rmd)]
 
     > As genome-wide assays are increasingly more streamlined, 
     integrating data from multi-omics experiments becomes a challenging step.  
@@ -35,7 +34,7 @@ practical3: "day05/chromatin_states.html"
     ATAC-seq with public databases such as transcription factor binding motif databases. 
 
 -  **\[1 h 30 min\]** Inspecting chromatin states changes in Human
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}})
+    [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}}.Rmd)]
 
     > Data for this part of the course is entirely recovered from `AnnotationHub`.
 

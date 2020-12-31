@@ -31,14 +31,17 @@ Have a look at MEME homepage:
 
 > Which tool do you think will be useful for us? 
 
+For an extensive of MEME internal computation steps, you can read the excellent in-depth presentation 
+from Jonas Ibn-Salem [here](http://cbdm-01.zdv.uni-mainz.de/~jibnsale/teaching/SS16_MotifAnalysis_lecture_v02.pdf)
+
 ### Running MEME to find *de novo* motifs in Reb1 peaks
 
 Let's run MEME on peaks mapped in Reb1 ChIP-seq assay. 
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
-genome='results/genome/genome.fa'
-peaks_folder='results/bwa/mergedLibrary/macs/narrowPeak/'
+genome='Share/day03/results/genome/genome.fa'
+peaks_folder='Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/'
 TF='Reb1_R1'
 fasta_path="${TF}.fa"
 output_dir="meme_out/${TF}"
@@ -101,8 +104,8 @@ Let's have a go at it.
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
-genome='results/genome/genome.fa'
-peaks_folder='results/bwa/mergedLibrary/macs/narrowPeak/'
+genome='Share/day03/results/genome/genome.fa'
+peaks_folder='Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/'
 TF='Reb1_R1'
 fasta_path="${TF}.fa"
 nmotifs=5
@@ -127,17 +130,17 @@ streme \
 
 ### Running STREME to find *de novo* motifs for all TFs
 
-*De novo* motif analyses were conducted with `Streme` for all the ChIP-seq libraries sequenced, using the following gist: 
+*De novo* motif analyses were conducted with `Streme` for all the ChIP-seq libraries sequenced. We can use a `for` loop in Bash, as shown in this gist: 
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
-genome='results/genome/genome.fa'
-peaks_folder='results/bwa/mergedLibrary/macs/narrowPeak/'
+genome='Share/day03/results/genome/genome.fa'
+peaks_folder='Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/'
 nmotifs=5
 min_width=6
 max_width=20
-TFs=$(ls ${peaks_folder}*.narrowPeak | sed 's,_peaks.narrowPeak,,' | sed 's,.*/,,g')
 #
+TFs=$(ls ${peaks_folder}*.narrowPeak | sed 's,_peaks.narrowPeak,,' | sed 's,.*/,,g')
 for TF in ${TFs}
 do
     echo -e "\033[0;31m[`date +"%T"`]\033[0;37m Processing ${TF} TF..." 
@@ -173,7 +176,7 @@ the common genomic file formats.
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-Reb1_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak')
+Reb1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak')
 ```
 </p></details><br>
 
@@ -197,7 +200,7 @@ hist(GenomicRanges::width(Reb1_peaks))
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-Reb1_peak_summits <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_summits.bed')
+Reb1_peak_summits <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_summits.bed')
 pos <- {GenomicRanges::end(Reb1_peak_summits) - GenomicRanges::start(Reb1_peaks)} / {GenomicRanges::end(Reb1_peaks) - GenomicRanges::start(Reb1_peaks)}
 hist(pos)
 ```
@@ -223,8 +226,7 @@ class(genome)
 genome
 yeast_sequences <- Biostrings::getSeq(genome, names(genome))
 yeast_sequences
-#
-Reb1_motifs <- universalmotif::read_meme('results/streme_out/Reb1_R1/streme.txt')
+Reb1_motifs <- universalmotif::read_meme('Share/day03/streme_out/Reb1_R1/streme.txt')
 Reb1_PWM <- TFBSTools::PWMatrix(ID = 'Reb1', profileMatrix = Reb1_motifs[[1]]@motif)
 Reb1_hits <- GenomicRanges::GRanges(
     TFBSTools::searchSeq(
@@ -238,8 +240,7 @@ Reb1_hits <- Reb1_hits[order(Reb1_hits$relScore, decreasing = TRUE)]
 Reb1_hits
 Reb1_hits <- Reb1_hits[Reb1_hits$relScore >= 0.80]
 Reb1_hits
-#
-Abf1_motifs <- universalmotif::read_meme('results/streme_out/Abf1_R1/streme.txt')
+Abf1_motifs <- universalmotif::read_meme('Share/day03/streme_out/Abf1_R1/streme.txt')
 Abf1_PWM <- TFBSTools::PWMatrix(ID = 'Abf1', profileMatrix = Abf1_motifs[[1]]@motif)
 Abf1_hits <- GenomicRanges::GRanges(
     TFBSTools::searchSeq(
@@ -277,7 +278,7 @@ table(Reb1_peaks %over% Reb1_hits)
 dist <- GenomicRanges::distanceToNearest(Reb1_peaks, Reb1_hits)@elementMetadata$distance
 hist(dist, breaks = 100)
 #
-Abf1_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Abf1_R1_peaks.narrowPeak')
+Abf1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Abf1_R1_peaks.narrowPeak')
 GenomeInfoDb::seqlevelsStyle(Abf1_hits) <- "NCBI"
 table(Abf1_peaks %over% Abf1_hits)
 dist <- GenomicRanges::distanceToNearest(Abf1_peaks, Abf1_hits)@elementMetadata$distance
@@ -285,19 +286,19 @@ hist(dist, breaks = 100)
 ```
 </p></details><br>
 
-> How far from each other are Abf1, Reb1 and Rap1 peaks?  
+> Compare the overlap of Abf1 and Rap1 peaks. 
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-Rap1_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Rap1_R1_peaks.narrowPeak')
+Rap1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Rap1_R1_peaks.narrowPeak')
 table(Abf1_peaks %over% Rap1_peaks)
 ```
 </p></details><br>
 
 ## Conclusions 
 
-> How do PWM motif scanning and peak calling reconcile? Which one provides a 
+> How do PWM motif scanning and peak calling reconcile with each other? Which one provides a 
 better estimation of the regions regulated by a given transcription factor?  
 
 > How could you compare overlaps of multiple sets of TF peaks in a more 
-comprehensive manner?  
+comprehensive way? 

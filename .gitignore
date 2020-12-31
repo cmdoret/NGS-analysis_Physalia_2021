@@ -1,2 +1,14 @@
 .vscode
 results
+meme_out
+streme_out
+*fastq.gz
+*.fa
+*bw
+*bam
+*bam.bai
+*bed
+*.tab
+*.rds
+*.pptx
+*.gff

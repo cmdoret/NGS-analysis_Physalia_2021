@@ -1698,8 +1698,8 @@ Show code
 ## 
 ##     reduce</code></pre>
 <pre><code>## Loading required package: GenomeInfoDb</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>ATAC_peaks &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;ATAC_peaks_with_annots.rds&quot;</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>Reb1_peaks &lt;-<span class="st"> </span>rtracklayer<span class="op">::</span><span class="kw">import</span>(<span class="st">&#39;results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak&#39;</span>)</span>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>ATAC_peaks &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;Share/day05/ATAC_peaks_with_annots.rds&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>Reb1_peaks &lt;-<span class="st"> </span>rtracklayer<span class="op">::</span><span class="kw">import</span>(<span class="st">&#39;Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak&#39;</span>)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>ATAC_peaks<span class="op">$</span>has_Reb1 &lt;-<span class="st"> </span>ATAC_peaks <span class="op">%over%</span><span class="st"> </span>Reb1_peaks</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a><span class="kw">with</span>(ATAC_peaks, <span class="kw">table</span>(annot, has_Reb1))</span></code></pre></div>
 <pre><code>##                             has_Reb1
@@ -1722,7 +1722,7 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a>Hog1_peaks &lt;-<span class="st"> </span>rtracklayer<span class="op">::</span><span class="kw">import</span>(<span class="st">&#39;results/bwa/mergedLibrary/macs/narrowPeak/Hog1_R1_peaks.narrowPeak&#39;</span>)</span>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a>Hog1_peaks &lt;-<span class="st"> </span>rtracklayer<span class="op">::</span><span class="kw">import</span>(<span class="st">&#39;Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Hog1_R1_peaks.narrowPeak&#39;</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>ATAC_peaks<span class="op">$</span>has_Hog1 &lt;-<span class="st"> </span>ATAC_peaks <span class="op">%over%</span><span class="st"> </span>Hog1_peaks</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a><span class="kw">with</span>(ATAC_peaks, <span class="kw">table</span>(annot, has_Hog1))</span></code></pre></div>
 <pre><code>##                             has_Hog1
@@ -1745,10 +1745,10 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a>TFs &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;*.narrowPeak$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;results/bwa/mergedLibrary/macs/narrowPeak&#39;</span>)</span>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a>TFs &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">&#39;*.narrowPeak$&#39;</span>, <span class="dt">path =</span> <span class="st">&#39;Share/day03/results/bwa/mergedLibrary/macs/narrowPeak&#39;</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>TFs &lt;-<span class="st"> </span><span class="kw">unique</span>(<span class="kw">gsub</span>(<span class="st">&#39;_.*&#39;</span>, <span class="st">&#39;&#39;</span>, TFs))</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>list_TF_peaks &lt;-<span class="st"> </span><span class="kw">lapply</span>(TFs, <span class="cf">function</span>(TF) {</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>    TF_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="kw">paste0</span>(TF, <span class="st">&#39;.*narrowPeak$&#39;</span>), <span class="dt">path =</span> <span class="st">&#39;results/bwa/mergedLibrary/macs/narrowPeak&#39;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>    TF_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="kw">paste0</span>(TF, <span class="st">&#39;.*narrowPeak$&#39;</span>), <span class="dt">path =</span> <span class="st">&#39;Share/day03/results/bwa/mergedLibrary/macs/narrowPeak&#39;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>    peaks &lt;-<span class="st"> </span>GenomicRanges<span class="op">::</span><span class="kw">reduce</span>(<span class="kw">do.call</span>(c, <span class="kw">lapply</span>(TF_files, rtracklayer<span class="op">::</span>import)))</span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a>    <span class="kw">return</span>(peaks)</span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a>})</span>

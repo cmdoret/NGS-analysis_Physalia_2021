@@ -27,7 +27,7 @@ YAPC has mapped peaks with several different thresholds of significance.
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh}
-wc -l _yapc-files/stress-response_*.bed
+wc -l Share/day04/_yapc-files/stress-response_*.bed
 ```
 </p></details><br>
 
@@ -37,7 +37,7 @@ wc -l _yapc-files/stress-response_*.bed
 ```{r}
 # Import ATAC peaks as GRanges
 library(tidyverse)
-ATAC_peaks <- read.table('_yapc-files/stress-response_0.05.bed') %>% 
+ATAC_peaks <- read.table('Share/day04/_yapc-files/stress-response_0.05.bed') %>% 
     as_tibble() %>% 
     setNames(c('seqnames', 'start', 'end', 'yapc_scores', 'score', 'strand', 'summit', 'summit2')) %>%
     GenomicRanges::makeGRangesFromDataFrame(keep.extra.columns = TRUE)
@@ -73,7 +73,7 @@ hist(log10(mcols(dists)$distance), breaks = 300)
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 ChIP_peaks <- GenomicRanges::reduce(do.call(c, lapply(
-    list.files(pattern = '.*narrowPeak$', path = '../day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE), rtracklayer::import
+    list.files(pattern = '.*narrowPeak$', path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE), rtracklayer::import
 )))
 dists <- IRanges::distanceToNearest(ATAC_peaks, ChIP_peaks)
 summary(mcols(dists)$distance)
@@ -87,18 +87,20 @@ In R, we can leverage Bioconductor classes and their optimized access to `.bam` 
 fragment coverage of ATAC-seq datasets over all the annotated ATAC-seq peaks. 
 
 ```{r, echo = FALSE, results = FALSE}
-ATAC_counts <- readRDS('ATAC_counts.rds')
+ATAC_counts <- readRDS('Share/day04/ATAC_counts.rds')
 ```
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r, eval = FALSE}
+```{r}
 # Define sample sheet
 sampleTable <- data.frame(
-    sample = gsub('_SRR.*', '', list.files(pattern = '_noChrM_q10.bam$', path = '_bam-files/')), 
-    timepoint = gsub('SacCer3_|_rep.*', '', list.files(pattern = '_noChrM_q10.bam$', path = '_bam-files/')), 
+    sample = gsub('_SRR.*', '', list.files(pattern = '_noChrM_q10.bam$', path = 'Share/day04/_bam-files/')), 
+    timepoint = gsub('SacCer3_|_rep.*', '', list.files(pattern = '_noChrM_q10.bam$', path = 'Share/day04/_bam-files/')), 
     replicate = rep(c(1, 2), 5), 
-    bam = list.files(pattern = '_noChrM_q10.bam$', path = '_bam-files/', full.names = TRUE)
+    bam = list.files(pattern = '_noChrM_q10.bam$', path = 'Share/day04/_bam-files/', full.names = TRUE)
 )
+```
+```{r, eval = FALSE}
 # Import fragment counts over peaks 
 ATAC_counts <- GenomicAlignments::summarizeOverlaps(, 
     features = ATAC_peaks, 
@@ -115,7 +117,7 @@ ATAC_counts
 ## 4. Perform DA analysis
 
 ```{r, echo = FALSE, results = FALSE}
-ATAC_peaks <- readRDS('ATAC_peaks.rds')
+ATAC_peaks <- readRDS('Share/day04/ATAC_peaks.rds')
 ```
 
 DESeq2 is probably the most widely used package to compute differential coverage (expression) of chromatin loci 
@@ -163,7 +165,7 @@ rlog <- matrix(unlist(lapply(
 )), nrow = nrow(rlog))
 rownames(rlog) <- paste0('peak_', 1:nrow(rlog))
 colnames(rlog) <- paste0('rlog_', unique(sampleTable$timepoint))
-# Compile and save results
+# Collate all results together
 results <- cbind(rlog, out.l2fc, out.padj)
 mcols(ATAC_peaks) <- cbind(mcols(ATAC_peaks), results)
 ```
@@ -185,7 +187,7 @@ g
 ```
 </p></details><br>
 
-## 6. Save analysis
+## 6. Save analysis output
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}

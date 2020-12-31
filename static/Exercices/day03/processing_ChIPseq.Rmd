@@ -52,7 +52,7 @@ The following gist can be used to reformat the sample information into an input 
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-samples <- read.table('shared/ChIP-seq_samples.txt', header = TRUE, sep = '\t')
+samples <- read.table('Share/day03/ChIP-seq_samples.txt', header = TRUE, sep = '\t')
 samples
 samples$ctl <- paste0("control_", samples$Assay)[match(samples$ctl, samples$Run)]
 samples$Transcription_factor[samples$Transcription_factor == 'Neg'] = paste0("control_", samples$Assay)[samples$Transcription_factor == 'Neg']
@@ -94,10 +94,19 @@ nextflow run nf-core/chipseq \
 ```
 </p></details><br>
 
-> Execute the nf-core/chipseq pipeline for a single TF (for a single-end CHIP-seq) 
+This is what the nf-core/chipseq pipeline input datasheet looks like for a single-end ChIP-seq library 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh}
+cat Share/day03/ChIP-seq_design_2.csv
+```
+</p></details><br>
+
+The only modification to the Nextflow `run` command is the additional `--single_end` parameter. Easy!
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh eval  = FALSE}
+cat Share/day03/ChIP-seq_design_2.csv
 NXF_OPTS='-Xms1g -Xmx4g'
 nextflow run nf-core/chipseq \
     -profile singularity \
@@ -169,7 +178,7 @@ Have a look at the content of the folder `results/bwa/mergedLibrary/bigwig/scale
 
 <details><summary>Clue</summary>
 <p>
-Check out rrtacklayer package from Bioconductor:
+Check out rtacklayer package from Bioconductor:
 See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http://genome.ucsc.edu/goldenPath/help/wiggle.html) documentation.
 </p>
 </details>
