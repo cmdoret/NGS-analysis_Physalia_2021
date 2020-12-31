@@ -26,7 +26,7 @@ Let's load all the peaks in R, using `rtracklayer` package.
 TFs <- list.files(pattern = '*.narrowPeak$', path = 'results/bwa/mergedLibrary/macs/narrowPeak')
 TFs <- unique(gsub('_.*', '', TFs))
 require(rtracklayer)
-list_TF_peaks <- parallel::mclapply(mc.cores = 1, TFs, function(TF) {
+list_TF_peaks <- lapply(TFs, function(TF) {
     TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = 'results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
     peaks <- GenomicRanges::reduce(do.call(c, lapply(TF_files, rtracklayer::import)))
     return(peaks)

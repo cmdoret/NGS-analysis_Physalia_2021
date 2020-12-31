@@ -1756,13 +1756,13 @@ Show code
 </summary>
 <p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="fu">grep</span> -P <span class="st">&quot;^group|^Reb1|^control_ChIP-Exo&quot;</span> shared/ChIP-seq_design.csv <span class="op">&gt;</span> shared/ChIP-seq_subset_design.csv</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="fu">grep</span> -P <span class="st">&quot;^group|^Reb1|^control_ChIP-Exo&quot;</span> Share/day03/ChIP-seq_design.csv <span class="op">&gt;</span> ChIP-seq_subset_design.csv</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    <span class="ex">--input</span> shared/ChIP-seq_subset_design.csv <span class="kw">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    <span class="ex">--input</span> ChIP-seq_subset_design.csv <span class="kw">\</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;8.GB&#39;</span> <span class="kw">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;4.GB&#39;</span> <span class="kw">\</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
@@ -1782,11 +1782,11 @@ Show code
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="ex">-resume</span> <span class="kw">\</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="ex">--input</span> shared/ChIP-seq_design_2.csv <span class="kw">\</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="ex">--input</span> Share/day03/ChIP-seq_design_2.csv <span class="kw">\</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    <span class="ex">--single_end</span> <span class="kw">\</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;5&#39;</span> <span class="kw">\</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;28.GB&#39;</span> <span class="kw">\</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;4.GB&#39;</span> <span class="kw">\</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
@@ -1845,7 +1845,7 @@ See <a href="http://genome.ucsc.edu/goldenPath/help/bigWig.html">bigWig</a> and 
 </p>
 </details>
 <blockquote>
-<p>How comparable are <code>.bigwig</code> files from one to another?</p>
+<p>How comparable is the ChIP-seq coverage, from one <code>.bigwig</code> file to another?</p>
 </blockquote>
 <details>
 <summary>

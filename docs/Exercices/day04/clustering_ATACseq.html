@@ -1938,7 +1938,7 @@ Show code
 </div>
 <div id="conclusions" class="section level2">
 <h2>Conclusions</h2>
-<p>You can have a look at the following paper, which focus on osmotic stress-related gene regulation:</p>
+<p>Have a look at the following paper, which focus on osmotic stress-related gene regulation:</p>
 <ul>
 <li>Osmotic Stress Signaling and Osmoadaptation in Yeasts, <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC120784/">(Stefan Hohmann, Microbiol Mol Biol Rev. 2002)</a></li>
 <li>Structure and function of a transcriptional network activated by the MAPK Hog1, <a href="https://www.nature.com/articles/ng.235">(Capaldi et al., Nature Genetics 2008)</a></li>
@@ -1954,6 +1954,27 @@ Show code
 <blockquote>
 <p>Do promoters of all the master regulators show dynamic accessibility? Can you speculate why some do not show an increased accessibility?</p>
 </blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="co"># Export as RDS</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>ATAC_peaks<span class="op">$</span>cluster &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>    ATAC_peaks<span class="op">$</span>peakID, </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>    <span class="cf">function</span>(id) {</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a>        n &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>(clusters_peaks, <span class="cf">function</span>(set) id <span class="op">%in%</span><span class="st"> </span>set)))</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a>        <span class="cf">if</span> (<span class="kw">length</span>(n) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) {</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true"></a>            <span class="dv">0</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true"></a>        } <span class="cf">else</span>{</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true"></a>            n</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true"></a>        }</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true"></a>    }</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true"></a>))</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true"></a><span class="kw">saveRDS</span>(ATAC_peaks, <span class="st">&#39;ATAC_peaks_with_clusters.rds&#39;</span>)</span></code></pre></div>
+</p>
+</details>
+<p><br></p>
 </div>
 </div>
 

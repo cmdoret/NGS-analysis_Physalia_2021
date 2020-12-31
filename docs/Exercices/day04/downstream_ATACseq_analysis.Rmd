@@ -51,27 +51,6 @@ ATAC_peaks$peakID <- paste0('peak_', 1:length(ATAC_peaks))
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
-# Use ChIPpeakAnno to see which genomic features ATAC peaks overlap
-ChIPpeakAnno::genomicElementDistribution(
-    ATAC_peaks, 
-    TxDb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene,
-    labels = list(
-        geneLevel = c(
-            promoter = "Promoter", 
-            geneDownstream = "Downstream",
-            geneBody = "Gene body", 
-            distalIntergenic = "Distal Intergenic"
-        ), 
-        group = c(promoterLevel = "Prom. Level", geneLevel = "Gene Level")
-    ),
-    promoterLevel = list(
-        breaks = c(-2000, -1000, -500, -100, 0, 100),
-        labels = c("upstream 1-2Kb", "upstream 0.5-1Kb", "upstream 100-500bp", "-100 - TSS", "TSS - 100b"),
-        colors = c("#FFE5CC", "#FFCA99", "#FFAD65", "#FF8E32", "#bb5a0a")
-    )
-)
-```
-```{r}
 # Get Yeast TSS annotations from TxDb
 yeast_genes <- GenomicFeatures::genes(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
 GenomeInfoDb::seqlevelsStyle(yeast_genes) <- GenomeInfoDb::seqlevelsStyle(ATAC_peaks)

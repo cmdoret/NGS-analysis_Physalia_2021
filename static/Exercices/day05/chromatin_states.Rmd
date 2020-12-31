@@ -1,5 +1,5 @@
 ---
-title: "Ex. 05-2: Leveraging AnnotationHub to investigate epigenomics"
+title: "Ex. 05-3: Leveraging AnnotationHub to investigate epigenomics"
 output: 
     rmdformats::readthedown: 
         highlight: tango
@@ -48,8 +48,8 @@ overlap between ATAC peaks and genomic features)?
 
 <details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
 ```{r}
-query(ah, c("Saccharomyces cerevisiae", "release-102"))
-yeast_gtf <- ah[['AH87694']]
+query(ah, c("Saccharomyces cerevisiae", "R64-1-1", "gtf"))
+yeast_gtf <- ah[['AH79438']]
 yeast_Ensembl_genes <- yeast_gtf[yeast_gtf$type == 'gene']
 sort(yeast_Ensembl_genes)
 query(ah, c("Saccharomyces cerevisiae", "UCSC", "TxDb"))
@@ -58,7 +58,7 @@ sort(yeast_UCSC_genes)
 ```
 </p></details><br>
 
-> So is AnnotationHub really informative? In which organism/context could it be useful? 
+> So is AnnotationHub really informative in our situation? In which organism/context could it be useful? 
 
 <details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
 ```{r}

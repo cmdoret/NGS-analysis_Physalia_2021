@@ -4,8 +4,9 @@ day: "Day 05"
 presentation1: " "
 presentation2: " "
 presentation3: " "
-practical1: "day05/"
-practical2: "day05/chromatin_states.html"
+practical1: "day05/GO_GSEA.html"
+practical2: "day05/integrating_ATACseq_ChIPseq.html"
+practical3: "day05/chromatin_states.html"
 ---
 
 ---
@@ -22,7 +23,10 @@ practical2: "day05/chromatin_states.html"
 
 ## Exercises for {{< param "day" >}}
 
--  **\[1 h 30 min\]** Intersecting ATAC-seq with public databases:
+-  **\[30 min\]** Intersecting ATAC-seq with GO databases:
+    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}})
+
+-  **\[1 h\]** Intersecting ATAC-seq with public TF motif databases:
     [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}})
 
     > As genome-wide assays are increasingly more streamlined, 
@@ -30,10 +34,8 @@ practical2: "day05/chromatin_states.html"
     Here, we will see an example of how to integrate 
     ATAC-seq with public databases such as transcription factor binding motif databases. 
 
-    * A Library of Yeast Transcription Factor Motifs Reveals a Widespread Function for Rsc3 in Targeting Nucleosome Exclusion at Promoters [(Badis et al., Mol. Cell 2008)](https://www.cell.com/fulltext/S1097-2765(08)00842-3)
-
 -  **\[1 h 30 min\]** Inspecting chromatin states changes in Human
-    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}})
+    [[Rmd]](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}})
 
     > Data for this part of the course is entirely recovered from `AnnotationHub`.
 

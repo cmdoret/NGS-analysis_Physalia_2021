@@ -148,7 +148,7 @@ whose accessibility is regulated during response to osmotic stress?
 
 ## Conclusions
 
-You can have a look at the following paper, which focus on osmotic stress-related gene regulation: 
+Have a look at the following paper, which focus on osmotic stress-related gene regulation: 
 
 * Osmotic Stress Signaling and Osmoadaptation in Yeasts, [(Stefan Hohmann, Microbiol Mol Biol Rev. 2002)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC120784/)
 * Structure and function of a transcriptional network activated by the MAPK Hog1, [(Capaldi et al., Nature Genetics 2008)](https://www.nature.com/articles/ng.235)
@@ -163,3 +163,21 @@ Osmotic stress regulatory networks are extensively described in these papers. Fo
 > List the most important genes that are regulating the response to osmotic stress in Yeast.  
 
 > Do promoters of all the master regulators show dynamic accessibility? Can you speculate why some do not show an increased accessibility?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+# Export as RDS
+ATAC_peaks$cluster <- unlist(lapply(
+    ATAC_peaks$peakID, 
+    function(id) {
+        n <- which(unlist(lapply(clusters_peaks, function(set) id %in% set)))
+        if (length(n) == 0) {
+            0
+        } else{
+            n
+        }
+    }
+))
+saveRDS(ATAC_peaks, 'ATAC_peaks_with_clusters.rds')
+```
+</p></details><br>

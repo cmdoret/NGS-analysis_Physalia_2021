@@ -75,7 +75,7 @@ cd ..
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
-cores=5
+cores=4
 for sample in $(ls data/ | sed 's,_1.fastq.gz\|_2.fastq.gz,,' | uniq)
 do 
     ./bin/ATAC_pipeline.sh "${sample}" "${cores}"

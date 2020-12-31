@@ -1709,7 +1709,7 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="va">cores=</span>5</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="va">cores=</span>4</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$(</span><span class="fu">ls</span> data/ <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,_1.fastq.gz\|_2.fastq.gz,,&#39;</span> <span class="kw">|</span> <span class="fu">uniq</span><span class="va">)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">do</span> </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="ex">./bin/ATAC_pipeline.sh</span> <span class="st">&quot;</span><span class="va">${sample}</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">${cores}</span><span class="st">&quot;</span></span>

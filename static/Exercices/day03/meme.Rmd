@@ -69,7 +69,6 @@ meme \
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 Check meme options with meme --help
-
 ```{sh, eval = FALSE}
 output_dir="meme_out/${TF}_revcomp"
 meme \
@@ -186,29 +185,6 @@ length(Reb1_peaks)
 ```
 </p></details><br>
 
-> Where are Reb1 peaks located in the genome? How about Cse4 peaks? And relative to gene annotations?
-
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-ChIPseeker::covplot(Reb1_peaks, weightCol = "qValue")
-ChIPpeakAnno::genomicElementDistribution(
-    Reb1_peaks, 
-    TxDb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene,
-    promoterRegion = c(upstream = 2000, downstream = 500),
-    geneDownstream = c(upstream = 0, downstream = 2000)
-)
-#
-Cse4_peaks <- rtracklayer::import('results/bwa/mergedLibrary/macs/narrowPeak/Cse4_R1_peaks.narrowPeak')
-ChIPseeker::covplot(Cse4_peaks, weightCol = "qValue")
-ChIPpeakAnno::genomicElementDistribution(
-    Cse4_peaks, 
-    TxDb = TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene,
-    promoterRegion = c(upstream = 2000, downstream = 500),
-    geneDownstream = c(upstream = 0, downstream = 2000)
-)
-```
-</p></details><br>
-
 > What is the distribution of peak widths?  
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
@@ -250,24 +226,12 @@ yeast_sequences
 #
 Reb1_motifs <- universalmotif::read_meme('results/streme_out/Reb1_R1/streme.txt')
 Reb1_PWM <- TFBSTools::PWMatrix(ID = 'Reb1', profileMatrix = Reb1_motifs[[1]]@motif)
-Reb1_hits <- c(
-    as(
-        TFBSTools::searchSeq(
-            Reb1_PWM, 
-            yeast_sequences, 
-            strand = '+', 
-            min.score = '60%'
-        ),
-        'GRanges'
-    ),
-    as(
-        TFBSTools::searchSeq(
-            Reb1_PWM, 
-            yeast_sequences, 
-            strand = '-', 
-            min.score = '60%'
-        ),
-        'GRanges'
+Reb1_hits <- GenomicRanges::GRanges(
+    TFBSTools::searchSeq(
+        Reb1_PWM, 
+        yeast_sequences, 
+        strand = '*', 
+        min.score = '60%'
     )
 )
 Reb1_hits <- Reb1_hits[order(Reb1_hits$relScore, decreasing = TRUE)]
@@ -277,24 +241,12 @@ Reb1_hits
 #
 Abf1_motifs <- universalmotif::read_meme('results/streme_out/Abf1_R1/streme.txt')
 Abf1_PWM <- TFBSTools::PWMatrix(ID = 'Abf1', profileMatrix = Abf1_motifs[[1]]@motif)
-Abf1_hits <- c(
-    as(
-        TFBSTools::searchSeq(
-            Abf1_PWM, 
-            yeast_sequences, 
-            strand = '+', 
-            min.score = '60%'
-        ),
-        'GRanges'
-    ),
-    as(
-        TFBSTools::searchSeq(
-            Abf1_PWM, 
-            yeast_sequences, 
-            strand = '-', 
-            min.score = '60%'
-        ),
-        'GRanges'
+Abf1_hits <- GenomicRanges::GRanges(
+    TFBSTools::searchSeq(
+        Abf1_PWM, 
+        yeast_sequences, 
+        strand = '*', 
+        min.score = '60%'
     )
 )
 Abf1_hits <- Abf1_hits[order(Abf1_hits$relScore, decreasing = TRUE)]
@@ -304,7 +256,7 @@ Abf1_hits
 ```
 </p></details><br>
 
-> Compare the peaks found by MACS2 witht the binding motifs found 
+> Compare the peaks found by MACS2 with the binding motifs found 
 when mapping the STREME-derived PWMs onto the Yeast genome sequence. 
 Are they overlapping? How far from the nearest motif each peak is?  
 

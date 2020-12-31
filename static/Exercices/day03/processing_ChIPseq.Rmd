@@ -80,13 +80,13 @@ tab
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh eval  = FALSE}
 NXF_OPTS='-Xms1g -Xmx4g'
-grep -P "^group|^Reb1|^control_ChIP-Exo" shared/ChIP-seq_design.csv > shared/ChIP-seq_subset_design.csv
+grep -P "^group|^Reb1|^control_ChIP-Exo" Share/day03/ChIP-seq_design.csv > ChIP-seq_subset_design.csv
 nextflow run nf-core/chipseq \
     -profile singularity \
-    --input shared/ChIP-seq_subset_design.csv \
+    --input ChIP-seq_subset_design.csv \
     --genome 'R64-1-1' \
     --max_cpus '1' \
-    --max_memory '8.GB' \
+    --max_memory '4.GB' \
     --save_trimmed false \
     --narrow_peak true \
     --skip_plot_fingerprint \
@@ -102,11 +102,11 @@ NXF_OPTS='-Xms1g -Xmx4g'
 nextflow run nf-core/chipseq \
     -profile singularity \
     -resume \
-    --input shared/ChIP-seq_design_2.csv \
+    --input Share/day03/ChIP-seq_design_2.csv \
     --genome 'R64-1-1' \
     --single_end \
-    --max_cpus '5' \
-    --max_memory '28.GB' \
+    --max_cpus '1' \
+    --max_memory '4.GB' \
     --save_trimmed false \
     --narrow_peak true \
     --skip_plot_fingerprint \
@@ -157,7 +157,7 @@ See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http:
 </p>
 </details>
 
-> How comparable are `.bigwig` files from one to another? 
+> How comparable is the ChIP-seq coverage, from one `.bigwig` file to another? 
 
 <details><summary>Clue</summary>
 <p>
