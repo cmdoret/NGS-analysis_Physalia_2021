@@ -1,7 +1,7 @@
 ---
 title: "5. Day 05"
 day: "Day 05"
-presentation1: " "
+presentation1: "day05/GO_GSEA.pdf"
 presentation2: " "
 practical1: "day05/GO_GSEA"
 practical2: "day05/integrating_ATACseq_ChIPseq"
@@ -13,10 +13,10 @@ practical3: "day05/chromatin_states"
 ## Presentations for {{< param "day" >}}
 
 - **\[1 h\]** Gene ontology and gene set enrichment analyses
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
 
 - **\[1 h\]** Advanced R/Bioconductor - AnnotationHub, biomaRt, ...
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
 
 ---
 

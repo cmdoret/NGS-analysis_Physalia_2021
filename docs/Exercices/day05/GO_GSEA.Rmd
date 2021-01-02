@@ -153,6 +153,9 @@ gsea_results <- clusterProfiler::gseGO(
     verbose = TRUE
 )
 gsea_results@result[, 1:8] %>% arrange(desc(NES)) %>% head(20)
+K <- which(gsea_results@result$Description == 'response to osmotic stress')
+enrichplot::gseaplot2(gsea_results, K, title = gsea_results@result$Description[K])
+enrichplot::ridgeplot(gsea_results, 20)
 ```
 </p></details><br>
 
