@@ -1,8 +1,8 @@
 ---
 title: "4. Day 04"
 day: "Day 04"
-presentation1: " "
-presentation2: " "
+presentation1: "day04/accessibility.pdf"
+presentation2: "day04/accessibility_assays.pdf"
 presentation3: " "
 practical1: "day04/processing_ATACseq"
 practical2: "day04/downstream_ATACseq_analysis"
@@ -14,17 +14,13 @@ practical3: "day04/clustering_ATACseq"
 ## Presentations for {{< param "day" >}}
 
 - **\[20 min\]** Chromatin accessibility: local architecture and TF binding: 
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation1" >}})
 
 - **\[50 min\]** Assays to measure chromatin accessibility: 
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
-
-    * A long story of nucleases
-    * Towards single-cell approaches
-    * Why peak callers should be carefully chosen: 
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
 
 - **\[40 min\]** Intermediate R/Bioconductor - Using GRanges to intersect multi-omics data:
-[[HTML]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
 
 ---
 
