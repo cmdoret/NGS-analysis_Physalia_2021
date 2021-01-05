@@ -61,11 +61,15 @@ rule all:
 
 ## Additional features
 
-* Multiple rules automatically run on separate CPUs in parallel
-* Pipelines can be split into multiple files for modularity
+* A conda environment [can be defined](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html) for the pipeline or individual rules using a YAML file. It is then loaded using `conda: my_env.yaml`. This enforces fixed software versions to make results more reproducible.
+* Rules can be [executed in a docker / singularity image](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#running-jobs-in-containers) pulled automatically from the web. This allows to run softwares which are difficult to install.
+* Multiple rules [automatically run on separate CPUs](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#threads) in parallel
+* Pipelines can be [split into multiple files](https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#includes) for modularity
 * Much more: temporary files, report generation, logging...
 
 # Exercises
 
 * Write a Snakemake pipeline from the scripts in the previous exercise
 * Allow it to run multiple samples
+
+
