@@ -212,8 +212,8 @@ Another task would be to import Probability Weight Matrices (PWMs)
 computed by by MEME.  
 To do so, we can leverage several packages: 
 
+* `Biostrings` package is used to recover the entire Yeast genomic sequence.
 * `universalmotif` is used to import STREME (or MEME) `.txt` output as PWMs. 
-* `BSgenome` and `Biostrings` packages are used to recover the entire Yeast genomic sequence
 * `TFBSTools` is used to map a PWM of interest on a entire genome sequence. 
 
 > Let's import Reb1 and Abf1 motif PWMs and map their binding sites found in the genome. 
@@ -221,10 +221,7 @@ To do so, we can leverage several packages:
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 `%over%` <- IRanges::`%over%`
-genome <- BSgenome.Scerevisiae.UCSC.sacCer3::BSgenome.Scerevisiae.UCSC.sacCer3
-class(genome)
-genome
-yeast_sequences <- Biostrings::getSeq(genome, names(genome))
+yeast_sequences <- Biostrings::readDNAStringSet('Share/day03/results/genome/genome.fa')
 yeast_sequences
 Reb1_motifs <- universalmotif::read_meme('Share/day03/streme_out/Reb1_R1/streme.txt')
 Reb1_PWM <- TFBSTools::PWMatrix(ID = 'Reb1', profileMatrix = Reb1_motifs[[1]]@motif)
@@ -267,7 +264,7 @@ table(Reb1_hits %over% Reb1_peaks)
 ```
 </p></details><br>
 
-> Check the seqnames of the 2 GRanges objects. Are they strictly identical? 
+> Check the seqname nomenclature of the 2 GRanges objects with `seqlevelsStyle()`. Are they identical? 
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
@@ -277,7 +274,6 @@ GenomeInfoDb::seqlevelsStyle(Reb1_hits) <- "NCBI"
 table(Reb1_peaks %over% Reb1_hits)
 dist <- GenomicRanges::distanceToNearest(Reb1_peaks, Reb1_hits)@elementMetadata$distance
 hist(dist, breaks = 100)
-#
 Abf1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Abf1_R1_peaks.narrowPeak')
 GenomeInfoDb::seqlevelsStyle(Abf1_hits) <- "NCBI"
 table(Abf1_peaks %over% Abf1_hits)

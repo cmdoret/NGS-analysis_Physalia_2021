@@ -42,6 +42,10 @@ ATAC_peaks <- read.table('Share/day04/_yapc-files/stress-response_0.05.bed') %>%
     setNames(c('seqnames', 'start', 'end', 'yapc_scores', 'score', 'strand', 'summit', 'summit2')) %>%
     GenomicRanges::makeGRangesFromDataFrame(keep.extra.columns = TRUE)
 ATAC_peaks$peakID <- paste0('peak_', 1:length(ATAC_peaks))
+ATAC_peaks$yapc_scores <- NULL
+ATAC_peaks$summit2 <- NULL
+ATAC_peaks$score <- NULL
+ATAC_peaks
 ```
 </p></details><br>
 
@@ -89,7 +93,6 @@ fragment coverage of ATAC-seq datasets over all the annotated ATAC-seq peaks.
 ```{r, echo = FALSE, results = FALSE}
 ATAC_counts <- readRDS('Share/day04/ATAC_counts.rds')
 ```
-
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
 # Define sample sheet
@@ -108,9 +111,15 @@ ATAC_counts <- GenomicAlignments::summarizeOverlaps(,
     ignore.strand = TRUE, 
     singleEnd = FALSE
 )
+SummarizedExperiment::colData(ATAC_counts) <- DataFrame(sampleTable)
 ```
 ```{r}
 ATAC_counts
+length(ATAC_counts)
+dim(ATAC_counts)
+dplyr::glimpse(ATAC_counts)
+SummarizedExperiment::rowRanges(ATAC_counts)
+SummarizedExperiment::colData(ATAC_counts)
 ```
 </p></details><br>
 
@@ -132,7 +141,6 @@ DESeq2 is probably the most widely used package to compute differential coverage
 ```{r, eval = FALSE}
 library(DESeq2)
 # Perform DE analysis
-colData(ATAC_counts) <- DataFrame(sampleTable)
 dds <- DESeqDataSet(ATAC_counts, design = ~ timepoint) 
 dds <- DESeq(dds)
 # Prepare contrasts for timepoint pairwise comparison
@@ -171,6 +179,8 @@ mcols(ATAC_peaks) <- cbind(mcols(ATAC_peaks), results)
 ```
 ```{r}
 ATAC_peaks
+glimpse(ATAC_peaks)
+glimpse(ATAC_peaks@elementMetadata)
 ```
 </p></details><br>
 
@@ -180,10 +190,10 @@ ATAC_peaks
 ```{r}
 # Get peaks whose accessibility increases between 0 and 15 min
 g <- ATAC_peaks[which(ATAC_peaks$L2FC_15_v_00 > log2(1.5) & ATAC_peaks$padj_15_v_00 < 0.01)]
-g
+g[, 1:2]
 # Get peaks whose accessibility increases between 0 and 60 min
 g <- ATAC_peaks[which(ATAC_peaks$L2FC_60_v_00 > log2(1.5) & ATAC_peaks$padj_60_v_00 < 0.01)]
-g
+g[, 1:2]
 ```
 </p></details><br>
 

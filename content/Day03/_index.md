@@ -3,8 +3,8 @@ title: "3. Day 03"
 day: "Day 03"
 presentation1: "day03/ChIPseq-intro.pdf"
 presentation2: "day03/mapping_peaks.pdf"
-presentation3: " "
 presentation4: "day03/nextflow.pdf"
+presentation3: "day03/R_Bioc_101.pdf"
 practical1: "day03/processing_ChIPseq"
 practical2: "day03/meme"
 practical3: "day03/ChIP-integration"
@@ -20,11 +20,11 @@ practical3: "day03/ChIP-integration"
 - **\[20 min\]** Mapping peaks in ChIP-seq datasets: 
 [[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
 
-- **\[30 min\]** R/Bioconductor crash course: comprehensive integration of genomic data: 
-[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
-
 - **\[15 min\]** Nextflow: an efficient workflow manager for reproducible research in biological projects: 
 [[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation4" >}})
+
+- **\[30 min\]** R/Bioconductor crash course: comprehensive integration of genomic data: 
+[[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
 
 ---
 

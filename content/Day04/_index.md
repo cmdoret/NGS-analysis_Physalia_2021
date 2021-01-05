@@ -3,7 +3,7 @@ title: "4. Day 04"
 day: "Day 04"
 presentation1: "day04/accessibility.pdf"
 presentation2: "day04/accessibility_assays.pdf"
-presentation3: " "
+presentation3: "day04/R_Bioc_201.pdf"
 practical1: "day04/processing_ATACseq"
 practical2: "day04/downstream_ATACseq_analysis"
 practical3: "day04/clustering_ATACseq"
@@ -19,7 +19,7 @@ practical3: "day04/clustering_ATACseq"
 - **\[50 min\]** Assays to measure chromatin accessibility: 
 [[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation2" >}})
 
-- **\[40 min\]** Intermediate R/Bioconductor - Using GRanges to intersect multi-omics data:
+- **\[40 min\]** Intermediate R/Bioconductor - Analysing NGS data:
 [[PDF]](/{{<myPackageUrl>}}Presentations/{{< param "presentation3" >}})
 
 ---

@@ -1,0 +1,132 @@
+
+SUMMARISING RUN PARAMETERS
+==========================
+Input filename: data/SacCer3_15_rep1_SRR1822157_1.fastq.gz
+Trimming mode: paired-end
+Trim Galore version: 0.6.6
+Cutadapt version: 2.10
+Python version: could not detect
+Number of cores used for trimming: 5
+Quality Phred score cutoff: 20
+Quality encoding type selected: ASCII+33
+Using Nextera adapter for trimming (count: 136147). Second best hit was Illumina (count: 0)
+Adapter sequence: 'CTGTCTCTTATA' (Nextera Transposase sequence; auto-detected)
+Maximum trimming error rate: 0.1 (default)
+Minimum required adapter overlap (stringency): 1 bp
+Minimum required sequence length for both reads before a sequence pair gets removed: 20 bp
+Running FastQC on the data once trimming has completed
+Output file will be GZIP compressed
+
+
+This is cutadapt 2.10 with Python 3.8.5
+Command line parameters: -j 5 -e 0.1 -q 20 -O 1 -a CTGTCTCTTATA data/SacCer3_15_rep1_SRR1822157_1.fastq.gz
+Processing reads on 5 cores in single-end mode ...
+Finished in 27.45 s (6 us/read; 10.53 M reads/minute).
+
+=== Summary ===
+
+Total reads processed:               4,817,338
+Reads with adapters:                 2,062,699 (42.8%)
+Reads written (passing filters):     4,817,338 (100.0%)
+
+Total basepairs processed:   366,117,688 bp
+Quality-trimmed:                 890,949 bp (0.2%)
+Total written (filtered):    346,049,000 bp (94.5%)
+
+=== Adapter 1 ===
+
+Sequence: CTGTCTCTTATA; Type: regular 3'; Length: 12; Trimmed: 2062699 times
+
+No. of allowed errors:
+0-9 bp: 0; 10-12 bp: 1
+
+Bases preceding removed adapters:
+  A: 19.8%
+  C: 30.6%
+  G: 24.1%
+  T: 25.5%
+  none/other: 0.0%
+
+Overview of removed sequences
+length	count	expect	max.err	error counts
+1	871493	1204334.5	0	871493
+2	255169	301083.6	0	255169
+3	74033	75270.9	0	74033
+4	38894	18817.7	0	38894
+5	28274	4704.4	0	28274
+6	26823	1176.1	0	26823
+7	26327	294.0	0	26327
+8	26498	73.5	0	26498
+9	25776	18.4	0	25694 82
+10	25144	4.6	1	24622 522
+11	24715	1.1	1	24352 363
+12	23791	0.3	1	23362 429
+13	25620	0.3	1	25172 448
+14	22896	0.3	1	22510 386
+15	26132	0.3	1	25700 432
+16	24858	0.3	1	24339 519
+17	27374	0.3	1	26932 442
+18	26262	0.3	1	25818 444
+19	24615	0.3	1	24308 307
+20	26093	0.3	1	25548 545
+21	24668	0.3	1	24127 541
+22	26594	0.3	1	26180 414
+23	18064	0.3	1	17726 338
+24	21456	0.3	1	21158 298
+25	22733	0.3	1	22307 426
+26	25383	0.3	1	24867 516
+27	27041	0.3	1	26604 437
+28	19200	0.3	1	18823 377
+29	23957	0.3	1	23455 502
+30	23505	0.3	1	23157 348
+31	21840	0.3	1	21445 395
+32	26579	0.3	1	26157 422
+33	14693	0.3	1	14446 247
+34	19480	0.3	1	19111 369
+35	14993	0.3	1	14707 286
+36	16366	0.3	1	16113 253
+37	16500	0.3	1	16161 339
+38	14172	0.3	1	13963 209
+39	11964	0.3	1	11773 191
+40	8398	0.3	1	8276 122
+41	4052	0.3	1	3982 70
+42	3114	0.3	1	3016 98
+43	1056	0.3	1	1008 48
+44	499	0.3	1	476 23
+45	1078	0.3	1	1048 30
+46	358	0.3	1	325 33
+47	1105	0.3	1	1073 32
+48	1175	0.3	1	1119 56
+49	919	0.3	1	897 22
+50	404	0.3	1	384 20
+51	37	0.3	1	19 18
+52	11	0.3	1	5 6
+53	46	0.3	1	3 43
+54	22	0.3	1	10 12
+55	26	0.3	1	2 24
+56	14	0.3	1	2 12
+57	8	0.3	1	2 6
+58	9	0.3	1	0 9
+59	35	0.3	1	1 34
+60	13	0.3	1	1 12
+61	16	0.3	1	0 16
+62	13	0.3	1	1 12
+63	19	0.3	1	0 19
+64	19	0.3	1	0 19
+65	26	0.3	1	0 26
+66	9	0.3	1	0 9
+67	37	0.3	1	0 37
+68	111	0.3	1	0 111
+69	24	0.3	1	0 24
+70	12	0.3	1	0 12
+71	2	0.3	1	0 2
+72	9	0.3	1	0 9
+73	21	0.3	1	0 21
+74	13	0.3	1	0 13
+75	6	0.3	1	0 6
+76	8	0.3	1	0 8
+
+RUN STATISTICS FOR INPUT FILE: data/SacCer3_15_rep1_SRR1822157_1.fastq.gz
+=============================================
+4817338 sequences processed in total
+
