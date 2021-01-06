@@ -23,7 +23,7 @@ Snakefiles contain python code with additional rule blocks.
 There must be a final rule, often named "all" which requests the output files of your pipeline. Snakemake will then look for other rules that generate the input required by this rule and generate a graph of inputs and outputs to link rules with each other. Here is a basic example for paired-end read mapping of multiple samples:
 
 ```python
-REF = 'data/in/genome.fa'
+REF = 'genome.fa'
 
 rule all:
     input:
@@ -230,8 +230,33 @@ plt.savefig(snakemake.output)
 </details>
 
 
+## Summarize the pipeline
+
+To easily and visually communicate what the pipeline does, snakemake provides 2 useful command line flags:
+
+### Directed acyclic graph
+
+The `--dag` flag prints the "directed acyclic graph" (DAG) of the pipeline, showing the data flow of files through rules. Each sample will have one node per rule it goes through.
+
+`snakemake -j1 --rulegraph | dot -Tsvg > rulegraph.svg`
+
+```{r, out.width = "90%",  fig.cap= "DAG of the Hi-C pipelin", echo=FALSE}
+knitr::include_graphics("assets/hic_dag.svg")
+```
+
+### Rule graph
+
+The `--rulegraph` flag generates a simpler graph showing each rule of the pipeline as a node, with input/output dependencies as edges. This is often easier to read:
+
+`snakemake -j1 --rulegraph | dot -Tsvg > rulegraph.svg`
+
+```{r, out.width = "90%",  fig.cap= "Rule graph of the Hi-C pipeline", echo=FALSE}
+knitr::include_graphics("assets/hic_rules.svg")
+```
+
 ## Tips
 
+* By default, snakemake stores a log of every run in `.snakemake/log` in the same directory as the Snakefile.
 * Instead of writing sample names directly in the Snakefile, it is more convenient to have a dedicated CSV table with sample names and informations and load it using e.g. `pandas.read_csv`.
 * Snakemake rules can execute rules in dedicated conda environments described in YAML files. This is useful to force your pipeline to use specific software versions.
 * When the pipeline becomes more complex, you can split it into multiple files instead of having one long snakefile. The different files can then be imported in the snakefile using e.g. `include: 'rnaseq.smk'`
