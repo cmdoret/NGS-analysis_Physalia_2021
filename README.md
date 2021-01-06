@@ -12,21 +12,25 @@ git clone https://github.com/js2264/NGS-analysis_Physalia_2021.git
 
 ## For information only: Building the course book
 
-To build the website, run: 
-
-```sh
-./bin/build_site.sh
-```
-
-To serve the course book locally, one needs to: 
+To build the course book locally, one needs to: 
 
 ```sh
 for file in $(ls Exercices/*/*ipynb); do jupyter nbconvert "${file}" --to html; done
 Rscript -e "blogdown::build_dir('content/')"
 Rscript -e "blogdown::build_dir('static/')"
 Rscript -e "blogdown::build_site()"
-# Rscript -e "blogdown::hugo_server(host='127.0.0.1', port = 4321)"
+Rscript -e "blogdown::hugo_server(host='127.0.0.1', port = 4321)"
 ```
+
+or 
+
+```sh
+make && Rscript -e "blogdown::hugo_server(host='127.0.0.1', port = 4321)"
+```
+
+This builds the website in `docs/`. Once the website is built and checked, 
+changes should be commited and pushed to master. Once in GitHub, 
+the website is rendered (from `docs/`) through GitHub Pages at https://js2264.github.io/NGS-analysis_Physalia_2021/index.html
 
 ## For information only: Populating the book 
 

@@ -1,0 +1,187 @@
+---
+title: "Ex. 05-2: Intersecting ATAC-seq and ChIP-seq datasets"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../../custom.css
+    rmdformats::downcute: 
+        preserve_yaml: true
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+## 1. Compare ATAC-seq and ChIP-seq results
+
+On one hand, we characterized different sets of dynamically regulated chromatin loci by ATAC-seq. 
+On the other hand, we have profiled the binding of transcription factors genome-wide. 
+
+> Focus on Reb1 for now: which ATAC peak clusters are the most enriched for Reb1 peaks? Propose an biological explanation for this observation.
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+library(tidyverse)
+library(GenomicRanges)
+ATAC_peaks <- readRDS("Share/day05/ATAC_peaks_with_annots.rds")
+Reb1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak')
+ATAC_peaks$has_Reb1 <- ATAC_peaks %over% Reb1_peaks
+with(ATAC_peaks, table(annot, has_Reb1))
+```
+</p></details><br>
+
+> Now do the same for a master regulator of response to osmotic stress. Conclude
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+Hog1_peaks <- rtracklayer::import('Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Hog1_R1_peaks.narrowPeak')
+ATAC_peaks$has_Hog1 <- ATAC_peaks %over% Hog1_peaks
+with(ATAC_peaks, table(annot, has_Hog1))
+```
+</p></details><br>
+
+> Can you do this for all the TFs that were studied in this course? 
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+TFs <- list.files(pattern = '*.narrowPeak$', path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak')
+TFs <- unique(gsub('_.*', '', TFs))
+list_TF_peaks <- lapply(TFs, function(TF) {
+    TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = 'Share/day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
+    peaks <- GenomicRanges::reduce(do.call(c, lapply(TF_files, rtracklayer::import)))
+    return(peaks)
+})
+names(list_TF_peaks) <- TFs
+lengths(list_TF_peaks)
+df <- lapply(TFs, function(TF) {
+    data.frame(
+        TF = TF, 
+        locus = ATAC_peaks$annot,
+        hasTF = ATAC_peaks %over% list_TF_peaks[[TF]]
+    )
+}) %>% 
+    do.call(rbind, .) %>% 
+    group_by(TF, locus) %>% 
+    summarize(pct_with_TF = sum(hasTF) / n() * 100) 
+spread(df, locus, pct_with_TF)
+ggplot(df, aes(x = locus, y = TF, fill = pct_with_TF)) + 
+    geom_tile(col = "black") + 
+    theme_bw() + 
+    scale_fill_gradientn(colours = c('white', 'orange', 'darkred')) + 
+    theme(
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        axis.ticks = element_blank()
+    ) + 
+    labs(
+        x = "Clusters of dynamic accessible loci", 
+        y = "Transcription factor", 
+        fill = '% of peaks\nin a cluster\nbound by the TF'
+    ) + 
+    coord_fixed()
+```
+</p></details><br>
+
+## 2. Mapping TF motifs from public databases in ATAC peaks 
+
+We can leverage public databases such as JASPAR to recover TF binding motifs 
+in R. Then we can map these motifs on the Yeast genome and see which clusters of peaks 
+are enriched for which factors. 
+
+> Recover MSN4 binding motif from JASPAR database
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+# Get genome sequence from AnnotationHub
+library(AnnotationHub)
+library(Biostrings)
+genome <- AnnotationHub() %>% 
+    query('Saccharomyces_cerevisiae') %>% 
+    query('R64-1-1') %>%
+    query('dna.toplevel.2bit') %>% 
+    '[['(1) %>% 
+    getSeq()
+genome
+# Get MSN4 binding motif from JASPAR
+library(JASPAR2018)
+library(TFBSTools)
+motifs <- getMatrixSet(JASPAR2018::JASPAR2018, opts = list(species = "4932"))
+motif_names <- lapply(motifs, function(m) c(name(m)))
+MSN4_motif <- toPWM(motifs[[which(motif_names == 'USV1')]])
+MSN4_motif
+MSN4_hits <- GRanges(
+    searchSeq(
+        MSN4_motif, 
+        genome, 
+        strand = '*', 
+        min.score = '60%'
+    )
+)
+MSN4_hits <- MSN4_hits[MSN4_hits$relScore >= 0.90]
+MSN4_hits <- MSN4_hits[order(MSN4_hits$relScore, decreasing = TRUE)]
+MSN4_hits
+ATAC_peaks$has_MSN4_motif <- ATAC_peaks %over% MSN4_hits
+# Calculate enrichment in each cluster
+odds_MSN4 <- lapply(levels(ATAC_peaks$annot), function(cluster) {
+    fisher.test(table(ATAC_peaks$annot == cluster, ATAC_peaks$has_MSN4_motif))$estimate
+}) %>% unlist() %>% setNames(levels(ATAC_peaks$annot))
+```
+</p></details><br>
+
+> Now let's see how it looks when we compute the odds ratio for each known motif in each cluster. 
+
+<details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
+```{r}
+odds_motifs <- parallel::mclapply(mc.cores = 6, motif_names, function(factor) {
+    message(factor)
+    motif <- toPWM(motifs[[which(motif_names == factor)]])
+    hits <- GRanges(
+        searchSeq(
+            motif, 
+            genome, 
+            strand = '*', 
+            min.score = '60%'
+        )
+    )
+    hits <- hits[hits$relScore >= 0.90]
+    hits <- hits[order(hits$relScore, decreasing = TRUE)]
+    ATAC_peaks$has_motif <- ATAC_peaks %over% hits
+    odds <- lapply(levels(ATAC_peaks$annot), function(cluster) {
+        fisher.test(table(ATAC_peaks$annot == cluster, ATAC_peaks$has_motif))$estimate
+    }) %>% unlist() %>% setNames(levels(ATAC_peaks$annot))
+    return(odds)
+}) %>% setNames(motif_names) %>% do.call(rbind, .)
+odds_motifs[is.infinite(odds_motifs)] <- 0
+odds_motifs %>% 
+    as.data.frame() %>% 
+    rownames_to_column('TF') %>% 
+    gather('cluster', 'odds', -TF) %>% 
+    mutate(odds = ifelse(odds > 5, 5, odds)) %>% 
+    ggplot(aes(x = TF, y = cluster, fill = odds)) +
+    geom_tile(col = "black") + 
+    theme_bw() + 
+    scale_fill_gradientn(colours = c('white', 'orange', 'darkred')) + 
+    theme(
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 3), 
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        axis.ticks = element_blank()
+    ) + 
+    labs(
+        x = "TF", 
+        y = "Cluster", 
+        fill = ''
+    )
+```
+</p></details><br>
+

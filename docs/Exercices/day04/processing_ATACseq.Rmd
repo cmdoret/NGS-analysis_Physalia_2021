@@ -1,0 +1,135 @@
+---
+title: "Ex. 04-1: Processing ATAC-seq data, the 'hard' way"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../../custom.css
+    rmdformats::downcute: 
+        preserve_yaml: true
+    rmarkdown::html_document: 
+        theme: simplex
+        highlight: tango
+        preserve_yaml: true
+        code_folding: hide
+        df_print: tibble
+        toc: true
+        toc_float: true
+---
+
+## 1. Downloading data
+
+### Build genome 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh, eval = FALSE} 
+mkdir R64
+wget \
+    ftp://ftp.ensembl.org/pub/release-102/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz \
+    -O R64/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz \
+    && gunzip R64/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz
+bwa index R64/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa -p R64/R64-1-1
+samtools faidx R64/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa
+cut -f1,2 R64/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.fai > R64/R64-1-1.chrom.sizes
+cd ..
+```
+</p></details><br>
+
+### Download reads
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh, eval = FALSE}
+mkdir data/
+cd data/
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/006/SRR1822156/SRR1822156_1.fastq.gz -o SacCer3_00_rep2_SRR1822156_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/006/SRR1822156/SRR1822156_2.fastq.gz -o SacCer3_00_rep2_SRR1822156_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/009/SRR1822159/SRR1822159_1.fastq.gz -o SacCer3_30_rep1_SRR1822159_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/009/SRR1822159/SRR1822159_2.fastq.gz -o SacCer3_30_rep1_SRR1822159_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/000/SRR1822160/SRR1822160_1.fastq.gz -o SacCer3_30_rep2_SRR1822160_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/000/SRR1822160/SRR1822160_2.fastq.gz -o SacCer3_30_rep2_SRR1822160_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/007/SRR1822157/SRR1822157_1.fastq.gz -o SacCer3_15_rep1_SRR1822157_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/007/SRR1822157/SRR1822157_2.fastq.gz -o SacCer3_15_rep1_SRR1822157_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/005/SRR1822155/SRR1822155_1.fastq.gz -o SacCer3_00_rep1_SRR1822155_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/005/SRR1822155/SRR1822155_2.fastq.gz -o SacCer3_00_rep1_SRR1822155_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/008/SRR1822158/SRR1822158_1.fastq.gz -o SacCer3_15_rep2_SRR1822158_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/008/SRR1822158/SRR1822158_2.fastq.gz -o SacCer3_15_rep2_SRR1822158_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/002/SRR1822162/SRR1822162_1.fastq.gz -o SacCer3_45_rep2_SRR1822162_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/002/SRR1822162/SRR1822162_2.fastq.gz -o SacCer3_45_rep2_SRR1822162_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/001/SRR1822161/SRR1822161_1.fastq.gz -o SacCer3_45_rep1_SRR1822161_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/001/SRR1822161/SRR1822161_2.fastq.gz -o SacCer3_45_rep1_SRR1822161_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/004/SRR1822164/SRR1822164_1.fastq.gz -o SacCer3_60_rep2_SRR1822164_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/004/SRR1822164/SRR1822164_2.fastq.gz -o SacCer3_60_rep2_SRR1822164_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/003/SRR1822163/SRR1822163_1.fastq.gz -o SacCer3_60_rep1_SRR1822163_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/003/SRR1822163/SRR1822163_2.fastq.gz -o SacCer3_60_rep1_SRR1822163_2.fastq.gz
+cd ..
+```
+</p></details><br>
+
+## 2. Running custom pipeline
+
+> Have a look at the custom ATAC-seq processing pipeline. Do you understand each step of the pipeline?  
+
+> To execute the pipeline for all the samples, the following `for` loop is used:
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh, eval = FALSE}
+cores=4
+for sample in $(ls data/ | sed 's,_1.fastq.gz\|_2.fastq.gz,,' | uniq)
+do 
+    Share/day04/bin/ATAC_pipeline.sh "${sample}" "${cores}"
+done
+```
+</p></details><br>
+
+## 3. Inspecting output
+
+> What type of output files are generated with this script?  
+
+> Comment on the organization of the output files.  
+
+> Comment on the reproducibility of this script.  
+
+## 4. Checking out the tracks 
+
+Load the `.bigwig` tracks generated in this pipeline in IGV. 
+If you still have them locally, try and load the `.bigwig` files from ChIP-seq experiments 
+(from Ex. 03-1).  
+
+> Can you see a good signal in the ATAC-seq tracks?  
+
+> Comment on the shape of the peaks. Do they look different from ChIP-seq peaks?  
+
+> What about the background? Does it look different from ChIP-seq background?  
+
+## 5. Calling peaks 
+
+We will use YAPC to map peaks from ATAC-seq. 
+
+> Run YAPC on ATAC-seq datasets 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh, eval = FALSE}
+conda install -c bioconda yapc
+mkdir _yapc-files/
+yapc _yapc-files/stress-response \
+    Share/day04/_bigwig-files/SacCer3_00_rep1_SRR1822155.bw Share/day04/_bigwig-files/SacCer3_00_rep2_SRR1822156.bw \
+    Share/day04/_bigwig-files/SacCer3_15_rep1_SRR1822157.bw Share/day04/_bigwig-files/SacCer3_15_rep2_SRR1822158.bw \
+    Share/day04/_bigwig-files/SacCer3_30_rep1_SRR1822159.bw Share/day04/_bigwig-files/SacCer3_30_rep2_SRR1822160.bw \
+    Share/day04/_bigwig-files/SacCer3_45_rep1_SRR1822161.bw Share/day04/_bigwig-files/SacCer3_45_rep2_SRR1822162.bw \
+    Share/day04/_bigwig-files/SacCer3_60_rep1_SRR1822163.bw Share/day04/_bigwig-files/SacCer3_60_rep2_SRR1822164.bw
+```
+</p></details><br>
+
+> How many peaks were found?  
+
+> How does this number compare to the total number of genomic sites bound by any TF (by ChIP-seq)? 
+
+## Conclusions 
+
+> Can you comment on the benefits of using a workflow manager? Can you see any downside?  
+
+> Can you visually spot dynamics in the accessibility of some promoters during osmotic stress response?  
+
+> Can you see a reason why YAPC is particularly well-designed when looking at time series? 
