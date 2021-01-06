@@ -7,7 +7,7 @@ day: "Day 02"
 
 ## Presentations for {{< param "day" >}}
 
-- Application to Hi-C: [HTML](/{{<myPackageUrl>}}Presentations/processing_NGS_data.html)
+- Applications of Hi-C **\[60min\]**: [HTML](/{{<myPackageUrl>}}Presentations/day02/applications_hic.html)
 
 ---
 
@@ -23,4 +23,4 @@ day: "Day 02"
 
 - Pattern detection **[50min\]** [[HTML](/{{<myPackageUrl>}}Exercices/day02/detection.html) | [Jupyter](/{{<myPackageUrl>}}Exercices/day02/detection.ipynb)]
 
-    You will be introduced to Chromosight for supervised pattern detection and we will analyse the results to quantify differences between condiions.
+    You will be introduced to different tools for supervised pattern detection and we will analyse the results from loop detection to quantify differences between condiions.

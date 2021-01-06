@@ -15,3 +15,7 @@ Here is a list of resources we thought would be useful for people interested in 
 ## Scientific readings
 
 - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4405355/
+
+## Hi-C tools
+
+A github repository keeping an updated and curated list of Hi-C tools: https://github.com/mdozmorov/HiC_tools
