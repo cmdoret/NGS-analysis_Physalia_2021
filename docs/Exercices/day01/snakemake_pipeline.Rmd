@@ -27,20 +27,20 @@ REF = 'data/in/genome.fa'
 
 rule all:
     input:
-        expand('data/out/{sample}.bam', sample=['A', 'B'])
+        expand('out/{sample}.bam', sample=['G1', 'M'])
 
 rule align:
     input:
         idx = REF,
-        r1 = 'data/in/{sample}_1.fq',
-        r2 = 'data/in/{sample}_2.fq'
-    output: 'data/out/{sample}.bam'
+        r1 = '{sample}_1.fq.gz',
+        r2 = '{sample}_2.fq.gz'
+    output: 'out/{sample}.bam'
     shell: 'bwa mem {input.idx} {input.r1} {input.r2} > {output}'
 ```
 
 The above rules work as follow:
 
-* Wildcards are expanded in `rule all`'s output, which resolves to `A.bam` and `B.bam`
+* Wildcards are expanded in `rule all`'s output, which resolves to `G1.bam` and `M.bam`
 * `rule align` satisfies the wildcards requirement as it can generate `{sample}.bam`, matching both files. It will be run twice (once for each sample).
 * If the inputs of `rule align` already exist, the pipeline will run normally, but if they are missing, this will raise an error as there is no rule to generate them.
 
@@ -132,19 +132,19 @@ This can be done by using the `configfile` directive. Writing `configfile: 'conf
 For example, in our minimal mapping example, we could add a minimum mapping quality filter as an option:
 
 ```python
-REF = 'data/in/genome.fa'
+REF = 'genome.fa'
 configfile: 'config.yaml'
 
 rule all:
     input:
-        expand('data/out/{sample}.bam', sample=['A', 'B'])
+        expand('out/{sample}.bam', sample=['G1', 'M'])
 
 rule align:
     input:
         idx = REF,
-        r1 = 'data/in/{sample}_1.fq',
-        r2 = 'data/in/{sample}_2.fq'
-    output: 'data/out/{sample}.bam'
+        r1 = '{sample}_1.fq.gz',
+        r2 = '{sample}_2.fq.gz'
+    output: 'out/{sample}.bam'
     params:
         mapq = config["mapq"]
     shell:
@@ -181,7 +181,7 @@ rule balance:
 
 For the sake of comparing our Hi-C matrices visually, we can add a rule to compute the log ration of the 2 Hi-C matrices. When coverage differs between condition, it is generally a good idea to subsample matrices to the same coverage.
 
-This can be done easily using the `cooltools` package. This software has several useful features for downstream processing of Hi-C data.
+This can be done easily using the `cooler` package. This software has several useful features for downstream processing of Hi-C data.
 
 > Add a rule to subsample matrices to the same coverage using `cooltools`.
 

@@ -32,8 +32,8 @@ sequencing. In Hi-C there is no such apriori and the distance between forward an
 
 ```bash
 bowtie2-build genome.fa genome
-bowtie2 -U for.fq.gz -x genome > for.sam
-bowtie2 -U rev.fq.gz -x genome > rev.sam
+bowtie2 -U for.fq.gz -x genome -S for.sam
+bowtie2 -U rev.fq.gz -x genome -S rev.sam
 ```
 
 ## Processing alignments
@@ -141,8 +141,8 @@ cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 chrom.sizes:10000 valid_pcrfree.pairs
 There are multiple ways to achieve what we did. Instead of converting sam files to pairs by hand, it may be more convenient to do:
 
 ```bash
-bwa mem -5SP genome.fasta for.fq rev.fq | samtools view -S -h -b -F 2316 > contacts.bam
-pairtools parse contacts.bam > contacts.pairs
+bwa mem -5SP genome.fa for.fq rev.fq | samtools view -S -h -b -F 2316 > contacts.bam
+pairtools parse -c chrom.sizes contacts.bam > contacts.pairs
 ```
 
 This runs the bwa aligner in pair end mode, but disables the assumptions of mate distance. Samtools then removes supplementary alignments and filters out pairs where one mate is unmapped.
