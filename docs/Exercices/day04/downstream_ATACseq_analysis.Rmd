@@ -163,18 +163,21 @@ for (i in 1:ncol(contrasts)) {
     out.padj[,i] <- out[, 'padj']
 }
 # Get regularized log-normalized accessibility counts
-rlog <- assay(rlog(dds, blind = FALSE))
-colnames(rlog) <- paste0(sampleTable$timepoint, "_rep", sampleTable$replicate)
-rlog <- matrix(unlist(lapply( 
+rlogs <- rlog(dds, blind = FALSE)
+rlogs
+rlogs <- assay(rlogs)
+glimpse(rlogs)
+colnames(rlogs) <- paste0(sampleTable$timepoint, "_rep", sampleTable$replicate)
+rlogs <- matrix(unlist(lapply( 
     unique(sampleTable$timepoint), 
     function(x) { 
-        x <- rowMeans(matrix(rlog[,grep(x, colnames(rlog))], nrow = nrow(rlog))) 
+        x <- rowMeans(matrix(rlogs[,grep(x, colnames(rlogs))], nrow = nrow(rlogs))) 
     }
-)), nrow = nrow(rlog))
-rownames(rlog) <- paste0('peak_', 1:nrow(rlog))
-colnames(rlog) <- paste0('rlog_', unique(sampleTable$timepoint))
+)), nrow = nrow(rlogs))
+rownames(rlogs) <- paste0('peak_', 1:nrow(rlogs))
+colnames(rlogs) <- paste0('rlog_', unique(sampleTable$timepoint))
 # Collate all results together
-results <- cbind(rlog, out.l2fc, out.padj)
+results <- cbind(rlogs, out.l2fc, out.padj)
 mcols(ATAC_peaks) <- cbind(mcols(ATAC_peaks), results)
 ```
 ```{r}

@@ -1873,10 +1873,10 @@ Show code
 ## [16] 1091291 ACACCACACCCACACCACACCC...GAGTGTGTGGGTGTGGTGTGT XV
 ## [17]  948066 AAATAGCCCTCATGTACGTCTC...TTTTTTAATTTCGGTCAGAAA XVI</code></pre>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="co"># Get MSN4 binding motif from JASPAR</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a><span class="kw">library</span>(JASPAR2020)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a><span class="kw">library</span>(JASPAR2018)</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a><span class="kw">library</span>(TFBSTools)</span></code></pre></div>
 <pre><code>## </code></pre>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a>motifs &lt;-<span class="st"> </span><span class="kw">getMatrixSet</span>(JASPAR2020<span class="op">::</span>JASPAR2020, <span class="dt">opts =</span> <span class="kw">list</span>(<span class="dt">species =</span> <span class="st">&quot;4932&quot;</span>))</span>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a>motifs &lt;-<span class="st"> </span><span class="kw">getMatrixSet</span>(JASPAR2018<span class="op">::</span>JASPAR2018, <span class="dt">opts =</span> <span class="kw">list</span>(<span class="dt">species =</span> <span class="st">&quot;4932&quot;</span>))</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true"></a>motif_names &lt;-<span class="st"> </span><span class="kw">lapply</span>(motifs, <span class="cf">function</span>(m) <span class="kw">c</span>(<span class="kw">name</span>(m)))</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true"></a>MSN4_motif &lt;-<span class="st"> </span><span class="kw">toPWM</span>(motifs[[<span class="kw">which</span>(motif_names <span class="op">==</span><span class="st"> &#39;USV1&#39;</span>)]])</span>
 <span id="cb54-4"><a href="#cb54-4" aria-hidden="true"></a>MSN4_motif</span></code></pre></div>

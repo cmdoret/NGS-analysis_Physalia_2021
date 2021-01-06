@@ -45,7 +45,7 @@ pip install cooltools
 conda install conda-forge::r-base=3.6.2 r-essentials=3.6.0
 Rscript -e 'install.packages(c("igraph"), repos="http://cran.us.r-project.org")'
 Rscript -e 'install.packages(c("BiocManager"), repos="http://cran.us.r-project.org")'
-Rscript -e 'BiocManager::install(c("rtracklayer", "GenomicRanges", "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene", "ChIPpeakAnno", "universalmotif", "Biostrings", "TFBSTools", "BSgenome.Scerevisiae.UCSC.sacCer3", "GenomeInfoDb", "gprofiler2", "GenomicAlignments", "Rsamtools", "DESeq2", "AnnotationHub", "GenomicFeatures", "org.Sc.sgd.db", "clusterProfiler", "JASPAR2020"))'
+Rscript -e 'BiocManager::install(c("rtracklayer", "GenomicRanges", "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene", "ChIPpeakAnno", "universalmotif", "Biostrings", "TFBSTools", "BSgenome.Scerevisiae.UCSC.sacCer3", "GenomeInfoDb", "gprofiler2", "GenomicAlignments", "Rsamtools", "DESeq2", "AnnotationHub", "GenomicFeatures", "org.Sc.sgd.db", "clusterProfiler", "JASPAR2018"))'
 ```
 
 ### Install Singularity and Nextflow

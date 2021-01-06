@@ -1928,99 +1928,102 @@ Show code
 <span id="cb49-22"><a href="#cb49-22" aria-hidden="true"></a>    out.padj[,i] &lt;-<span class="st"> </span>out[, <span class="st">&#39;padj&#39;</span>]</span>
 <span id="cb49-23"><a href="#cb49-23" aria-hidden="true"></a>}</span>
 <span id="cb49-24"><a href="#cb49-24" aria-hidden="true"></a><span class="co"># Get regularized log-normalized accessibility counts</span></span>
-<span id="cb49-25"><a href="#cb49-25" aria-hidden="true"></a>rlog &lt;-<span class="st"> </span><span class="kw">assay</span>(<span class="kw">rlog</span>(dds, <span class="dt">blind =</span> <span class="ot">FALSE</span>))</span>
-<span id="cb49-26"><a href="#cb49-26" aria-hidden="true"></a><span class="kw">colnames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(sampleTable<span class="op">$</span>timepoint, <span class="st">&quot;_rep&quot;</span>, sampleTable<span class="op">$</span>replicate)</span>
-<span id="cb49-27"><a href="#cb49-27" aria-hidden="true"></a>rlog &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>( </span>
-<span id="cb49-28"><a href="#cb49-28" aria-hidden="true"></a>    <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint), </span>
-<span id="cb49-29"><a href="#cb49-29" aria-hidden="true"></a>    <span class="cf">function</span>(x) { </span>
-<span id="cb49-30"><a href="#cb49-30" aria-hidden="true"></a>        x &lt;-<span class="st"> </span><span class="kw">rowMeans</span>(<span class="kw">matrix</span>(rlog[,<span class="kw">grep</span>(x, <span class="kw">colnames</span>(rlog))], <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlog))) </span>
-<span id="cb49-31"><a href="#cb49-31" aria-hidden="true"></a>    }</span>
-<span id="cb49-32"><a href="#cb49-32" aria-hidden="true"></a>)), <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlog))</span>
-<span id="cb49-33"><a href="#cb49-33" aria-hidden="true"></a><span class="kw">rownames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;peak_&#39;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(rlog))</span>
-<span id="cb49-34"><a href="#cb49-34" aria-hidden="true"></a><span class="kw">colnames</span>(rlog) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;rlog_&#39;</span>, <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint))</span>
-<span id="cb49-35"><a href="#cb49-35" aria-hidden="true"></a><span class="co"># Collate all results together</span></span>
-<span id="cb49-36"><a href="#cb49-36" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">cbind</span>(rlog, out.l2fc, out.padj)</span>
-<span id="cb49-37"><a href="#cb49-37" aria-hidden="true"></a><span class="kw">mcols</span>(ATAC_peaks) &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">mcols</span>(ATAC_peaks), results)</span></code></pre></div>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true"></a>rlogs &lt;-<span class="st"> </span><span class="kw">rlog</span>(dds, <span class="dt">blind =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true"></a>rlogs</span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true"></a>rlogs &lt;-<span class="st"> </span><span class="kw">assay</span>(rlogs)</span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true"></a><span class="kw">glimpse</span>(rlogs)</span>
+<span id="cb49-29"><a href="#cb49-29" aria-hidden="true"></a><span class="kw">colnames</span>(rlogs) &lt;-<span class="st"> </span><span class="kw">paste0</span>(sampleTable<span class="op">$</span>timepoint, <span class="st">&quot;_rep&quot;</span>, sampleTable<span class="op">$</span>replicate)</span>
+<span id="cb49-30"><a href="#cb49-30" aria-hidden="true"></a>rlogs &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">unlist</span>(<span class="kw">lapply</span>( </span>
+<span id="cb49-31"><a href="#cb49-31" aria-hidden="true"></a>    <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint), </span>
+<span id="cb49-32"><a href="#cb49-32" aria-hidden="true"></a>    <span class="cf">function</span>(x) { </span>
+<span id="cb49-33"><a href="#cb49-33" aria-hidden="true"></a>        x &lt;-<span class="st"> </span><span class="kw">rowMeans</span>(<span class="kw">matrix</span>(rlogs[,<span class="kw">grep</span>(x, <span class="kw">colnames</span>(rlogs))], <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlogs))) </span>
+<span id="cb49-34"><a href="#cb49-34" aria-hidden="true"></a>    }</span>
+<span id="cb49-35"><a href="#cb49-35" aria-hidden="true"></a>)), <span class="dt">nrow =</span> <span class="kw">nrow</span>(rlogs))</span>
+<span id="cb49-36"><a href="#cb49-36" aria-hidden="true"></a><span class="kw">rownames</span>(rlogs) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;peak_&#39;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(rlogs))</span>
+<span id="cb49-37"><a href="#cb49-37" aria-hidden="true"></a><span class="kw">colnames</span>(rlogs) &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;rlog_&#39;</span>, <span class="kw">unique</span>(sampleTable<span class="op">$</span>timepoint))</span>
+<span id="cb49-38"><a href="#cb49-38" aria-hidden="true"></a><span class="co"># Collate all results together</span></span>
+<span id="cb49-39"><a href="#cb49-39" aria-hidden="true"></a>results &lt;-<span class="st"> </span><span class="kw">cbind</span>(rlogs, out.l2fc, out.padj)</span>
+<span id="cb49-40"><a href="#cb49-40" aria-hidden="true"></a><span class="kw">mcols</span>(ATAC_peaks) &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">mcols</span>(ATAC_peaks), results)</span></code></pre></div>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>ATAC_peaks</span></code></pre></div>
-<pre><code>## GRanges object with 6513 ranges and 27 metadata columns:
-##          seqnames        ranges strand |    summit      peakID   rlog_00
-##             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt; &lt;character&gt; &lt;numeric&gt;
-##      [1]        I        78-552      * |        78      peak_1  11.18032
-##      [2]        I     1193-1481      * |      1193      peak_2   6.90893
-##      [3]        I     2415-2738      * |      2415      peak_3   7.17406
-##      [4]        I     6342-6539      * |      6342      peak_4   7.96458
-##      [5]        I     9304-9545      * |      9304      peak_5   6.25758
-##      ...      ...           ...    ... .       ...         ...       ...
-##   [6509]      XVI 941520-941693      * |    941520   peak_6509   5.18114
-##   [6510]      XVI 942541-942742      * |    942541   peak_6510   9.44538
-##   [6511]      XVI 943128-943286      * |    943128   peak_6511   5.48982
-##   [6512]      XVI 944265-944521      * |    944265   peak_6512   3.93646
-##   [6513]      XVI 946186-946398      * |    946186   peak_6513   5.36235
-##            rlog_15   rlog_30   rlog_45   rlog_60 L2FC_15_v_00 L2FC_30_v_00
-##          &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
-##      [1]  10.43841  10.55013  10.54757  10.33556   -1.0623117    -0.900131
-##      [2]   6.72995   6.47148   6.70536   6.66408   -0.3507611    -0.876365
-##      [3]   7.14827   6.77224   7.08386   7.00687   -0.0587938    -0.753498
-##      [4]   7.55407   7.32448   7.55818   7.75081   -0.6833669    -1.094019
-##      [5]   5.97919   5.83083   5.98149   6.13429   -0.6280704    -1.001061
-##      ...       ...       ...       ...       ...          ...          ...
-##   [6509]   5.16056   5.17560   5.24441   5.04098   -0.0604972   -0.0313828
-##   [6510]   9.16153   9.17902   9.15247   9.19334   -0.4280592   -0.4020281
-##   [6511]   5.32342   5.35707   5.37971   5.48041   -0.4701299   -0.3776449
-##   [6512]   3.89880   3.83133   3.94381   3.84090   -0.1997090   -0.5818438
-##   [6513]   5.33274   5.08251   5.16809   5.06775   -0.1101724   -0.8396196
-##          L2FC_45_v_00 L2FC_60_v_00 L2FC_30_v_15 L2FC_45_v_15 L2FC_60_v_15
+<pre><code>## GRanges object with 6513 ranges and 28 metadata columns:
+##          seqnames        ranges strand |    summit      peakID associated_gene
+##             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt; &lt;character&gt;     &lt;character&gt;
+##      [1]        I        78-552      * |        78      peak_1         YAL069W
+##      [2]        I     1193-1481      * |      1193      peak_2            PAU8
+##      [3]        I     2415-2738      * |      2415      peak_3       YAL067W-A
+##      [4]        I     6342-6539      * |      6342      peak_4            SEO1
+##      [5]        I     9304-9545      * |      9304      peak_5            SEO1
+##      ...      ...           ...    ... .       ...         ...             ...
+##   [6509]      XVI 941520-941693      * |    941520   peak_6509         YPR202W
+##   [6510]      XVI 942541-942742      * |    942541   peak_6510         YPR202W
+##   [6511]      XVI 943128-943286      * |    943128   peak_6511         YPR202W
+##   [6512]      XVI 944265-944521      * |    944265   peak_6512         YPR204W
+##   [6513]      XVI 946186-946398      * |    946186   peak_6513       YPR204C-A
+##            rlog_00   rlog_15   rlog_30   rlog_45   rlog_60 L2FC_15_v_00
+##          &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;    &lt;numeric&gt;
+##      [1]  11.18032  10.43841  10.55013  10.54757  10.33556   -1.0623117
+##      [2]   6.90893   6.72995   6.47148   6.70536   6.66408   -0.3507611
+##      [3]   7.17406   7.14827   6.77224   7.08386   7.00687   -0.0587938
+##      [4]   7.96458   7.55407   7.32448   7.55818   7.75081   -0.6833669
+##      [5]   6.25758   5.97919   5.83083   5.98149   6.13429   -0.6280704
+##      ...       ...       ...       ...       ...       ...          ...
+##   [6509]   5.18114   5.16056   5.17560   5.24441   5.04098   -0.0604972
+##   [6510]   9.44538   9.16153   9.17902   9.15247   9.19334   -0.4280592
+##   [6511]   5.48982   5.32342   5.35707   5.37971   5.48041   -0.4701299
+##   [6512]   3.93646   3.89880   3.83133   3.94381   3.84090   -0.1997090
+##   [6513]   5.36235   5.33274   5.08251   5.16809   5.06775   -0.1101724
+##          L2FC_30_v_00 L2FC_45_v_00 L2FC_60_v_00 L2FC_30_v_15 L2FC_45_v_15
 ##             &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
-##      [1]    -0.902907    -1.173122     0.162181   0.15940516    -0.110811
-##      [2]    -0.344617    -0.475177    -0.525604   0.00614397    -0.124416
-##      [3]    -0.119077    -0.297350    -0.694704  -0.06028370    -0.238556
-##      [4]    -0.679747    -0.339730    -0.410652   0.00361988     0.343637
-##      [5]    -0.615074    -0.286883    -0.372991   0.01299623     0.341187
+##      [1]    -0.900131    -0.902907    -1.173122     0.162181   0.15940516
+##      [2]    -0.876365    -0.344617    -0.475177    -0.525604   0.00614397
+##      [3]    -0.753498    -0.119077    -0.297350    -0.694704  -0.06028370
+##      [4]    -1.094019    -0.679747    -0.339730    -0.410652   0.00361988
+##      [5]    -1.001061    -0.615074    -0.286883    -0.372991   0.01299623
 ##      ...          ...          ...          ...          ...          ...
-##   [6509]    0.1773956   -0.4407989    0.0291144    0.2378928    -0.380302
-##   [6510]   -0.4435526   -0.3771951    0.0260311   -0.0154935     0.050864
-##   [6511]   -0.3107903   -0.0533724    0.0924850    0.1593395     0.416758
-##   [6512]    0.0622861   -0.5232212   -0.3821347    0.2619951    -0.323512
-##   [6513]   -0.5223499   -0.8825297   -0.7294472   -0.4121775    -0.772357
-##          L2FC_45_v_30 L2FC_60_v_30 L2FC_60_v_45 padj_15_v_00 padj_30_v_00
+##   [6509]   -0.0313828    0.1773956   -0.4407989    0.0291144    0.2378928
+##   [6510]   -0.4020281   -0.4435526   -0.3771951    0.0260311   -0.0154935
+##   [6511]   -0.3776449   -0.3107903   -0.0533724    0.0924850    0.1593395
+##   [6512]   -0.5818438    0.0622861   -0.5232212   -0.3821347    0.2619951
+##   [6513]   -0.8396196   -0.5223499   -0.8825297   -0.7294472   -0.4121775
+##          L2FC_60_v_15 L2FC_45_v_30 L2FC_60_v_30 L2FC_60_v_45 padj_15_v_00
 ##             &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
-##      [1]  -0.00277545    -0.272991    -0.270216  9.50334e-05  0.002809493
-##      [2]   0.53174782     0.401188    -0.130560  5.06491e-01  0.066589377
-##      [3]   0.63442027     0.456148    -0.178272  9.32032e-01  0.133487340
-##      [4]   0.41427193     0.754289     0.340017  2.43435e-02  0.000140911
-##      [5]   0.38598720     0.714178     0.328191  2.12877e-01  0.046569804
+##      [1]    -0.110811  -0.00277545    -0.272991    -0.270216  9.50334e-05
+##      [2]    -0.124416   0.53174782     0.401188    -0.130560  5.06491e-01
+##      [3]    -0.238556   0.63442027     0.456148    -0.178272  9.32032e-01
+##      [4]     0.343637   0.41427193     0.754289     0.340017  2.43435e-02
+##      [5]     0.341187   0.38598720     0.714178     0.328191  2.12877e-01
 ##      ...          ...          ...          ...          ...          ...
-##   [6509]    0.2087784   -0.4094161   -0.6181945     0.952230     0.979001
-##   [6510]   -0.0415245    0.0248330    0.0663575     0.105750     0.185475
-##   [6511]    0.0668546    0.3242726    0.2574180     0.465737     0.633629
-##   [6512]    0.6441299    0.0586226   -0.5855073     0.886800           NA
-##   [6513]    0.3172697   -0.0429101   -0.3601798     0.904831     0.258224
-##          padj_45_v_00 padj_60_v_00 padj_30_v_15 padj_45_v_15 padj_60_v_15
+##   [6509]    -0.380302    0.2087784   -0.4094161   -0.6181945     0.952230
+##   [6510]     0.050864   -0.0415245    0.0248330    0.0663575     0.105750
+##   [6511]     0.416758    0.0668546    0.3242726    0.2574180     0.465737
+##   [6512]    -0.323512    0.6441299    0.0586226   -0.5855073     0.886800
+##   [6513]    -0.772357    0.3172697   -0.0429101   -0.3601798     0.904831
+##          padj_30_v_00 padj_45_v_00 padj_60_v_00 padj_30_v_15 padj_45_v_15
 ##             &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
-##      [1]   0.00471045  2.52075e-05     0.870496     0.980003     0.914367
-##      [2]   0.63669724  3.46971e-01     0.571741     0.999909     0.927957
-##      [3]   0.90203145  5.95252e-01     0.356075     0.998993     0.853435
-##      [4]   0.05820379  3.50481e-01     0.536182     0.999909     0.591274
-##      [5]   0.33989903  6.37807e-01     0.770085     0.999909     0.778626
+##      [1]  0.002809493   0.00471045  2.52075e-05     0.870496     0.980003
+##      [2]  0.066589377   0.63669724  3.46971e-01     0.571741     0.999909
+##      [3]  0.133487340   0.90203145  5.95252e-01     0.356075     0.998993
+##      [4]  0.000140911   0.05820379  3.50481e-01     0.536182     0.999909
+##      [5]  0.046569804   0.33989903  6.37807e-01     0.770085     0.999909
 ##      ...          ...          ...          ...          ...          ...
-##   [6509]     0.892767     0.563145     0.993587     0.986574     0.812940
-##   [6510]     0.164418     0.173288     0.986201     0.999909     0.949587
-##   [6511]     0.758523     0.950906     0.970064     0.991566     0.748940
-##   [6512]     0.982615     0.667690     0.901490     0.991566     0.909174
-##   [6513]     0.594085     0.174352     0.553620     0.930896     0.440618
-##          padj_45_v_30 padj_60_v_30 padj_60_v_45
-##             &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
-##      [1]     0.998615     0.729106     0.281853
-##      [2]     0.998615     0.708308           NA
-##      [3]     0.998615     0.654457           NA
-##      [4]     0.998615     0.108161           NA
-##      [5]     0.998615     0.451629           NA
-##      ...          ...          ...          ...
-##   [6509]     0.998615     0.790933           NA
-##   [6510]     0.998615     0.979634           NA
-##   [6511]     0.998615     0.822947           NA
-##   [6512]     0.998615     0.987293           NA
-##   [6513]     0.998615     0.987293           NA
+##   [6509]     0.979001     0.892767     0.563145     0.993587     0.986574
+##   [6510]     0.185475     0.164418     0.173288     0.986201     0.999909
+##   [6511]     0.633629     0.758523     0.950906     0.970064     0.991566
+##   [6512]           NA     0.982615     0.667690     0.901490     0.991566
+##   [6513]     0.258224     0.594085     0.174352     0.553620     0.930896
+##          padj_60_v_15 padj_45_v_30 padj_60_v_30 padj_60_v_45
+##             &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;    &lt;numeric&gt;
+##      [1]     0.914367     0.998615     0.729106     0.281853
+##      [2]     0.927957     0.998615     0.708308           NA
+##      [3]     0.853435     0.998615     0.654457           NA
+##      [4]     0.591274     0.998615     0.108161           NA
+##      [5]     0.778626     0.998615     0.451629           NA
+##      ...          ...          ...          ...          ...
+##   [6509]     0.812940     0.998615     0.790933           NA
+##   [6510]     0.949587     0.998615     0.979634           NA
+##   [6511]     0.748940     0.998615     0.822947           NA
+##   [6512]     0.909174     0.998615     0.987293           NA
+##   [6513]     0.440618     0.998615     0.987293           NA
 ##   -------
 ##   seqinfo: 16 sequences from an unspecified genome; no seqlengths</code></pre>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="kw">glimpse</span>(ATAC_peaks)</span></code></pre></div>
@@ -2036,34 +2039,35 @@ Show code
 <pre><code>## Formal class &#39;DFrame&#39; [package &quot;S4Vectors&quot;] with 6 slots
 ##   ..@ rownames       : NULL
 ##   ..@ nrows          : int 6513
-##   ..@ listData       :List of 27
-##   .. ..$ summit      : int [1:6513] 78 1193 2415 6342 9304 11097 14720 17761 20701 25315 ...
-##   .. ..$ peakID      : chr [1:6513] &quot;peak_1&quot; &quot;peak_2&quot; &quot;peak_3&quot; &quot;peak_4&quot; ...
-##   .. ..$ rlog_00     : num [1:6513] 11.18 6.91 7.17 7.96 6.26 ...
-##   .. ..$ rlog_15     : num [1:6513] 10.44 6.73 7.15 7.55 5.98 ...
-##   .. ..$ rlog_30     : num [1:6513] 10.55 6.47 6.77 7.32 5.83 ...
-##   .. ..$ rlog_45     : num [1:6513] 10.55 6.71 7.08 7.56 5.98 ...
-##   .. ..$ rlog_60     : num [1:6513] 10.34 6.66 7.01 7.75 6.13 ...
-##   .. ..$ L2FC_15_v_00: num [1:6513] -1.0623 -0.3508 -0.0588 -0.6834 -0.6281 ...
-##   .. ..$ L2FC_30_v_00: num [1:6513] -0.9 -0.876 -0.753 -1.094 -1.001 ...
-##   .. ..$ L2FC_45_v_00: num [1:6513] -0.903 -0.345 -0.119 -0.68 -0.615 ...
-##   .. ..$ L2FC_60_v_00: num [1:6513] -1.173 -0.475 -0.297 -0.34 -0.287 ...
-##   .. ..$ L2FC_30_v_15: num [1:6513] 0.162 -0.526 -0.695 -0.411 -0.373 ...
-##   .. ..$ L2FC_45_v_15: num [1:6513] 0.15941 0.00614 -0.06028 0.00362 0.013 ...
-##   .. ..$ L2FC_60_v_15: num [1:6513] -0.111 -0.124 -0.239 0.344 0.341 ...
-##   .. ..$ L2FC_45_v_30: num [1:6513] -0.00278 0.53175 0.63442 0.41427 0.38599 ...
-##   .. ..$ L2FC_60_v_30: num [1:6513] -0.273 0.401 0.456 0.754 0.714 ...
-##   .. ..$ L2FC_60_v_45: num [1:6513] -0.27 -0.131 -0.178 0.34 0.328 ...
-##   .. ..$ padj_15_v_00: num [1:6513] 0.000095 0.506491 0.932032 0.024343 0.212877 ...
-##   .. ..$ padj_30_v_00: num [1:6513] 0.002809 0.066589 0.133487 0.000141 0.04657 ...
-##   .. ..$ padj_45_v_00: num [1:6513] 0.00471 0.6367 0.90203 0.0582 0.3399 ...
-##   .. ..$ padj_60_v_00: num [1:6513] 2.52e-05 3.47e-01 5.95e-01 3.50e-01 6.38e-01 ...
-##   .. ..$ padj_30_v_15: num [1:6513] 0.87 0.572 0.356 0.536 0.77 ...
-##   .. ..$ padj_45_v_15: num [1:6513] 0.98 1 0.999 1 1 ...
-##   .. ..$ padj_60_v_15: num [1:6513] 0.914 0.928 0.853 0.591 0.779 ...
-##   .. ..$ padj_45_v_30: num [1:6513] 0.999 0.999 0.999 0.999 0.999 ...
-##   .. ..$ padj_60_v_30: num [1:6513] 0.729 0.708 0.654 0.108 0.452 ...
-##   .. ..$ padj_60_v_45: num [1:6513] 0.282 NA NA NA NA ...
+##   ..@ listData       :List of 28
+##   .. ..$ summit         : int [1:6513] 78 1193 2415 6342 9304 11097 14720 17761 20701 25315 ...
+##   .. ..$ peakID         : chr [1:6513] &quot;peak_1&quot; &quot;peak_2&quot; &quot;peak_3&quot; &quot;peak_4&quot; ...
+##   .. ..$ associated_gene: chr [1:6513] &quot;YAL069W&quot; &quot;PAU8&quot; &quot;YAL067W-A&quot; &quot;SEO1&quot; ...
+##   .. ..$ rlog_00        : num [1:6513] 11.18 6.91 7.17 7.96 6.26 ...
+##   .. ..$ rlog_15        : num [1:6513] 10.44 6.73 7.15 7.55 5.98 ...
+##   .. ..$ rlog_30        : num [1:6513] 10.55 6.47 6.77 7.32 5.83 ...
+##   .. ..$ rlog_45        : num [1:6513] 10.55 6.71 7.08 7.56 5.98 ...
+##   .. ..$ rlog_60        : num [1:6513] 10.34 6.66 7.01 7.75 6.13 ...
+##   .. ..$ L2FC_15_v_00   : num [1:6513] -1.0623 -0.3508 -0.0588 -0.6834 -0.6281 ...
+##   .. ..$ L2FC_30_v_00   : num [1:6513] -0.9 -0.876 -0.753 -1.094 -1.001 ...
+##   .. ..$ L2FC_45_v_00   : num [1:6513] -0.903 -0.345 -0.119 -0.68 -0.615 ...
+##   .. ..$ L2FC_60_v_00   : num [1:6513] -1.173 -0.475 -0.297 -0.34 -0.287 ...
+##   .. ..$ L2FC_30_v_15   : num [1:6513] 0.162 -0.526 -0.695 -0.411 -0.373 ...
+##   .. ..$ L2FC_45_v_15   : num [1:6513] 0.15941 0.00614 -0.06028 0.00362 0.013 ...
+##   .. ..$ L2FC_60_v_15   : num [1:6513] -0.111 -0.124 -0.239 0.344 0.341 ...
+##   .. ..$ L2FC_45_v_30   : num [1:6513] -0.00278 0.53175 0.63442 0.41427 0.38599 ...
+##   .. ..$ L2FC_60_v_30   : num [1:6513] -0.273 0.401 0.456 0.754 0.714 ...
+##   .. ..$ L2FC_60_v_45   : num [1:6513] -0.27 -0.131 -0.178 0.34 0.328 ...
+##   .. ..$ padj_15_v_00   : num [1:6513] 0.000095 0.506491 0.932032 0.024343 0.212877 ...
+##   .. ..$ padj_30_v_00   : num [1:6513] 0.002809 0.066589 0.133487 0.000141 0.04657 ...
+##   .. ..$ padj_45_v_00   : num [1:6513] 0.00471 0.6367 0.90203 0.0582 0.3399 ...
+##   .. ..$ padj_60_v_00   : num [1:6513] 2.52e-05 3.47e-01 5.95e-01 3.50e-01 6.38e-01 ...
+##   .. ..$ padj_30_v_15   : num [1:6513] 0.87 0.572 0.356 0.536 0.77 ...
+##   .. ..$ padj_45_v_15   : num [1:6513] 0.98 1 0.999 1 1 ...
+##   .. ..$ padj_60_v_15   : num [1:6513] 0.914 0.928 0.853 0.591 0.779 ...
+##   .. ..$ padj_45_v_30   : num [1:6513] 0.999 0.999 0.999 0.999 0.999 ...
+##   .. ..$ padj_60_v_30   : num [1:6513] 0.729 0.708 0.654 0.108 0.452 ...
+##   .. ..$ padj_60_v_45   : num [1:6513] 0.282 NA NA NA NA ...
 ##   ..@ elementType    : chr &quot;ANY&quot;
 ##   ..@ elementMetadata: NULL
 ##   ..@ metadata       : list()</code></pre>
