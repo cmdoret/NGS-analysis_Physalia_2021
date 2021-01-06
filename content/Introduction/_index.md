@@ -1,8 +1,6 @@
 ---
-title: "0. Introduction"
+title: " NGS analysis for gene regulation and epigenomics"
 ---
-
-# NGS analysis for gene regulation and epigenomics
 
 This repo contains the instructions related to the 2021 Physalia course entitled "NGS analysis for gene regulation and epigenomics". 
 

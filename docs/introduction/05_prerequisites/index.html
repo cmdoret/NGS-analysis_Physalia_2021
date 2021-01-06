@@ -12,21 +12,21 @@
     <title>5. Prerequisites and required local config :: NGS analysis for gene regulation and epigenomics</title>
 
     
-    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1609192098" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1609192098" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1609937582" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1609937582" rel="stylesheet">
     
-    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1609192098" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1609937582" rel="stylesheet">
     
     
 
-    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1609192098"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1609937582"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -67,13 +67,13 @@
  
   
     
-    <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/" title="0. Introduction" class="dd-item
+    <li data-nav-id="/NGS-analysis_Physalia_2021/introduction/" title=" NGS analysis for gene regulation and epigenomics" class="dd-item
         parent
         
         
         ">
       <a href="/NGS-analysis_Physalia_2021/introduction/">
-          0. Introduction
+           NGS analysis for gene regulation and epigenomics
           
       </a>
       
@@ -376,6 +376,7 @@
     <section id="footer">
       <center>
 
+    <a href="https://github.com/js2264/NGS-analysis_Physalia_2021">Check this website source on Github</a>
     <p>Created by J. Serizay and C. Matthey-Doret</p>
     <p>Copyright 2021</p>
 
@@ -432,7 +433,7 @@
             
           
           
-            <a href='/NGS-analysis_Physalia_2021/'>Home</a> > <a href='/NGS-analysis_Physalia_2021/introduction/'>0. Introduction</a> > 5. Prerequisites and required local config
+            <a href='/NGS-analysis_Physalia_2021/'>Home</a> > <a href='/NGS-analysis_Physalia_2021/introduction/'> NGS analysis for gene regulation and epigenomics</a> > 5. Prerequisites and required local config
           
         
           
@@ -452,8 +453,8 @@
     <li><a href="#aws-configuration">AWS configuration</a>
       <ul>
         <li><a href="#install-and-set-up-conda">Install and set up Conda</a></li>
+        <li><a href="#install-missing-tools-in-conda-base-env">Install missing tools in conda <code>base</code> env</a></li>
         <li><a href="#install-singularity-and-nextflow">Install Singularity and Nextflow</a></li>
-        <li><a href="#install-r-packages">Install R packages</a></li>
       </ul>
     </li>
   </ul>
@@ -506,13 +507,22 @@ bash Miniconda3-latest-Linux-x86_64.sh
 conda config --add channels conda-forge
 conda config --add channels bioconda
 <span style="color:#75715e"># Create conda env. with python 3.8 and R 4.0.3</span>
-conda create -n physalia python<span style="color:#f92672">=</span>3.8 conda-forge::r-base<span style="color:#f92672">=</span>4.0.3 r-essentials<span style="color:#f92672">=</span>4.0 -y
+conda create -n base python<span style="color:#f92672">=</span>3.8 conda-forge::r-base<span style="color:#f92672">=</span>4.0.3 r-essentials<span style="color:#f92672">=</span>4.0 gcc_linux-64 -y
 <span style="color:#75715e"># Activate env.</span>
-conda activate physalia
+conda activate base
+</code></pre></div><h3 id="install-missing-tools-in-conda-base-env">Install missing tools in conda <code>base</code> env</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># Bash tools </span>
+conda install -c bioconda trim-galore ucsc-bedgraphtobigwig pairtools snakemake meme<span style="color:#f92672">=</span>5.3.0 -y
+<span style="color:#75715e"># Python tools </span>
+conda install cython numpy click scipy matplotlib -y
+pip install cooltools
+<span style="color:#75715e"># R tools </span>
+conda install conda-forge::r-base<span style="color:#f92672">=</span>3.6.2 r-essentials<span style="color:#f92672">=</span>3.6.0
+Rscript -e <span style="color:#e6db74">&#39;install.packages(c(&#34;igraph&#34;), repos=&#34;http://cran.us.r-project.org&#34;)&#39;</span>
+Rscript -e <span style="color:#e6db74">&#39;install.packages(c(&#34;BiocManager&#34;), repos=&#34;http://cran.us.r-project.org&#34;)&#39;</span>
+Rscript -e <span style="color:#e6db74">&#39;BiocManager::install(c(&#34;rtracklayer&#34;, &#34;GenomicRanges&#34;, &#34;TxDb.Scerevisiae.UCSC.sacCer3.sgdGene&#34;, &#34;ChIPpeakAnno&#34;, &#34;universalmotif&#34;, &#34;Biostrings&#34;, &#34;TFBSTools&#34;, &#34;BSgenome.Scerevisiae.UCSC.sacCer3&#34;, &#34;GenomeInfoDb&#34;, &#34;gprofiler2&#34;, &#34;GenomicAlignments&#34;, &#34;Rsamtools&#34;, &#34;DESeq2&#34;, &#34;AnnotationHub&#34;, &#34;GenomicFeatures&#34;, &#34;org.Sc.sgd.db&#34;, &#34;clusterProfiler&#34;, &#34;JASPAR2018&#34;))&#39;</span>
 </code></pre></div><h3 id="install-singularity-and-nextflow">Install Singularity and Nextflow</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">
-</code></pre></div><h3 id="install-r-packages">Install R packages</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Rscript -e <span style="color:#e6db74">&#39;install.packages(&#34;devtools&#34;, repos = &#34;https://cloud.r-project.org&#34;)&#39;</span>
 </code></pre></div>
 
 <footer class="footline">
@@ -769,6 +779,13 @@ conda activate physalia
 
 	 
 	 
+		
+			<a class="nav nav-prev" href="/NGS-analysis_Physalia_2021/introduction/04_rstudio-and-jupyternotebooks/" title="4. Rstudio and Jupyter Notebooks"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/NGS-analysis_Physalia_2021/day01/" title="1. Introduction" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
     </div>
 
     </section>
@@ -776,19 +793,19 @@ conda activate physalia
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1609192098"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1609192098"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1609192098"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1609192098"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1609192098"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1609192098"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1609937582"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1609937582"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1609937582"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1609937582"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1609937582"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1609937582"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1609192098"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1609192098"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1609192098"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1609937582"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1609937582"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1609937582"></script>
     
         
-            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1609192098"></script>
+            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1609937582"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

@@ -28,9 +28,24 @@ bash Miniconda3-latest-Linux-x86_64.sh
 conda config --add channels conda-forge
 conda config --add channels bioconda
 # Create conda env. with python 3.8 and R 4.0.3
-conda create -n physalia python=3.8 conda-forge::r-base=4.0.3 r-essentials=4.0 -y
+conda create -n base python=3.8 conda-forge::r-base=4.0.3 r-essentials=4.0 gcc_linux-64 -y
 # Activate env.
-conda activate physalia
+conda activate base
+```
+
+### Install missing tools in conda `base` env
+
+```sh
+# Bash tools 
+conda install -c bioconda trim-galore ucsc-bedgraphtobigwig pairtools snakemake meme=5.3.0 -y
+# Python tools 
+conda install cython numpy click scipy matplotlib -y
+pip install cooltools
+# R tools 
+conda install conda-forge::r-base=3.6.2 r-essentials=3.6.0
+Rscript -e 'install.packages(c("igraph"), repos="http://cran.us.r-project.org")'
+Rscript -e 'install.packages(c("BiocManager"), repos="http://cran.us.r-project.org")'
+Rscript -e 'BiocManager::install(c("rtracklayer", "GenomicRanges", "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene", "ChIPpeakAnno", "universalmotif", "Biostrings", "TFBSTools", "BSgenome.Scerevisiae.UCSC.sacCer3", "GenomeInfoDb", "gprofiler2", "GenomicAlignments", "Rsamtools", "DESeq2", "AnnotationHub", "GenomicFeatures", "org.Sc.sgd.db", "clusterProfiler", "JASPAR2018"))'
 ```
 
 ### Install Singularity and Nextflow
@@ -38,11 +53,4 @@ conda activate physalia
 ```sh
 
 ```
-
-### Install R packages 
-
-```sh
-Rscript -e 'install.packages("devtools", repos = "https://cloud.r-project.org")'
-```
-
 

@@ -5,7 +5,7 @@
     --MAIN-TITLES-TEXT-color: #5e5e5e; /* Color of titles h2-h3-h4-h5 */
     --MAIN-LINK-color:#f31c1c; /* Color of links */
     --MAIN-LINK-HOVER-color:#d01616; /* Color of hovered links */
-    --MAIN-ANCHOR-color: #f31c1c; /* color of anchors on titles */
+    --MAIN-ANCHOR-color: #5E5E5E; /* color of anchors on titles */
 
     --MENU-HOME-LINK-color: #ccc; /* Color of the home button text */
     --MENU-HOME-LINK-HOVER-color: #e6e6e6; /* Color of the hovered home button text */
@@ -17,7 +17,7 @@
     --MENU-SEARCH-BOX-color: #ef2020; /* Override search field border color */
     --MENU-SEARCH-BOX-ICONS-color: #fda1a1; /* Override search field icons color */
 
-    --MENU-SECTIONS-ACTIVE-BG-color:#2b2020; /* Background color of the active section and its childs */
+    --MENU-SECTIONS-ACTIVE-BG-color:#5f3636; /* Background color of the active section and its childs */
     --MENU-SECTIONS-BG-color:#312525; /* Background color of other sections */
     --MENU-SECTIONS-LINK-color: #ccc; /* Color of links in menu */
     --MENU-SECTIONS-LINK-HOVER-color: #e6e6e6;  /* Color of links in menu, when hovered */

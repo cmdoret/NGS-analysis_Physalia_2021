@@ -1,0 +1,11 @@
+sample,timepoint,replicate,bam
+SacCer3_00_rep1,00,1,Share/day04/_bam-files//SacCer3_00_rep1_SRR1822155_noChrM_q10.bam
+SacCer3_00_rep2,00,2,Share/day04/_bam-files//SacCer3_00_rep2_SRR1822156_noChrM_q10.bam
+SacCer3_15_rep1,15,1,Share/day04/_bam-files//SacCer3_15_rep1_SRR1822157_noChrM_q10.bam
+SacCer3_15_rep2,15,2,Share/day04/_bam-files//SacCer3_15_rep2_SRR1822158_noChrM_q10.bam
+SacCer3_30_rep1,30,1,Share/day04/_bam-files//SacCer3_30_rep1_SRR1822159_noChrM_q10.bam
+SacCer3_30_rep2,30,2,Share/day04/_bam-files//SacCer3_30_rep2_SRR1822160_noChrM_q10.bam
+SacCer3_45_rep1,45,1,Share/day04/_bam-files//SacCer3_45_rep1_SRR1822161_noChrM_q10.bam
+SacCer3_45_rep2,45,2,Share/day04/_bam-files//SacCer3_45_rep2_SRR1822162_noChrM_q10.bam
+SacCer3_60_rep1,60,1,Share/day04/_bam-files//SacCer3_60_rep1_SRR1822163_noChrM_q10.bam
+SacCer3_60_rep2,60,2,Share/day04/_bam-files//SacCer3_60_rep2_SRR1822164_noChrM_q10.bam

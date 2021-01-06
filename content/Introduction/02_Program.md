@@ -38,7 +38,7 @@ Classes are from:
 
 --- 
 
-## Wednesday: 2-8 pm Berlin time. ChIP-seq analysis
+## Wednesday: ChIP-seq analysis
 
 ### Lecture 3
 * Introduction to ChIP-Seq
@@ -52,7 +52,7 @@ Classes are from:
   ChIP-seq peak calling
 * Identification of motifs and motif enrichment analysis
 
-## Thursday: 2-8 pm Berlin time. ATAC-seq
+## Thursday: ATAC-seq
 
 ### Lecture 4
 * Notion of local chromatin accessibility
@@ -66,7 +66,7 @@ Classes are from:
 
 --- 
 
-## Friday: 2-8 pm Berlin time. Integration and visualization of different genomics data
+## Friday: Integration and visualization of different genomics data
 
 ### Lecture 5
 * Types of questions: Classification, description, differential analysis
