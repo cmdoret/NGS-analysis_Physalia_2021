@@ -25,7 +25,7 @@ Overview This course will introduce biologists and bioinformaticians to the fiel
       
       <guid>https://js2264.github.io/NGS-analysis_Physalia_2021/introduction/02_program/</guid>
       <description>Classes are from:
- 2 to 8 pm Paris time. 1 to 7 pm London time. 8 am to 7 pm London time. 8 am to 2 pm NY time. 5 am to 11 am SF time.  Day 1 - Introduction to epigenomics, and 3D organisation of genomes. Lecture 1  Epigenomics introduction Hi-C protocol General processing of Hi-C data  Lab 1  Step-by-step processing of Hi-C data and integration with snakemake.</description>
+ 2 to 8 pm Paris time. 1 to 7 pm London time. 8 am to 7 pm London time. 8 am to 2 pm NY time. 5 am to 11 am SF time.  Day 1 - Introduction to epigenomics, and 3D organisation of genomes. Lecture 1  Epigenomics introduction General processing of Hi-C data Improving pipelines with snakemake  Lab 1  Step-by-step processing of Hi-C data and integration with snakemake.</description>
     </item>
     
     <item>

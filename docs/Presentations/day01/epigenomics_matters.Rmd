@@ -19,6 +19,7 @@ Day 1
 
 ## Types of chromatin information
 
+We will look at 3 scales of chromatin organization during this workshop:
 * Chromosome conformation capture
 * Histone marks ChIP-seq
 * ATAC-seq
@@ -27,5 +28,5 @@ Day 1
 ## A picture of the regulatory landscape
 
 * Gene expression tells us what genes are affected during e.g. differentiation, disease...
-* Epigenetic tracks tell us how / why they are activated
+* Epigenomics can tell us how / why they are activated
 
