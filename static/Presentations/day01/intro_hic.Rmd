@@ -7,9 +7,29 @@ output:
   slidy_presentation: default
 ---
 
-# Chromosome conformation capture
+# Introduction to Hi-C
 
 Day 1
+
+
+## Regulatory function of chromatin
+
+* Chromatin made up of many DNA-bound proteins
+* Dynamic interactions
+* Chromatin state regulates gene expression
+
+## A picture of the regulatory landscape
+
+* Gene expression tells us what genes are affected during e.g. differentiation, disease...
+* Epigenomics can tell us how / why they are activated
+
+## Types of chromatin information
+
+We will look at 3 scales of chromatin organization during this workshop:
+
+* Chromosome conformation capture
+* Histone marks ChIP-seq
+* ATAC-seq
 
 ## Capturing chromosome conformation
 
@@ -65,7 +85,7 @@ Important to understand individual steps (biases, custom analyses, ...)
 
 General steps common to all Hi-C pipelines
 
-![contact map](assets/hic_pipeline.svg){width=80%}
+![contact map](assets/hic_pipeline.svg){width=70%}
 
 
 ## Hi-C processing: Read alignment
