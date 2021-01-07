@@ -14,27 +14,25 @@ Classes are from:
 
 ### Lecture 1
 * Epigenomics introduction
-* Hi-C protocol
 * General processing of Hi-C data
+* Improving pipelines with snakemake
 
 ### Lab 1
 * Step-by-step processing of Hi-C data and integration with snakemake.
 * Use of existing Hi-C processing pipelines and common formats.
-* Manipulation and visualisation of sparse matrices using the cooler package
 
 --- 
 
 ## Tuesday: Application and analysis of Hi-C data
 
 ### Lecture 2
-* Applications of Hi-C data (Scaffolding, 3D QTL, regulatory genomics)
 * Common analysis on Hi-C contact maps and their biological interpretation
+* Overview of Hi-C applications (Scaffolding, metagenomics, regulatory genomics, ...)
 
 ### Lab2
+* Manipulation and visualisation of sparse matrices using the cooler package
 * Compute interpretable metrics on the Hi-C contact maps from last lesson
 * Use existing methods for signal detection in Hi-C data.
-* Compare the signals across samples
-* Visualization techniques for Hi-C derived signals in jupyter notebook
 
 --- 
 
