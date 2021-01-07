@@ -8,6 +8,7 @@ day: "Day 02"
 ## Presentations for {{< param "day" >}}
 
 - Applications of Hi-C **\[60min\]**: [HTML](/{{<myPackageUrl>}}Presentations/day02/applications_hic.html)
+- Python for genomics crash course **\[60min\]**: [HTML](/{{<myPackageUrl>}}Presentations/day02/python_syntax.html)
 
 ---
 
