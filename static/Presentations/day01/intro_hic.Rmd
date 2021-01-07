@@ -27,9 +27,10 @@ Day 1
 
 We will look at 3 scales of chromatin organization during this workshop:
 
-* Chromosome conformation capture
-* Histone marks ChIP-seq
-* ATAC-seq
+<div class="columns-2">
+
+
+![Adapted from [Illumina](https://www.illumina.com/content/dam/illumina-marketing/documents/applications/ngs-library-prep/for-all-you-seek-dna.pdf)](assets/chromatin_features.svg)
 
 ## Capturing chromosome conformation
 
@@ -85,7 +86,7 @@ Important to understand individual steps (biases, custom analyses, ...)
 
 General steps common to all Hi-C pipelines
 
-![contact map](assets/hic_pipeline.svg){width=70%}
+![](assets/hic_pipeline.svg){width=70%}
 
 
 ## Hi-C processing: Read alignment
@@ -120,7 +121,7 @@ while not mapped:
   - 1 pair of reads = 1 contact
   - The [pairs](https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md) format is commonly used
 
-  ![](assets/pipeline/hic_pipeline_merge_bams.svg){width=40%}
+  ![](assets/pipeline/hic_pipeline_merge_bams.svg){width=70%}
 </div>
 
 
@@ -152,7 +153,7 @@ Hi-C specific filters to remove uninformative events
 > - Undigested fragments
 > - Duplicates filter
 
-> ![](assets/filters.svg){width=80%}
+> ![](assets/filters.svg){width=100%}
 
 ## Hi-C processing: Balancing
 
