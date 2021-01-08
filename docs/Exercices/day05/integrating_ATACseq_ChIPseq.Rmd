@@ -141,7 +141,7 @@ odds_MSN4 <- lapply(levels(ATAC_peaks$annot), function(cluster) {
 
 <details><summary style='color: #ff7f00; font-weight: bold'>Show code</summary><p>
 ```{r}
-odds_motifs <- parallel::mclapply(mc.cores = 6, motif_names, function(factor) {
+odds_motifs <- parallel::mclapply(mc.cores = 1, motif_names, function(factor) {
     message(factor)
     motif <- toPWM(motifs[[which(motif_names == factor)]])
     hits <- GRanges(

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="generator" content="Hugo 0.79.1" />
     <meta name="description" content="NGS analysis for gene regulation and epigenomics">
 <meta name="author" content="Jacques Serizay">
 
@@ -12,21 +12,21 @@
     <title>2. Day 02 :: NGS analysis for gene regulation and epigenomics</title>
 
     
-    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1610022250" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1610022250" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1610120899" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1610120899" rel="stylesheet">
     
-    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1610022250" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1610120899" rel="stylesheet">
     
     
 
-    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1610022250"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1610120899"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -350,13 +350,13 @@
  
   
     
-    <li data-nav-id="/NGS-analysis_Physalia_2021/how_to_load_in_aws/" title="How to log in to AWS" class="dd-item
+    <li data-nav-id="/NGS-analysis_Physalia_2021/how_to_load_in_aws/" title="How to log in AWS" class="dd-item
         
         
         
         ">
       <a href="/NGS-analysis_Physalia_2021/how_to_load_in_aws/">
-          How to log in to AWS
+          How to log in AWS
           
       </a>
       
@@ -488,7 +488,7 @@ Exercices/day02/matrix_interaction.html" target="_blank">HTML</a>
  | <a href="/NGS-analysis_Physalia_2021/
 Exercices/day02/matrix_interaction.ipynb" target="_blank">Jupyter</a>
 ]</p>
-<p>You will be using python scripting and leverage the cooler API to interact directly with Hi-C matrices. This can help querying specific regions, computing statistics and generating more advanced visualisations.</p>
+<p>You will be using python scripting and leverage the cooler API to interact directly with Hi-C matrices. This can help querying specific regions, computing statistics and generating more advanced visualisations. We will be using matrices from the previous session for this.</p>
 </li>
 <li>
 <p>Extracting signal tracks from matrices <strong>[50min]</strong> [<a href="/NGS-analysis_Physalia_2021/
@@ -496,7 +496,10 @@ Exercices/day02/signal_tracks.html" target="_blank">HTML</a>
  | <a href="/NGS-analysis_Physalia_2021/
 Exercices/day02/signal_tracks.ipynb" target="_blank">Jupyter</a>
 ]</p>
-<p>Here, you will use the cooltools API to extract 1D tracks from contact data. We will be computing insulation score and doing PCA analysis on mammalian chromosomes to extract the A/B compartment signal.</p>
+<p>Here, you will use the cooltools API to extract 1D tracks from contact data. We will be computing insulation score and doing PCA analysis on mammalian chromosomes to extract the A/B compartment signal. For this session we will be working with mouse embryonic stem cells (mESC) and neural progenitor cells (NPC) from <a href="https://pubmed.ncbi.nlm.nih.gov/29053968/" target="_blank">Bonev et al., 2017</a>
+. We will use subsampled versions of datasets <a href="https://data.4dnucleome.org/files-processed/4DNFI9FPCAC7/" target="_blank">4DNFI9FPCAC7</a>
+ (mESC) and <a href="https://data.4dnucleome.org/files-processed/4DNFIEB68WXR/" target="_blank">4DNFIEB68WXR</a>
+ (NPC).</p>
 </li>
 <li>
 <p>Pattern detection <strong>[50min]</strong> [<a href="/NGS-analysis_Physalia_2021/
@@ -504,7 +507,7 @@ Exercices/day02/detection.html" target="_blank">HTML</a>
  | <a href="/NGS-analysis_Physalia_2021/
 Exercices/day02/detection.ipynb" target="_blank">Jupyter</a>
 ]</p>
-<p>You will be introduced to different tools for supervised pattern detection and we will analyse the results from loop detection to quantify differences between condiions.</p>
+<p>You will be introduced to different tools for supervised pattern detection and we will analyse the results from loop detection to quantify differences between condiions. We will work with datasets from the previous session.</p>
 </li>
 </ul>
 
@@ -779,19 +782,19 @@ Exercices/day02/detection.ipynb" target="_blank">Jupyter</a>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1610022250"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1610022250"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1610022250"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1610022250"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1610022250"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1610022250"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1610120899"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1610120899"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1610120899"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1610120899"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1610120899"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1610120899"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1610022250"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1610022250"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1610022250"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1610120899"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1610120899"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1610120899"></script>
     
         
-            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1610022250"></script>
+            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1610120899"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

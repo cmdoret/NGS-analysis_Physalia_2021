@@ -64,9 +64,11 @@ meme \
 ```
 </p></details><br>
 
+> While the motif *de novo* search is running, have a look at [MEME website](http://meme-suite.org/).
+
 > What is the purpose of each argument here?   
 
-> Have a look at the output. How are the motifs identified? Where are they located in the MACS2 peaks?  
+> Have a look at the output. What are the identified motifs? Do they match published results? Where are they located in the MACS2 peaks?  
 
 > Can we avoid getting complementary motifs? 
 
@@ -88,9 +90,9 @@ meme \
 ```
 </p></details><br>
 
-> What happened to the original two motifs?  
+> What happened to the original two motifs? What can you conclude about Reb1 binding to the DNA?  
 
-> Do you find other interesting motifs? What can you conclude about Reb1 binding to the DNA?  
+> Do you find other interesting motifs?  
 
 > What is the proportion of peaks which contain the putative Reb1 binding motif? 
 Was Reb1 supposed to be a particularly successful ChIP-seq experiment, according to MultiQC reports? 
@@ -98,7 +100,7 @@ What can you conclude about the meaning of a "bad quality" ChIP-seq library?
 
 ### Running STREME to find *de novo* motifs in Reb1 peaks
 
-STREME is the "newer" MEME. It is faster, more sensitive and its documentation is clearer/simpler. 
+STREME is a newer tool in MEME ecosystem. It is faster, more sensitive and its documentation is clearer/simpler than original `meme`. 
 It alleviates the need to specify a cumbersome list of obscure parameters.  
 Let's have a go at it. 
 
@@ -126,7 +128,7 @@ streme \
 
 > Compare STREME and MEME outputs for Reb1_R1. What do you think?  
 
-> Timewhise, how long did each command take to execute? How many peaks were analyzed in this example? And how many peaks other TF ChIP-seq libraries have in average? Comment. 
+> Timewhise, how long did each command take to execute, roughly? How many peaks were analyzed in this example? And how many peaks other TF ChIP-seq libraries have in average? Comment. 
 
 ### Running STREME to find *de novo* motifs for all TFs
 

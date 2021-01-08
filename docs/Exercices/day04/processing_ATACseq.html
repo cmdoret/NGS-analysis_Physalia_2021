@@ -1709,11 +1709,15 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="va">cores=</span>4</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$(</span><span class="fu">ls</span> data/ <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,_1.fastq.gz\|_2.fastq.gz,,&#39;</span> <span class="kw">|</span> <span class="fu">uniq</span><span class="va">)</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">do</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="ex">Share/day04/bin/ATAC_pipeline.sh</span> <span class="st">&quot;</span><span class="va">${sample}</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">${cores}</span><span class="st">&quot;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="kw">done</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">mkdir</span> data/</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="ex">curl</span> -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/001/SRR1822161/SRR1822161_1.fastq.gz -o data/SacCer3_45_rep1_SRR1822161_1.fastq.gz</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="ex">curl</span> -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/001/SRR1822161/SRR1822161_2.fastq.gz -o data/SacCer3_45_rep1_SRR1822161_2.fastq.gz</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="co">#</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="va">cores=</span>4</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$(</span><span class="fu">ls</span> data/ <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,_1.fastq.gz\|_2.fastq.gz,,&#39;</span> <span class="kw">|</span> <span class="fu">uniq</span><span class="va">)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="kw">do</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="ex">Share/day04/bin/ATAC_pipeline.sh</span> <span class="st">&quot;</span><span class="va">${sample}</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">${cores}</span><span class="st">&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="kw">done</span></span></code></pre></div>
 </p>
 </details>
 <p><br></p>
@@ -1721,7 +1725,7 @@ Show code
 <div id="inspecting-output" class="section level2">
 <h2>3. Inspecting output</h2>
 <blockquote>
-<p>What type of output files are generated with this script?</p>
+<p>What type of output files are generated with this script (check <code>Share/day04/</code> folder)?</p>
 </blockquote>
 <blockquote>
 <p>Comment on the organization of the output files.</p>

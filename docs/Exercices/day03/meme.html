@@ -1688,10 +1688,13 @@ Show code
 </details>
 <p><br></p>
 <blockquote>
+<p>While the motif <em>de novo</em> search is running, have a look at <a href="http://meme-suite.org/">MEME website</a>.</p>
+</blockquote>
+<blockquote>
 <p>What is the purpose of each argument here?</p>
 </blockquote>
 <blockquote>
-<p>Have a look at the output. How are the motifs identified? Where are they located in the MACS2 peaks?</p>
+<p>Have a look at the output. What are the identified motifs? Do they match published results? Where are they located in the MACS2 peaks?</p>
 </blockquote>
 <blockquote>
 <p>Can we avoid getting complementary motifs?</p>
@@ -1718,10 +1721,10 @@ Show code
 </details>
 <p><br></p>
 <blockquote>
-<p>What happened to the original two motifs?</p>
+<p>What happened to the original two motifs? What can you conclude about Reb1 binding to the DNA?</p>
 </blockquote>
 <blockquote>
-<p>Do you find other interesting motifs? What can you conclude about Reb1 binding to the DNA?</p>
+<p>Do you find other interesting motifs?</p>
 </blockquote>
 <blockquote>
 <p>What is the proportion of peaks which contain the putative Reb1 binding motif? Was Reb1 supposed to be a particularly successful ChIP-seq experiment, according to MultiQC reports? What can you conclude about the meaning of a “bad quality” ChIP-seq library?</p>
@@ -1729,7 +1732,7 @@ Show code
 </div>
 <div id="running-streme-to-find-de-novo-motifs-in-reb1-peaks" class="section level3">
 <h3>Running STREME to find <em>de novo</em> motifs in Reb1 peaks</h3>
-<p>STREME is the “newer” MEME. It is faster, more sensitive and its documentation is clearer/simpler. It alleviates the need to specify a cumbersome list of obscure parameters.<br />
+<p>STREME is a newer tool in MEME ecosystem. It is faster, more sensitive and its documentation is clearer/simpler than original <code>meme</code>. It alleviates the need to specify a cumbersome list of obscure parameters.<br />
 Let’s have a go at it.</p>
 <details>
 <summary style="color: #ff7f00; font-weight: bold">
@@ -1760,7 +1763,7 @@ Show code
 <p>Compare STREME and MEME outputs for Reb1_R1. What do you think?</p>
 </blockquote>
 <blockquote>
-<p>Timewhise, how long did each command take to execute? How many peaks were analyzed in this example? And how many peaks other TF ChIP-seq libraries have in average? Comment.</p>
+<p>Timewhise, how long did each command take to execute, roughly? How many peaks were analyzed in this example? And how many peaks other TF ChIP-seq libraries have in average? Comment.</p>
 </blockquote>
 </div>
 <div id="running-streme-to-find-de-novo-motifs-for-all-tfs" class="section level3">

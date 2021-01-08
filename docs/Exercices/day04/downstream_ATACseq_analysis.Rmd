@@ -55,6 +55,7 @@ ATAC_peaks
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}
+require(GenomicRanges)
 # Get Yeast TSS annotations from TxDb
 yeast_genes <- GenomicFeatures::genes(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
 GenomeInfoDb::seqlevelsStyle(yeast_genes) <- GenomeInfoDb::seqlevelsStyle(ATAC_peaks)
@@ -100,7 +101,8 @@ sampleTable <- data.frame(
     sample = gsub('_SRR.*', '', list.files(pattern = '_noChrM_q10.bam$', path = 'Share/day04/_bam-files/')), 
     timepoint = gsub('SacCer3_|_rep.*', '', list.files(pattern = '_noChrM_q10.bam$', path = 'Share/day04/_bam-files/')), 
     replicate = rep(c(1, 2), 5), 
-    bam = list.files(pattern = '_noChrM_q10.bam$', path = 'Share/day04/_bam-files/', full.names = TRUE)
+    bam = list.files(pattern = '_noChrM_q10.bam$', path = 'Share/day04/_bam-files/', full.names = TRUE), 
+    stringsAsFactors = FALSE
 )
 ```
 ```{r, eval = FALSE}
@@ -181,7 +183,6 @@ results <- cbind(rlogs, out.l2fc, out.padj)
 mcols(ATAC_peaks) <- cbind(mcols(ATAC_peaks), results)
 ```
 ```{r}
-ATAC_peaks
 glimpse(ATAC_peaks)
 glimpse(ATAC_peaks@elementMetadata)
 ```

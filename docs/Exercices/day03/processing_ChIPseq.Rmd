@@ -32,7 +32,9 @@ Have a look at each processing step and understand what each step does.
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh eval  = FALSE}
-nextflow run nf-core/chipseq -profile test,singularity
+nextflow run nf-core/chipseq -profile test,singularity \
+    --max_cpus '1' \
+    --max_memory '3.GB'
 ```
 </p></details><br>
 
@@ -86,7 +88,7 @@ nextflow run nf-core/chipseq \
     --input ChIP-seq_subset_design.csv \
     --genome 'R64-1-1' \
     --max_cpus '1' \
-    --max_memory '4.GB' \
+    --max_memory '3.GB' \
     --save_trimmed false \
     --narrow_peak true \
     --skip_plot_fingerprint \

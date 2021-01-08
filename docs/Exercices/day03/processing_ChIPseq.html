@@ -1668,7 +1668,9 @@ Have a look at each processing step and understand what each step does.</p>
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq -profile test,singularity</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq -profile test,singularity <span class="kw">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;3.GB&#39;</span></span></code></pre></div>
 </p>
 </details>
 <p><br></p>
@@ -1762,7 +1764,7 @@ Show code
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    <span class="ex">--input</span> ChIP-seq_subset_design.csv <span class="kw">\</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;4.GB&#39;</span> <span class="kw">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;3.GB&#39;</span> <span class="kw">\</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
