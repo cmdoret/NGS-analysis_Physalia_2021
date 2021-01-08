@@ -14,8 +14,10 @@ Here is a list of resources we thought would be useful for people interested in 
 
 ## Scientific readings
 
-- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4405355/
+- [2014 Nat. Methods paper from Bioconductor core team describing important object classes](https://www.nature.com/articles/nmeth.3252)
+- [To see from how far Bioc comes from\.\.\.](https://genomebiology.biomedcentral.com/articles/10.1186/gb-2004-5-10-r80)
+- [More research on osmotic stress reponse](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4405355/)
 
 ## Hi-C tools
 
-A github repository keeping an updated and curated list of Hi-C tools: https://github.com/mdozmorov/HiC_tools
+* A github repository keeping an updated and curated list of Hi-C tools: https://github.com/mdozmorov/HiC_tools

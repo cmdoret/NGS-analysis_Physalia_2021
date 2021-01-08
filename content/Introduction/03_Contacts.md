@@ -11,6 +11,5 @@ Jacques Serizay: [jacques.serizay@pasteur.fr](mailto:jacques.serizay@pasteur.fr)
 
 Cyril Matthey-Doret: [cyril.matthey-doret@pasteur.fr](mailto:cyril.matthey-doret@pasteur.fr)
 
-Shared Google Doc: 
-
-AWS .pem file: [file](https://drive.google.com/u/0/uc?id=1a8cn_w7V1Z47qdZTG-bLJb4CWBYgHYw7&export=download)
+Shared Google Drive folder: [https://drive.google.com/drive/folders/1VCCpKMB7P0Hf5Th8tKGy6LyqCOK_0Owv?usp=sharing](https://drive.google.com/drive/folders/1VCCpKMB7P0Hf5Th8tKGy6LyqCOK_0Owv?usp=sharing)  
+Don't hesitate to introduce yourself!

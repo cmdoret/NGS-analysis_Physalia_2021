@@ -1,18 +1,26 @@
 ---
-title: "How to log in to AWS"
+title: "How to log in AWS"
 ---
 
 ## Connect to pre-configured AWS machine
 
 ```sh
-KEY="https://drive.google.com/u/0/uc?id=1a8cn_w7V1Z47qdZTG-bLJb4CWBYgHYw7&export=download"
-wget ${KEY} -O key.pem && chmod 600 key.pem
+KEY="path/to/your/key.pem"
+chmod 600 ${KEY}
 #
+USER= #e.g. user=user2
 IP= # e.g. IP=255.255.255.255
-USER= #e.g. user=ubuntu
 #
-ssh -i key.pem ${USER}@${IP}
+ssh -i ${KEY} ${USER}@${IP}
 ```
 
+E.g., for user1: 
 
+```sh
+KEY="c1.pem"
+chmod 600 ${KEY}
+USER=user1
+IP=52.33.244.194
+ssh -i ${KEY} ${USER}@${IP}
+```
 

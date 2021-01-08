@@ -42,7 +42,7 @@ conda install -c bioconda trim-galore ucsc-bedgraphtobigwig pairtools snakemake 
 conda install cython numpy click scipy matplotlib -y
 pip install cooltools
 # R tools 
-conda install conda-forge::r-base=3.6.2 r-essentials=3.6.0
+conda install conda-forge::r-base r-essentials
 Rscript -e 'install.packages(c("igraph"), repos="http://cran.us.r-project.org")'
 Rscript -e 'install.packages(c("BiocManager"), repos="http://cran.us.r-project.org")'
 Rscript -e 'BiocManager::install(c("rtracklayer", "GenomicRanges", "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene", "ChIPpeakAnno", "universalmotif", "Biostrings", "TFBSTools", "BSgenome.Scerevisiae.UCSC.sacCer3", "GenomeInfoDb", "gprofiler2", "GenomicAlignments", "Rsamtools", "DESeq2", "AnnotationHub", "GenomicFeatures", "org.Sc.sgd.db", "clusterProfiler", "JASPAR2018"))'

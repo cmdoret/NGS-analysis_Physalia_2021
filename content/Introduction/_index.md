@@ -4,11 +4,24 @@ title: " NGS analysis for gene regulation and epigenomics"
 
 This repo contains the instructions related to the 2021 Physalia course entitled "NGS analysis for gene regulation and epigenomics". 
 
-Go [here](/{{<myPackageUrl>}}how_to_load_in_aws/#connect-to-pre-configured-aws-machine) to see how to connect to the AWS machine.  
-
 ## IP for today (2020-12-19): 
 
 ```sh
-IP="15.188.89.207"
+IP="52.33.244.194"
 ```
 
+## To log in your AWS session: 
+
+```sh
+KEY="c1.pem"
+chmod 600 ${KEY}
+USER="user1"
+IP="52.33.244.194"
+ssh -i ${KEY} ${USER}@${IP}
+```
+
+More information is available [here](/{{<myPackageUrl>}}how_to_load_in_aws/#connect-to-pre-configured-aws-machine) if needed. 
+
+## Shared Google Drive folder
+
+[Here is a link to our shared Google Drive folder](https://drive.google.com/drive/folders/1VCCpKMB7P0Hf5Th8tKGy6LyqCOK_0Owv?usp=sharing)  

@@ -6,7 +6,6 @@ Classes are from:
 
 - 2 to 8 pm Paris time.
 - 1 to 7 pm London time.
-- 8 am to 7 pm London time.
 - 8 am to 2 pm NY time.
 - 5 am to 11 am SF time.
 

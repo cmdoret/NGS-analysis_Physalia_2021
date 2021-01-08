@@ -51,5 +51,5 @@ ssh -i ${KEY} -N -f -L 8000:localhost:8888 ${USER}@${IP}
 Simply go to the following address: 
 
 ```sh
-"http://ec2-${IP}.eu-west-3.compute.amazonaws.com:8787"
+"http://${IP}:8787"
 ```
