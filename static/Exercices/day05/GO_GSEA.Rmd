@@ -133,7 +133,7 @@ interest are predominently found at the top or at the bottom of the ranked list.
 ```{r}
 df <- read.table('Share/day05/Gutin2019.txt', sep = '\t', header = TRUE) %>% 
     dplyr::rename('gene' = 'X') %>% 
-    mutate(ratio = WT.t10/WT.t00) %>% 
+    mutate(ratio = log2(WT.t10/WT.t00)) %>% 
     filter(!is.infinite(ratio) & !is.na(ratio)) %>% 
     arrange(desc(ratio))
 ```

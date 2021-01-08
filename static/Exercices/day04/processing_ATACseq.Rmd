@@ -75,6 +75,10 @@ cd ..
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh, eval = FALSE}
+mkdir data/
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/001/SRR1822161/SRR1822161_1.fastq.gz -o data/SacCer3_45_rep1_SRR1822161_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR182/001/SRR1822161/SRR1822161_2.fastq.gz -o data/SacCer3_45_rep1_SRR1822161_2.fastq.gz
+#
 cores=4
 for sample in $(ls data/ | sed 's,_1.fastq.gz\|_2.fastq.gz,,' | uniq)
 do 
@@ -85,7 +89,7 @@ done
 
 ## 3. Inspecting output
 
-> What type of output files are generated with this script?  
+> What type of output files are generated with this script (check `Share/day04/` folder)?  
 
 > Comment on the organization of the output files.  
 

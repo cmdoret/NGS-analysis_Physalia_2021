@@ -44,7 +44,7 @@ then
     msg "Mapping reads"
     bwa mem -t "${cores}" -T 0 R64/R64-1-1 ${sample}_1_val_1.fq.gz ${sample}_2_val_2.fq.gz | \
         samtools view -b -F 4 -@ "${cores}" - | \
-        samtools sort -@ "${cores}" -m 16000000000 -T "${sample}".tmp.bam - > "${sample}".bam
+        samtools sort -o -@ "${cores}" -m 3000000 -T "${sample}".tmp.bam > "${sample}".bam
     samtools index -@ "${cores}" "${sample}".bam 
 else
     msg "Skipping read mapping"
