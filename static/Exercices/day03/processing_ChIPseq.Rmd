@@ -46,36 +46,7 @@ nextflow run nf-core/chipseq -profile test,singularity \
 
 ### Run pipeline on data 
 
-#### Prepare sample datasheet 
-
-> Use the samples information file located in `shared/` to build the required input datasheet. 
-
-The following gist can be used to reformat the sample information into an input datasheet. 
-
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-samples <- read.table('Share/day03/ChIP-seq_samples.txt', header = TRUE, sep = '\t')
-samples
-samples$ctl <- paste0("control_", samples$Assay)[match(samples$ctl, samples$Run)]
-samples$Transcription_factor[samples$Transcription_factor == 'Neg'] = paste0("control_", samples$Assay)[samples$Transcription_factor == 'Neg']
-tab <- data.frame(
-    group = samples$Transcription_factor,
-    replicate = samples$Replicate,
-    fastq_1 = samples$reads_1,
-    fastq_2 = samples$reads_2,
-    antibody = samples$Transcription_factor,
-    control = samples$ctl
-)
-tab[is.na(tab)] = ''
-tab$control[tab$control == ''] <- 'control_ChIP-Exo'
-tab$control[grepl('control', tab$group)] <- ''
-tab$antibody[grepl('control', tab$group)] <- ''
-write.csv(tab, 'ChIP-seq_design.csv', quote = FALSE, row.names = FALSE)
-tab
-```
-</p></details><br>
-
-#### Launch pipeline (for only one TF, for a matter of time)
+#### Launching pipeline
 
 > Execute the nf-core/chipseq pipeline for a single TF. 
 
@@ -95,6 +66,16 @@ nextflow run nf-core/chipseq \
     --skip_spp
 ```
 </p></details><br>
+
+This is what the nf-core/chipseq pipeline input datasheet looks like for a paired-end ChIP-seq library 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh}
+cat Share/day03/ChIP-seq_design.csv
+```
+</p></details><br>
+
+#### Launching pipeline for single-end libraries
 
 This is what the nf-core/chipseq pipeline input datasheet looks like for a single-end ChIP-seq library 
 

@@ -1623,8 +1623,8 @@ background-color: #edf9ff
       <li><a href="#test-run">Test run</a></li>
       <li><a href="#run-pipeline-on-data">Run pipeline on data</a>
       <ul>
-      <li><a href="#prepare-sample-datasheet">Prepare sample datasheet</a></li>
-      <li><a href="#launch-pipeline-for-only-one-tf-for-a-matter-of-time">Launch pipeline (for only one TF, for a matter of time)</a></li>
+      <li><a href="#launching-pipeline">Launching pipeline</a></li>
+      <li><a href="#launching-pipeline-for-single-end-libraries">Launching pipeline for single-end libraries</a></li>
       </ul></li>
       </ul></li>
       <li><a href="#inspecting-output-of-nextflow-workflow">2. Inspecting output of Nextflow workflow</a>
@@ -1686,69 +1686,8 @@ Show code
 </div>
 <div id="run-pipeline-on-data" class="section level3">
 <h3>Run pipeline on data</h3>
-<div id="prepare-sample-datasheet" class="section level4">
-<h4>Prepare sample datasheet</h4>
-<blockquote>
-<p>Use the samples information file located in <code>shared/</code> to build the required input datasheet.</p>
-</blockquote>
-<p>The following gist can be used to reformat the sample information into an input datasheet.</p>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>samples &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;Share/day03/ChIP-seq_samples.txt&#39;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>samples</span></code></pre></div>
-<pre><code>## # A tibble: 25 x 9
-##    Run   BioProject Transcription_f… Replicate Assay Study reads_1 reads_2 ctl  
-##    &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;                &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;
-##  1 SRR6… PRJNA4292… Reb1                     1 SLIM… Guti… Share/… Share/… &quot;&quot;   
-##  2 SRR6… PRJNA4292… Abf1                     1 SLIM… Guti… Share/… Share/… &quot;&quot;   
-##  3 SRR6… PRJNA4292… Rap1                     1 SLIM… Guti… Share/… Share/… &quot;&quot;   
-##  4 SRR5… PRJNA3855… Spt3-TAP                 1 ChIP… Vina… Share/… Share/… &quot;SRR…
-##  5 SRR5… PRJNA3855… Spt16-TAP                1 ChIP… Vina… Share/… Share/… &quot;SRR…
-##  6 SRR5… PRJNA3855… Hsf1-TAP                 1 ChIP… Vina… Share/… Share/… &quot;SRR…
-##  7 SRR5… PRJNA3855… Hsf1-TAP                 2 ChIP… Vina… Share/… Share/… &quot;SRR…
-##  8 SRR5… PRJNA3855… Rsc9-TAP                 1 ChIP… Vina… Share/… Share/… &quot;SRR…
-##  9 SRR5… PRJNA3855… Neg                      1 ChIP… Vina… Share/… Share/… &quot;SRR…
-## 10 SRR5… PRJNA3855… Neg                      2 ChIP… Vina… Share/… Share/… &quot;SRR…
-## # … with 15 more rows</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>samples<span class="op">$</span>ctl &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;control_&quot;</span>, samples<span class="op">$</span>Assay)[<span class="kw">match</span>(samples<span class="op">$</span>ctl, samples<span class="op">$</span>Run)]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>samples<span class="op">$</span>Transcription_factor[samples<span class="op">$</span>Transcription_factor <span class="op">==</span><span class="st"> &#39;Neg&#39;</span>] =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;control_&quot;</span>, samples<span class="op">$</span>Assay)[samples<span class="op">$</span>Transcription_factor <span class="op">==</span><span class="st"> &#39;Neg&#39;</span>]</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>tab &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="dt">group =</span> samples<span class="op">$</span>Transcription_factor,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="dt">replicate =</span> samples<span class="op">$</span>Replicate,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="dt">fastq_1 =</span> samples<span class="op">$</span>reads_<span class="dv">1</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    <span class="dt">fastq_2 =</span> samples<span class="op">$</span>reads_<span class="dv">2</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    <span class="dt">antibody =</span> samples<span class="op">$</span>Transcription_factor,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    <span class="dt">control =</span> samples<span class="op">$</span>ctl</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>tab[<span class="kw">is.na</span>(tab)] =<span class="st"> &#39;&#39;</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>tab<span class="op">$</span>control[tab<span class="op">$</span>control <span class="op">==</span><span class="st"> &#39;&#39;</span>] &lt;-<span class="st"> &#39;control_ChIP-Exo&#39;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>tab<span class="op">$</span>control[<span class="kw">grepl</span>(<span class="st">&#39;control&#39;</span>, tab<span class="op">$</span>group)] &lt;-<span class="st"> &#39;&#39;</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>tab<span class="op">$</span>antibody[<span class="kw">grepl</span>(<span class="st">&#39;control&#39;</span>, tab<span class="op">$</span>group)] &lt;-<span class="st"> &#39;&#39;</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="kw">write.csv</span>(tab, <span class="st">&#39;ChIP-seq_design.csv&#39;</span>, <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>tab</span></code></pre></div>
-<pre><code>## # A tibble: 25 x 6
-##    group    replicate fastq_1             fastq_2             antibody control  
-##    &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;               &lt;chr&gt;               &lt;chr&gt;    &lt;chr&gt;    
-##  1 Reb1             1 Share/day03/data/S… Share/day03/data/S… &quot;Reb1&quot;   &quot;control…
-##  2 Abf1             1 Share/day03/data/S… Share/day03/data/S… &quot;Abf1&quot;   &quot;control…
-##  3 Rap1             1 Share/day03/data/S… Share/day03/data/S… &quot;Rap1&quot;   &quot;control…
-##  4 Spt3-TAP         1 Share/day03/data/S… Share/day03/data/S… &quot;Spt3-T… &quot;control…
-##  5 Spt16-T…         1 Share/day03/data/S… Share/day03/data/S… &quot;Spt16-… &quot;control…
-##  6 Hsf1-TAP         1 Share/day03/data/S… Share/day03/data/S… &quot;Hsf1-T… &quot;control…
-##  7 Hsf1-TAP         2 Share/day03/data/S… Share/day03/data/S… &quot;Hsf1-T… &quot;control…
-##  8 Rsc9-TAP         1 Share/day03/data/S… Share/day03/data/S… &quot;Rsc9-T… &quot;control…
-##  9 control…         1 Share/day03/data/S… Share/day03/data/S… &quot;&quot;       &quot;&quot;       
-## 10 control…         2 Share/day03/data/S… Share/day03/data/S… &quot;&quot;       &quot;&quot;       
-## # … with 15 more rows</code></pre>
-</p>
-</details>
-<p><br></p>
-</div>
-<div id="launch-pipeline-for-only-one-tf-for-a-matter-of-time" class="section level4">
-<h4>Launch pipeline (for only one TF, for a matter of time)</h4>
+<div id="launching-pipeline" class="section level4">
+<h4>Launching pipeline</h4>
 <blockquote>
 <p>Execute the nf-core/chipseq pipeline for a single TF.</p>
 </blockquote>
@@ -1757,28 +1696,67 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="fu">grep</span> -P <span class="st">&quot;^group|^Reb1|^control_ChIP-Exo&quot;</span> Share/day03/ChIP-seq_design.csv <span class="op">&gt;</span> ChIP-seq_subset_design.csv</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    <span class="ex">--input</span> ChIP-seq_subset_design.csv <span class="kw">\</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;3.GB&#39;</span> <span class="kw">\</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a>    <span class="ex">--skip_spp</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="fu">grep</span> -P <span class="st">&quot;^group|^Reb1|^control_ChIP-Exo&quot;</span> Share/day03/ChIP-seq_design.csv <span class="op">&gt;</span> ChIP-seq_subset_design.csv</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="ex">--input</span> ChIP-seq_subset_design.csv <span class="kw">\</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;3.GB&#39;</span> <span class="kw">\</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    <span class="ex">--skip_spp</span></span></code></pre></div>
 </p>
 </details>
 <p><br></p>
+<p>This is what the nf-core/chipseq pipeline input datasheet looks like for a paired-end ChIP-seq library</p>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">cat</span> Share/day03/ChIP-seq_design.csv</span></code></pre></div>
+<pre><code>## group,replicate,fastq_1,fastq_2,antibody,control
+## Reb1,1,Share/day03/data/SRR6453183^SLIM-ChIP^Reb1^rep1^r1.fastq.gz,Share/day03/data/SRR6453183^SLIM-ChIP^Reb1^rep1^r2.fastq.gz,Reb1,control_ChIP-Exo
+## Abf1,1,Share/day03/data/SRR6453184^SLIM-ChIP^Abf1^rep1^r1.fastq.gz,Share/day03/data/SRR6453184^SLIM-ChIP^Abf1^rep1^r2.fastq.gz,Abf1,control_ChIP-Exo
+## Rap1,1,Share/day03/data/SRR6453185^SLIM-ChIP^Rap1^rep1^r1.fastq.gz,Share/day03/data/SRR6453185^SLIM-ChIP^Rap1^rep1^r2.fastq.gz,Rap1,control_ChIP-Exo
+## Spt3-TAP,1,Share/day03/data/SRR5511881^ChIP-Exo^Spt3-TAP^rep1^r1.fastq.gz,Share/day03/data/SRR5511881^ChIP-Exo^Spt3-TAP^rep1^r2.fastq.gz,Spt3-TAP,control_ChIP-Exo
+## Spt16-TAP,1,Share/day03/data/SRR5511951^ChIP-Exo^Spt16-TAP^rep1^r1.fastq.gz,Share/day03/data/SRR5511951^ChIP-Exo^Spt16-TAP^rep1^r2.fastq.gz,Spt16-TAP,control_ChIP-Exo
+## Hsf1-TAP,1,Share/day03/data/SRR5511958^ChIP-Exo^Hsf1-TAP^rep1^r1.fastq.gz,Share/day03/data/SRR5511958^ChIP-Exo^Hsf1-TAP^rep1^r2.fastq.gz,Hsf1-TAP,control_ChIP-Exo
+## Hsf1-TAP,2,Share/day03/data/SRR5511959^ChIP-Exo^Hsf1-TAP^rep2^r1.fastq.gz,Share/day03/data/SRR5511959^ChIP-Exo^Hsf1-TAP^rep2^r2.fastq.gz,Hsf1-TAP,control_ChIP-Exo
+## Rsc9-TAP,1,Share/day03/data/SRR5511984^ChIP-Exo^Rsc9-TAP^rep1^r1.fastq.gz,Share/day03/data/SRR5511984^ChIP-Exo^Rsc9-TAP^rep1^r2.fastq.gz,Rsc9-TAP,control_ChIP-Exo
+## control_ChIP-Exo,1,Share/day03/data/SRR5512036^ChIP-Exo^Neg^rep1^r1.fastq.gz,Share/day03/data/SRR5512036^ChIP-Exo^Neg^rep1^r2.fastq.gz,,
+## control_ChIP-Exo,2,Share/day03/data/SRR5512037^ChIP-Exo^Neg^rep2^r1.fastq.gz,Share/day03/data/SRR5512037^ChIP-Exo^Neg^rep2^r2.fastq.gz,,
+## Cse4,1,Share/day03/data/SRR5071542^CUTnRUN^Cse4^rep1^r1.fastq.gz,Share/day03/data/SRR5071542^CUTnRUN^Cse4^rep1^r2.fastq.gz,Cse4,control_CUTnRUN
+## H2A,1,Share/day03/data/SRR5071555^CUTnRUN^H2A^rep1^r1.fastq.gz,Share/day03/data/SRR5071555^CUTnRUN^H2A^rep1^r2.fastq.gz,H2A,control_CUTnRUN
+## Mot1,1,Share/day03/data/SRR5071567^CUTnRUN^Mot1^rep1^r1.fastq.gz,Share/day03/data/SRR5071567^CUTnRUN^Mot1^rep1^r2.fastq.gz,Mot1,control_CUTnRUN
+## Sth1,1,Share/day03/data/SRR5071576^CUTnRUN^Sth1^rep1^r1.fastq.gz,Share/day03/data/SRR5071576^CUTnRUN^Sth1^rep1^r2.fastq.gz,Sth1,control_CUTnRUN
+## Sth1,2,Share/day03/data/SRR5071577^CUTnRUN^Sth1^rep2^r1.fastq.gz,Share/day03/data/SRR5071577^CUTnRUN^Sth1^rep2^r2.fastq.gz,Sth1,control_CUTnRUN
+## control_CUTnRUN,1,Share/day03/data/SRR5071586^CUTnRUN^Neg^rep1^r1.fastq.gz,Share/day03/data/SRR5071586^CUTnRUN^Neg^rep1^r2.fastq.gz,,
+## control_CUTnRUN,2,Share/day03/data/SRR5071587^CUTnRUN^Neg^rep2^r1.fastq.gz,Share/day03/data/SRR5071587^CUTnRUN^Neg^rep2^r2.fastq.gz,,
+## Sua7,1,Share/day03/data/SRR1951347^ChIP-Exo^Sua7^rep1^r1.fastq.gz,Share/day03/data/SRR1951347^ChIP-Exo^Sua7^rep1^r2.fastq.gz,Sua7,control_ChIP-Exo
+## Sua7,2,Share/day03/data/SRR1951348^ChIP-Exo^Sua7^rep2^r1.fastq.gz,Share/day03/data/SRR1951348^ChIP-Exo^Sua7^rep2^r2.fastq.gz,Sua7,control_ChIP-Exo
+## Rpb3,1,Share/day03/data/SRR1951349^ChIP-Exo^Rpb3^rep1^r1.fastq.gz,Share/day03/data/SRR1951349^ChIP-Exo^Rpb3^rep1^r2.fastq.gz,Rpb3,control_ChIP-Exo
+## Rpb3,2,Share/day03/data/SRR1951350^ChIP-Exo^Rpb3^rep2^r1.fastq.gz,Share/day03/data/SRR1951350^ChIP-Exo^Rpb3^rep2^r2.fastq.gz,Rpb3,control_ChIP-Exo
+## Fhl1,1,Share/day03/data/SRR1951353^ChIP-Exo^Fhl1^rep1^r1.fastq.gz,Share/day03/data/SRR1951353^ChIP-Exo^Fhl1^rep1^r2.fastq.gz,Fhl1,control_ChIP-Exo
+## Fhl1,2,Share/day03/data/SRR1951354^ChIP-Exo^Fhl1^rep2^r1.fastq.gz,Share/day03/data/SRR1951354^ChIP-Exo^Fhl1^rep2^r2.fastq.gz,Fhl1,control_ChIP-Exo
+## Ifh1,1,Share/day03/data/SRR1951359^ChIP-Exo^Ifh1^rep1^r1.fastq.gz,Share/day03/data/SRR1951359^ChIP-Exo^Ifh1^rep1^r2.fastq.gz,Ifh1,control_ChIP-Exo
+## Ifh1,2,Share/day03/data/SRR1951360^ChIP-Exo^Ifh1^rep2^r1.fastq.gz,Share/day03/data/SRR1951360^ChIP-Exo^Ifh1^rep2^r2.fastq.gz,Ifh1,control_ChIP-Exo</code></pre>
+</p>
+</details>
+<p><br></p>
+</div>
+<div id="launching-pipeline-for-single-end-libraries" class="section level4">
+<h4>Launching pipeline for single-end libraries</h4>
 <p>This is what the nf-core/chipseq pipeline input datasheet looks like for a single-end ChIP-seq library</p>
 <details>
 <summary style="color: #ff7f00; font-weight: bold">
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">cat</span> Share/day03/ChIP-seq_design_2.csv</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">cat</span> Share/day03/ChIP-seq_design_2.csv</span></code></pre></div>
 <pre><code>## group,replicate,fastq_1,fastq_2,antibody,control
 ## Hog1,1,Share/day03/data/SRR500623_GSM936791_Hog1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Hog1,control_ChIP-seq
 ## Sko1,1,Share/day03/data/SRR500627_GSM936795_Sko1IP_wildtype_KCl_Saccharomyces_cerevisiae_ChIP-Seq.fastq.gz,,Sko1,control_ChIP-seq
@@ -1793,20 +1771,20 @@ Show code
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="fu">cat</span> Share/day03/ChIP-seq_design_2.csv</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    <span class="ex">-resume</span> <span class="kw">\</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>    <span class="ex">--input</span> Share/day03/ChIP-seq_design_2.csv <span class="kw">\</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>    <span class="ex">--single_end</span> <span class="kw">\</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;4.GB&#39;</span> <span class="kw">\</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a>    <span class="ex">--skip_spp</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">cat</span> Share/day03/ChIP-seq_design_2.csv</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="va">NXF_OPTS=</span><span class="st">&#39;-Xms1g -Xmx4g&#39;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="ex">nextflow</span> run nf-core/chipseq <span class="kw">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="ex">-profile</span> singularity <span class="kw">\</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="ex">-resume</span> <span class="kw">\</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    <span class="ex">--input</span> Share/day03/ChIP-seq_design_2.csv <span class="kw">\</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    <span class="ex">--genome</span> <span class="st">&#39;R64-1-1&#39;</span> <span class="kw">\</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="ex">--single_end</span> <span class="kw">\</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="ex">--max_cpus</span> <span class="st">&#39;1&#39;</span> <span class="kw">\</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>    <span class="ex">--max_memory</span> <span class="st">&#39;4.GB&#39;</span> <span class="kw">\</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>    <span class="ex">--save_trimmed</span> false <span class="kw">\</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>    <span class="ex">--narrow_peak</span> true <span class="kw">\</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>    <span class="ex">--skip_plot_fingerprint</span> <span class="kw">\</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>    <span class="ex">--skip_spp</span></span></code></pre></div>
 </p>
 </details>
 <p><br></p>

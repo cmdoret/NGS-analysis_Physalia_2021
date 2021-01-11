@@ -7,8 +7,8 @@ day: "Day 01"
 
 ## Presentations for {{< param "day" >}}
 
-- Introduction to Hi-C **\[40min\]**: [HTML](/{{<myPackageUrl>}}Presentations/day01/intro_hic.html)
-- Streamlining NGS processing pipelines with Snakemake **\[20min\]**: [HTML](/{{<myPackageUrl>}}Presentations/day01/snakemake_pipelines.html)
+- Introduction to Hi-C **\[40min\]**: [HTML](/{{<myPackageUrl>}}Presentations/day01/intro_hic.html) | [PDF](/{{<myPackageUrl>}}Presentations/day01/NGS_analysis.pdf)
+- Streamlining NGS processing pipelines with Snakemake **\[20min\]**: [HTML](/{{<myPackageUrl>}}Presentations/day01/snakemake_pipelines.html) | [PDF](/{{<myPackageUrl>}}Presentations/day01/snakemake_pipelines.pdf)
 
 ---
 
