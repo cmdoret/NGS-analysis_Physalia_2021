@@ -238,7 +238,7 @@ To easily and visually communicate what the pipeline does, snakemake provides 2 
 
 The `--dag` flag prints the "directed acyclic graph" (DAG) of the pipeline, showing the data flow of files through rules. Each sample will have one node per rule it goes through.
 
-`snakemake -j1 --rulegraph | dot -Tsvg > rulegraph.svg`
+`snakemake -j1 --dag | dot -Tsvg > rulegraph.svg`
 
 ```{r, out.width = "90%",  fig.cap= "DAG of the Hi-C pipelin", echo=FALSE}
 knitr::include_graphics("assets/hic_dag.svg")
