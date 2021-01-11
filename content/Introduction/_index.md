@@ -7,7 +7,7 @@ This repo contains the instructions related to the 2021 Physalia course entitled
 ## IP for today (2020-12-19): 
 
 ```sh
-IP="52.33.244.194"
+IP="54.218.120.97"
 ```
 
 ## To log in your AWS session: 
@@ -16,7 +16,7 @@ IP="52.33.244.194"
 KEY="c1.pem"
 chmod 600 ${KEY}
 USER="user1"
-IP="52.33.244.194"
+IP="54.218.120.97"
 ssh -i ${KEY} ${USER}@${IP}
 ```
 
