@@ -4,10 +4,10 @@ title: " NGS analysis for gene regulation and epigenomics"
 
 This repo contains the instructions related to the 2021 Physalia course entitled "NGS analysis for gene regulation and epigenomics". 
 
-## IP for today (2020-12-19): 
+## IP for today (2021-01-12): 
 
 ```sh
-IP="54.218.120.97"
+IP="34.220.165.62"
 ```
 
 ## To log in your AWS session: 
@@ -16,7 +16,7 @@ IP="54.218.120.97"
 KEY="c1.pem"
 chmod 600 ${KEY}
 USER="user1"
-IP="54.218.120.97"
+IP="34.220.165.62"
 ssh -i ${KEY} ${USER}@${IP}
 ```
 
