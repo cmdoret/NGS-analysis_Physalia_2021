@@ -1,0 +1,223 @@
+---
+title: "Ex. 04-2: Downstream ATAC-seq analysis"
+---
+
+## 1. Import ATAC peaks from YAPC
+
+YAPC has mapped peaks with several different thresholds of significance. 
+
+> Check how many peaks were mapped at each threshold.  
+
+```{sh}
+wc -l /home/ubuntu/Share/day04/_yapc-files/stress-response_*.bed
+```
+
+> Which type of genomic locus does an ATAC peak corresponds to? A priori, which YAPC 
+significance threshold seems to yield the most appropriate number of peaks?  
+
+```{r}
+# Import ATAC peaks as GRanges
+library(tidyverse)
+ATAC_peaks <- read.table('/home/ubuntu/Share/day04/_yapc-files/stress-response_0.05.bed') %>% 
+    as_tibble() %>% 
+    setNames(c('seqnames', 'start', 'end', 'yapc_scores', 'score', 'strand', 'summit', 'summit2')) %>%
+    GenomicRanges::makeGRangesFromDataFrame(keep.extra.columns = TRUE)
+ATAC_peaks$peakID <- paste0('peak_', 1:length(ATAC_peaks))
+ATAC_peaks$yapc_scores <- NULL
+ATAC_peaks$summit2 <- NULL
+ATAC_peaks$score <- NULL
+ATAC_peaks
+```
+
+> Comment on how we imported the peaks here? Why didn't we use `rtracklayer::import()` directly, if the peak files are `.bed` files? 
+Don't hesitate to check the `.bed` format rules again [here](http://genome.ccbr.utoronto.ca/FAQ/FAQformat.html#format1) and to compare it to 
+`/home/ubuntu/Share/day04/_yapc-files/stress-response_0.05.bed`. 
+
+## 2. Brief QC of ATAC peaks 
+
+> We now want to (1) check how far from a TSS each peak is, and (2) for each peak, annotate the closest TSS.
+What do you need to have to do that? 
+
+```{r}
+require(GenomicRanges)
+# Get Yeast TSS annotations from TxDb // We will go over this step tomorrow in depth
+yeast_genes <- GenomicFeatures::genes(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene::TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+GenomeInfoDb::seqlevelsStyle(yeast_genes) <- GenomeInfoDb::seqlevelsStyle(ATAC_peaks)
+yeast_TSSs <- GenomicRanges::resize(yeast_genes, 1, 'start')
+# Convert Ensembl gene ID to human-readable gene names, using gprofiler2 // We will go over this step tomorrow in depth
+yeast_IDs <- gprofiler2::gconvert(query = yeast_TSSs$gene_id, organism = 'scerevisiae')
+head(yeast_IDs)
+yeast_TSSs$gene_name <- yeast_IDs$name[match(yeast_TSSs$gene_id, yeast_IDs$input)]
+#
+#
+#Annotate closest TSS for each ATAC peak
+ATAC_peaks$associated_gene <- yeast_TSSs$gene_name[nearest(ATAC_peaks, yeast_TSSs, ignore.strand = TRUE)]
+# Calculate distance to the nearest TSS for each ATAC peak
+dists <- IRanges::distanceToNearest(ATAC_peaks, yeast_TSSs, ignore.strand = TRUE)
+summary(mcols(dists)$distance)
+hist(log10(mcols(dists)$distance), breaks = 300)
+```
+
+> Compare the location of ATAC-seq peaks with that of all the ChIP-seq peaks. Do they overlap well? 
+What would you expect from first principle? 
+
+```{r}
+ChIP_peaks <- GenomicRanges::reduce(do.call(c, lapply(
+    list.files(
+        pattern = '.*narrowPeak$', 
+        path = '/home/ubuntu/Share/day03/results/bwa/mergedLibrary/macs/narrowPeak', 
+        full.names = TRUE
+    ), 
+    rtracklayer::import
+)))
+dists <- IRanges::distanceToNearest(ATAC_peaks, ChIP_peaks)
+summary(mcols(dists)$distance)
+hist(log10(mcols(dists)$distance), breaks = 300)
+```
+
+## 3. Count ATAC fragments over ATAC peaks
+
+In R, we can leverage Bioconductor classes and their optimized access to `.bam` files to efficiently count 
+fragment coverage of ATAC-seq datasets over all the annotated ATAC-seq peaks. 
+
+```{r}
+# Define sample sheet
+sampleTable <- data.frame(
+    sample = gsub('_SRR.*', '', list.files(pattern = '_noChrM_q10.bam$', path = '/home/ubuntu/Share/day04/_bam-files/')), 
+    timepoint = gsub('SacCer3_|_rep.*', '', list.files(pattern = '_noChrM_q10.bam$', path = '/home/ubuntu/Share/day04/_bam-files/')), 
+    replicate = rep(c(1, 2), 5), 
+    bam = list.files(pattern = '_noChrM_q10.bam$', path = '/home/ubuntu/Share/day04/_bam-files/', full.names = TRUE), 
+    stringsAsFactors = FALSE
+)
+# Import fragment counts over peaks 
+ATAC_counts <- GenomicAlignments::summarizeOverlaps(, 
+    features = ATAC_peaks, 
+    reads = Rsamtools::BamFileList(sampleTable$bam), 
+    ignore.strand = TRUE, 
+    singleEnd = FALSE,
+    BPPARAM = BiocParallel::MulticoreParam(workers = 2)
+)
+SummarizedExperiment::colData(ATAC_counts) <- DataFrame(sampleTable)
+# Inspect the generated object
+ATAC_counts
+length(ATAC_counts)
+dim(ATAC_counts)
+dplyr::glimpse(ATAC_counts)
+SummarizedExperiment::rowRanges(ATAC_counts)
+SummarizedExperiment::colData(ATAC_counts)
+```
+
+## 4. Perform DA analysis
+
+DESeq2 is probably the most widely used package to compute differential coverage (expression) of chromatin loci 
+(genes). Using raw unnormalized counts, it performs the following steps: 
+
+* It estimates the size factors for each library 
+* It estimates the count-dependant dispersion 
+* It fits a negative binomial generalized linear model to internally normalized counts
+* Finally, it tests for differential coverage of genomic features (e.g. genes or peaks) 
+and estimates the log2 fold-change between pairs of conditions. 
+
+You can read more about DESeq2 in its extensive guide 
+[here](http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
+
+```{r}
+library(DESeq2)
+# Perform DE analysis
+dds <- DESeqDataSet(ATAC_counts, design = ~ timepoint) 
+dds <- DESeq(dds)
+# Prepare contrasts for timepoint pairwise comparison
+timepoints <- c('00', '15', '30', '45', '60')
+contrasts <- apply(combn(5, 2), 2, function(idx) {
+    c('timepoint', timepoints[idx[2]], timepoints[idx[1]])
+})
+colnames(contrasts) <- apply(contrasts, 2, function(col) paste0(col[2], '_v_', col[3]))
+contrasts
+# Extract differential accessibility results
+out.l2fc <- data.frame(matrix(nrow = nrow(dds), ncol = ncol(contrasts)))
+colnames(out.l2fc) <- paste0('L2FC_', colnames(contrasts))
+out.padj <- data.frame(matrix(nrow = nrow(dds), ncol = ncol(contrasts)))
+colnames(out.padj) <- paste0('padj_', colnames(contrasts))
+for (i in 1:ncol(contrasts)) {
+    ddr <- results(dds, contrast = contrasts[,i])
+    metadata(ddr)$alpha <- 0.01
+    out <- as.data.frame(ddr)
+    out.l2fc[,i] <- out[, 'log2FoldChange']
+    out.padj[,i] <- out[, 'padj']
+}
+# Get regularized log-normalized accessibility counts
+rlogs <- rlog(dds, blind = FALSE)
+rlogs
+rlogs <- assay(rlogs)
+glimpse(rlogs)
+colnames(rlogs) <- paste0(sampleTable$timepoint, "_rep", sampleTable$replicate)
+rlogs <- matrix(unlist(lapply( 
+    unique(sampleTable$timepoint), 
+    function(x) { 
+        x <- rowMeans(matrix(rlogs[,grep(x, colnames(rlogs))], nrow = nrow(rlogs))) 
+    }
+)), nrow = nrow(rlogs))
+rownames(rlogs) <- paste0('peak_', 1:nrow(rlogs))
+colnames(rlogs) <- paste0('rlog_', unique(sampleTable$timepoint))
+# Collate all results together
+results <- cbind(rlogs, out.l2fc, out.padj)
+mcols(ATAC_peaks) <- cbind(mcols(ATAC_peaks), results)
+# Inspect final object
+glimpse(ATAC_peaks)
+glimpse(ATAC_peaks@elementMetadata)
+```
+
+## 5. Check peaks DA between 2 timepoints
+
+Don't forget that DESeq2 performs differential abundance analysis between 2 different situtations 
+(this is a `contrast`). So you need to ask a specific question, e.g. 
+"what is the differential peak coverage between timepoint XX and timpoint YY?". 
+
+> Fetch the peaks that are differentially covered in ATAC-seq between 0 and 15 min, or between 0 and 60 min. 
+
+```{r}
+# Get peaks whose accessibility increases between 0 and 15 min
+g <- ATAC_peaks[which(ATAC_peaks$L2FC_15_v_00 > log2(1.5) & ATAC_peaks$padj_15_v_00 < 0.01)]
+g[, 1:2]
+# Get peaks whose accessibility increases between 0 and 60 min
+g <- ATAC_peaks[which(ATAC_peaks$L2FC_60_v_00 > log2(1.5) & ATAC_peaks$padj_60_v_00 < 0.01)]
+g[, 1:2]
+```
+
+## 6. Save analysis output
+
+This was a long day. Would be a shame to lose all this progress. 
+
+> You can export the generated objects as R-compatible binary `.rds` files, 
+or as human-readable `.gff` files (which can also be loaded in IGV!). 
+
+```{r}
+# Export as RDS
+saveRDS(ATAC_peaks, 'ATAC_peaks.rds')
+# Export as GFF
+attrs <- paste0(
+    "ID=", ATAC_peaks$peakID,
+    ";associated-gene=", ATAC_peaks$associated_gene, 
+    ";rlog_00=", ATAC_peaks$rlog_00,
+    ";rlog_15=", ATAC_peaks$rlog_15,
+    ";rlog_30=", ATAC_peaks$rlog_30,
+    ";rlog_45=", ATAC_peaks$rlog_45,
+    ";rlog_60=", ATAC_peaks$rlog_60
+)
+GFF <- data.frame(
+    seqname = as.character(seqnames(ATAC_peaks)),
+    source = 'ATACseq_osmotic-stress-response', 
+    feature = 'peak', 
+    start = as.character(start(ATAC_peaks) + 1),
+    end = as.character(end(ATAC_peaks)),
+    score = '.', 
+    strand = '*', 
+    frame = '.',
+    attribute = attrs
+)
+writeLines("##gffTags=on\n##displayName=Name\n##gff-version 3", 'ATAC_peaks.gff')
+write.table(GFF, file = 'ATAC_peaks.gff', row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t", append = TRUE)
+```
+
+> Have a look at the `.gff` file you generated (1) with `less` and (2) directly in IGV. 
+How does it look? Do you understand what we did with the `attrs <- ...` step?

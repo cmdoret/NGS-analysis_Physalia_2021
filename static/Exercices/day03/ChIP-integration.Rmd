@@ -69,7 +69,7 @@ table(rowSums(df))
 
 ## 2. Calculating an enrichment of binding between pairs of TFs
 
-> Calculate the odds ratio of (1) binding of Hog1 and (2) binding of Hot1 over all the bound peaks  
+> Calculate the odds ratio between (1) binding of Hog1 and (2) binding of Hot1, over all the bound peaks  
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{r}

@@ -89,7 +89,6 @@ The only modification to the Nextflow `run` command is the additional `--single_
 
 <details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh eval  = FALSE}
-cat Share/day03/ChIP-seq_design_2.csv
 NXF_OPTS='-Xms1g -Xmx4g'
 nextflow run nf-core/chipseq \
     -profile singularity \

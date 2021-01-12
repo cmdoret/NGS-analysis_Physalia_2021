@@ -1,0 +1,159 @@
+---
+title: "Ex. 05-2: Intersecting ATAC-seq and ChIP-seq datasets"
+---
+
+## 1. Compare ATAC-seq and ChIP-seq results
+
+On one hand, we characterized different sets of dynamically regulated chromatin loci by ATAC-seq. 
+On the other hand, we have profiled the binding of transcription factors genome-wide. 
+
+> Focus on Reb1 for now: which ATAC peak clusters are the most enriched for Reb1 peaks? 
+Propose an biological explanation for this observation.
+
+```{r}
+library(tidyverse)
+library(GenomicRanges)
+ATAC_peaks <- readRDS("/home/ubuntu/Share/day05/ATAC_peaks_with_annots.rds")
+Reb1_peaks <- rtracklayer::import('/home/ubuntu/Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Reb1_R1_peaks.narrowPeak')
+ATAC_peaks$has_Reb1 <- ATAC_peaks %over% Reb1_peaks
+with(ATAC_peaks, table(annot, has_Reb1))
+```
+
+> Now do the same for a master regulator of response to osmotic stress. Conclude
+
+```{r}
+Hog1_peaks <- rtracklayer::import('/home/ubuntu/Share/day03/results/bwa/mergedLibrary/macs/narrowPeak/Hog1_R1_peaks.narrowPeak')
+ATAC_peaks$has_Hog1 <- ATAC_peaks %over% Hog1_peaks
+with(ATAC_peaks, table(annot, has_Hog1))
+```
+
+> Can you do this for all the TFs that were studied in this course? 
+
+```{r}
+# Get a list of all the TF peaks
+TFs <- list.files(pattern = '*.narrowPeak$', path = '/home/ubuntu/Share/day03/results/bwa/mergedLibrary/macs/narrowPeak')
+TFs <- unique(gsub('_.*', '', TFs))
+list_TF_peaks <- lapply(TFs, function(TF) {
+    TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = '/home/ubuntu/Share/day03/results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
+    peaks <- GenomicRanges::reduce(do.call(c, lapply(TF_files, rtracklayer::import)))
+    return(peaks)
+})
+names(list_TF_peaks) <- TFs
+lengths(list_TF_peaks)
+# For each TF, get the % of its peaks overlapping with peaks from each cluster of ATAC-seq peaks
+df <- lapply(TFs, function(TF) {
+    data.frame(
+        TF = TF, 
+        locus = ATAC_peaks$annot,
+        hasTF = ATAC_peaks %over% list_TF_peaks[[TF]]
+    )
+}) %>% 
+    do.call(rbind, .) %>% 
+    group_by(TF, locus) %>% 
+    summarize(pct_with_TF = sum(hasTF) / n() * 100) 
+# Inspect resulting object
+spread(df, locus, pct_with_TF)
+# Plot it as a heatmap
+ggplot(df, aes(x = locus, y = TF, fill = pct_with_TF)) + 
+    geom_tile(col = "black") + 
+    theme_bw() + 
+    scale_fill_gradientn(colours = c('white', 'orange', 'darkred')) + 
+    theme(
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        axis.ticks = element_blank()
+    ) + 
+    labs(
+        x = "Clusters of dynamic accessible loci", 
+        y = "Transcription factor", 
+        fill = '% of peaks\nin a cluster\nbound by the TF'
+    ) + 
+    coord_fixed()
+```
+
+## 2. Mapping TF motifs from public databases in ATAC peaks 
+
+We can leverage public databases such as JASPAR to recover TF binding motifs 
+in R. Then we can map these motifs on the Yeast genome and see which clusters of peaks 
+are enriched for which factors. 
+
+You can go and read more about JASPAR [here](http://jaspar.genereg.net/)
+
+> Recover MSN4 binding motif from JASPAR database
+
+```{r}
+# Get genome sequence from AnnotationHub // We will go over this in the final exercise
+library(AnnotationHub)
+library(Biostrings)
+genome <- AnnotationHub() %>% 
+    query('Saccharomyces_cerevisiae') %>% 
+    query('R64-1-1') %>%
+    query('dna.toplevel.2bit') %>% 
+    '[['(1) %>% 
+    getSeq()
+genome
+# Fetch all motifs from JASPAR 2018 database
+library(JASPAR2018)
+library(TFBSTools)
+motifs <- getMatrixSet(JASPAR2018::JASPAR2018, opts = list(species = "4932"))
+motif_names <- lapply(motifs, function(m) c(name(m)))
+# Get MSN4 binding motif from JASPAR
+MSN4_motif <- toPWM(motifs[[which(motif_names == 'MSN4')]])
+MSN4_motif
+MSN4_hits <- GRanges(
+    searchSeq(
+        MSN4_motif, 
+        genome, 
+        strand = '*', 
+        min.score = '60%'
+    )
+)
+MSN4_hits <- MSN4_hits[order(MSN4_hits$relScore, decreasing = TRUE)]
+# Filtering out non-significant hits
+MSN4_hits <- MSN4_hits[MSN4_hits$relScore >= 0.80]
+# Subset MSN4 hits which overlap with ATAC peaks 
+MSN4_hits <- MSN4_hits[MSN4_hits %over% ATAC_peaks]
+# Calculate enrichment in each cluster
+ATAC_peaks$has_MSN4_motif <- ATAC_peaks %over% MSN4_hits
+odds_MSN4 <- lapply(levels(ATAC_peaks$annot), function(cluster) {
+    fisher.test(table(ATAC_peaks$annot == cluster, ATAC_peaks$has_MSN4_motif))$estimate
+}) %>% unlist() %>% setNames(levels(ATAC_peaks$annot))
+odds_MSN4
+# Inspect resulting logo
+ggseqlogo::ggseqlogo(as.character(MSN4_hits[MSN4_hits %over% ATAC_peaks]$siteSeqs))
+```
+
+> Compare the obtained logo to what has been published (see [JASPAR motif](http://jaspar.genereg.net/matrix/MA0342.1/)). 
+Can you comment on the observed differences? What are the benefits of multi-omics data integration, in this case?
+
+> Do the same for SWI5 now. 
+
+```{r}
+motifs <- getMatrixSet(JASPAR2018::JASPAR2018, opts = list(species = "4932"))
+motif_names <- lapply(motifs, function(m) c(name(m)))
+SWI5_motif <- toPWM(motifs[[which(motif_names == 'SWI5')]])
+SWI5_motif
+SWI5_hits <- GRanges(
+    searchSeq(
+        SWI5_motif, 
+        genome, 
+        strand = '*', 
+        min.score = '60%'
+    )
+)
+SWI5_hits <- SWI5_hits[order(SWI5_hits$relScore, decreasing = TRUE)]
+# Filtering out non-significant hits
+SWI5_hits <- SWI5_hits[SWI5_hits$relScore >= 0.80]
+# Subset MSN4 hits which overlap with ATAC peaks 
+SWI5_hits <- SWI5_hits[SWI5_hits %over% ATAC_peaks]
+# Calculate enrichment in each cluster
+ATAC_peaks$has_SWI5_motif <- ATAC_peaks %over% SWI5_hits
+odds_SWI5 <- lapply(levels(ATAC_peaks$annot), function(cluster) {
+    fisher.test(table(ATAC_peaks$annot == cluster, ATAC_peaks$has_SWI5_motif))$estimate
+}) %>% unlist() %>% setNames(levels(ATAC_peaks$annot))
+odds_SWI5
+```
+
+> Conclude on the importance of SWI5 in response to osmotic stress. Was it previously supposed? 

@@ -1,0 +1,130 @@
+---
+title: "Ex. 05-1: Intersecting ATAC-seq with GO database"
+---
+
+## 1. Group ATAC peaks based on their dynamic accessibility changes
+
+We characterized different clusters of dynamically regulated chromatin loci by ATAC-seq. 
+
+> Can you give a descriptive label to each cluster of ATAC peaks? 
+
+> Have a look at `ATAC_peaks$annot`. What does it corresponds to? Given the patterns of 
+varying chromatin accessibility in each peak cluster, we have merged clusters and labelled them. 
+
+![](.img/2020-12-29-18-55-23.png)
+
+```{r}
+library(tidyverse) 
+ATAC_peaks <- readRDS("/home/ubuntu/Share/day05/ATAC_peaks_with_annots.rds")
+table(ATAC_peaks$cluster)
+table(ATAC_peaks$annot)
+table(ATAC_peaks$cluster, ATAC_peaks$annot)
+#
+norm_rlogs <- mcols(ATAC_peaks)[, grepl('rlog_', colnames(mcols(ATAC_peaks)))] %>% 
+    apply(1, function(row) {row - mean(row)}) %>% 
+    t() %>% 
+    as_tibble() %>% 
+    mutate(locus = factor(ATAC_peaks$peakID)) %>% 
+    mutate(cluster = factor(ATAC_peaks$annot)) %>%
+    gather('timepoint', 'mean_centered_rlog', -locus, -cluster) %>% 
+    group_by(cluster) %>% 
+    mutate(timepoint = gsub('rlog_', '', timepoint))
+p <- ggplot(norm_rlogs, aes(x = timepoint, y = mean_centered_rlog, fill = cluster, group = locus, col = cluster)) + 
+    geom_line() + 
+    theme_bw() + 
+    facet_wrap(~cluster)
+p
+```
+
+## 2. Gene Ontology analyses 
+
+Based on previous labelling, there are 3 different groups of chromatin loci which are characterized by 
+an increase of accessibility following osmotic stress. 
+
+> Can you investigate the gene ontology of genes close to the chromatin loci in the `opened_recovery` cluster? 
+
+```{r}
+TSSs <- unique(ATAC_peaks$associated_gene[ATAC_peaks$annot == 'opened_recovery'])
+go_opened_recovery <- gprofiler2::gost(TSSs, organism = 'scerevisiae')
+go_opened_recovery$result
+```
+
+> Can you perform the same operation for all the clusters? 
+
+```{r}
+# Get enriched GO for each cluster
+go_clusters <- lapply(
+    levels(ATAC_peaks$annot), 
+    function(annot) {
+        TSSs <- unique(ATAC_peaks$associated_gene[ATAC_peaks$annot == annot])
+        go_results <- gprofiler2::gost(TSSs, organism = 'scerevisiae')$result
+        go_results$annot <- annot
+        return(go_results)
+    }
+) %>% 
+    do.call(rbind, .)
+# Inspect resulting object
+go_clusters
+table(go_clusters$annot)
+go_clusters %>% filter(annot == "opened_recovery")
+go_clusters %>% filter(annot == "opened_no-recovery")
+go_clusters %>% filter(annot == "closed_short-term-recovery")
+go_clusters %>% filter(annot == "closed_no-recovery")
+go_clusters %>% filter(annot == "closed_long-term-recovery")
+```
+
+## 2. Gene Set Enrichment Analysis
+
+GEAS is an approach *kind of* similar to that of GO enrichment analysis, with one big difference. 
+In GO enrichment analyses, one specifies a **gene set**, and Gene Ontology terms 
+statistically enriched within this set of genes are retrieved. 
+In GEAS analyses, a list of genes (usually all genes in the genome) are 
+ranked by a value (usually the fold-change between 2 conditions). 
+Then, for a given gene set of interest (e.g. genes associated with a specific 
+Gene Ontology term), the position of these genes is retrieved in the 
+initial list of ranked genes. Based on their position, an enrichment score can 
+be computed, incidicating whether the genes from the set of 
+interest are predominently found at the top or at the bottom of the ranked list. 
+
+> Can we perform GSEA in our list of ATAC peaks?
+
+> Can you find an alternative that would allow you to use the list of ATAC peaks for GSEA?
+
+> Import the `Gudin2019.txt` table and rank the genes based on their expression 
+fold-change between 10min of osmotic stress and no treatment
+
+```{r}
+df <- read.table('/home/ubuntu/Share/day05/Gutin2019.txt', sep = '\t', header = TRUE) %>% 
+    dplyr::rename('gene' = 'X') %>% 
+    mutate(ratio = log2(WT.t10/WT.t00)) %>% 
+    filter(!is.infinite(ratio) & !is.na(ratio)) %>% 
+    arrange(desc(ratio))
+dplyr::glimpse(df)
+```
+
+> Perform GSEA on that ranked list. `gseGO()` is function to perform GSEA using Gene Ontology sets and 
+is included in the awesome `clusterProfiler` package. 
+
+```{r}
+# Build list of genes ranked by their differential expression (10 vs 0 min).
+list_genes <- df$ratio
+names(list_genes) <- df$gene
+# Perform GSEA analysis
+gsea_results <- clusterProfiler::gseGO(
+    list_genes, 
+    keyType = "ENSEMBL", 
+    OrgDb = org.Sc.sgd.db::org.Sc.sgd.db,
+    verbose = TRUE
+)
+# Inspect resulting object
+gsea_results@result[, 1:8] %>% arrange(desc(NES)) %>% head(20)
+enrichplot::ridgeplot(gsea_results, 20)
+# Have a look at a specific GO term
+K <- which(gsea_results@result$Description == 'response to osmotic stress')
+enrichplot::gseaplot2(gsea_results, K, title = gsea_results@result$Description[K])
+```
+
+## Conclusions
+
+> Conclude on the relative usefulness of GO enrichment analysis / GSEA for specific NGS assays
+(ChIP-seq, ATAC-seq, RNA-seq, ...)

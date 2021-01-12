@@ -1,22 +1,5 @@
 ---
 title: "Ex. 03-1: Processing ChIP-seq data with Nextflow"
-output: 
-    rmdformats::readthedown: 
-        highlight: tango
-        preserve_yaml: true
-        df_print: tibble
-        toc_depth: 4
-        css: ../../../custom.css
-    rmdformats::downcute: 
-        preserve_yaml: true
-    rmarkdown::html_document: 
-        theme: simplex
-        highlight: tango
-        preserve_yaml: true
-        code_folding: hide
-        df_print: tibble
-        toc: true
-        toc_float: true
 ---
 
 ## 1. Running the nf-core/chipseq pipeline
@@ -30,13 +13,11 @@ Have a look at each processing step and understand what each step does.
 
 > Try to run a test workflow: 
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh eval  = FALSE}
 nextflow run nf-core/chipseq -profile test,singularity \
     --max_cpus '1' \
     --max_memory '3.GB'
 ```
-</p></details><br>
 
 > Check out the `results/` directory.  
 
@@ -50,10 +31,9 @@ nextflow run nf-core/chipseq -profile test,singularity \
 
 > Execute the nf-core/chipseq pipeline for a single TF. 
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh eval  = FALSE}
 NXF_OPTS='-Xms1g -Xmx4g'
-grep -P "^group|^Reb1|^control_ChIP-Exo" Share/day03/ChIP-seq_design.csv > ChIP-seq_subset_design.csv
+grep -P "^group|^Reb1|^control_ChIP-Exo" /home/ubuntu/Share/day03/ChIP-seq_design.csv > ChIP-seq_subset_design.csv
 nextflow run nf-core/chipseq \
     -profile singularity \
     --input ChIP-seq_subset_design.csv \
@@ -65,35 +45,29 @@ nextflow run nf-core/chipseq \
     --skip_plot_fingerprint \
     --skip_spp
 ```
-</p></details><br>
 
 This is what the nf-core/chipseq pipeline input datasheet looks like for a paired-end ChIP-seq library 
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh}
-cat Share/day03/ChIP-seq_design.csv
+cat /home/ubuntu/Share/day03/ChIP-seq_design.csv
 ```
-</p></details><br>
 
 #### Launching pipeline for single-end libraries
 
 This is what the nf-core/chipseq pipeline input datasheet looks like for a single-end ChIP-seq library 
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh}
-cat Share/day03/ChIP-seq_design_2.csv
+cat /home/ubuntu/Share/day03/ChIP-seq_design_2.csv
 ```
-</p></details><br>
 
 The only modification to the Nextflow `run` command is the additional `--single_end` parameter. Easy!
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
 ```{sh eval  = FALSE}
 NXF_OPTS='-Xms1g -Xmx4g'
 nextflow run nf-core/chipseq \
     -profile singularity \
     -resume \
-    --input Share/day03/ChIP-seq_design_2.csv \
+    --input /home/ubuntu/Share/day03/ChIP-seq_design_2.csv \
     --genome 'R64-1-1' \
     --single_end \
     --max_cpus '1' \
@@ -103,7 +77,6 @@ nextflow run nf-core/chipseq \
     --skip_plot_fingerprint \
     --skip_spp
 ```
-</p></details><br>
 
 ## 2. Inspecting output of Nextflow workflow
 
@@ -124,11 +97,7 @@ and trim each read if an adapter sequence is found in it.
 
 > What about other contaminating sequences? Can you speculate on the origin of such sequences?
 
-<details><summary>Clue</summary>
-<p>
 Is there any difference in the experimental approaches used to ChIP Hsf1 and Cse4?
-</p>
-</details>
 
 ### ChIP-seq coverage
 
@@ -141,29 +110,17 @@ library.
 
 > How exactly is `.bigWig` file structure? Is there a more "human-readable" version of `.bigWig` files? 
 
-<details><summary>Clue</summary>
-<p>
 Check out documentation provided by UCSC:  
 See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http://genome.ucsc.edu/goldenPath/help/wiggle.html) documentation.
-</p>
-</details>
 
 > How comparable is the ChIP-seq coverage, from one `.bigwig` file to another? 
 
-<details><summary>Clue</summary>
-<p>
 Have a look at the content of the folder `results/bwa/mergedLibrary/bigwig/scale/`. 
-</p>
-</details>
 
 > How can you parse a `.bigWig` file in R? 
 
-<details><summary>Clue</summary>
-<p>
 Check out rtacklayer package from Bioconductor:
 See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http://genome.ucsc.edu/goldenPath/help/wiggle.html) documentation.
-</p>
-</details>
 
 #### Enrichment over gene features
 
@@ -181,13 +138,9 @@ You can also load the tracks directly in IGV and visually inspect them.
 
 > Visually, can you detect specific peak patterns?
 
-<details><summary>Clue</summary>
-<p>
 Load all the tracks from Reja et al., 2015. Which type of genes have peaks? And which combinations of factors can you identify?  
 Load the tracks from Cook et al., 2012. What do you observe?  
 Now load Cse4 track. Is the coverage different? Where is it enriched at? Where is Cse4 supposed to be enriched in nuclei?  
-</p>
-</details>
 
 ### Conclusions 
 

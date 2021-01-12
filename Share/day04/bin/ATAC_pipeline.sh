@@ -29,6 +29,13 @@ then
     mkdir _bigwig-files
 fi
 
+# Check input files 
+
+if [ ! -f "data/"${sample}"_1.fastq.gz" ]
+then 
+    msg "ERROR: FASTQ FILES DO NOT EXIST. ABORTING NOW. BYEBYE"
+fi
+
 # Trim reads 
 if [ ! -f "${sample}_2_val_2.fq.gz" ]
 then
