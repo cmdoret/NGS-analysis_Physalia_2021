@@ -82,10 +82,9 @@ Pairs headers should look something like that:
 So in our case, the header can be generated using the SAM file:
 
 ```bash
-echo -n """
-## pairs format v1.0
+echo -n """## pairs format v1.0
 #sorted: readID
-#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+#columns: readID chrom1 pos1 chrom2 pos2 strand1 strand2
 """ > valid.pairs
 
 samtools view -H for.sam \
@@ -168,9 +167,9 @@ cooler info demo.cool
 Although the file format is compressed, the data from each table can always be retrieved in text format using the dump command:
 
 ```bash
-cooler dump -f pixels demo.cool
-cooler dump -f bins demo.cool
-cooler dump -f chroms demo.cool
+cooler dump -t pixels demo.cool
+cooler dump -t bins demo.cool
+cooler dump -t chroms demo.cool
 ```
 This is useful when converting data to custom format or exporting some data for analysis.
 

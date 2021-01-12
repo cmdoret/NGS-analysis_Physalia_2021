@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.79.1" />
+    <meta name="generator" content="Hugo 0.80.0" />
     <meta name="description" content="NGS analysis for gene regulation and epigenomics">
 <meta name="author" content="Jacques Serizay">
 
@@ -12,21 +12,21 @@
     <title>4. Rstudio and Jupyter Notebooks :: NGS analysis for gene regulation and epigenomics</title>
 
     
-    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1610444022" rel="stylesheet">
-    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1610444022" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/nucleus.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/fontawesome-all.min.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hybrid.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/featherlight.min.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/perfect-scrollbar.min.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/auto-complete.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/atom-one-dark-reasonable.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme.css?1610398999" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/hugo-theme.css?1610398999" rel="stylesheet">
     
-    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1610444022" rel="stylesheet">
+    <link href="/NGS-analysis_Physalia_2021/css/theme-red.css?1610398999" rel="stylesheet">
     
     
 
-    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1610444022"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery-3.3.1.min.js?1610398999"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -483,33 +483,12 @@ always able to connect to services such as AWS.</p>
 <p>Since most of the preliminary analysis we do is on AWS,
 we&rsquo;d like to be able to use Jupyter Notebooks directly on AWS. Here is how we can do!</p>
 <h2 id="jupyter-notebooks">Jupyter Notebooks</h2>
-<ol start="0">
-<li>Connect to the AWS instance:</li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">IP<span style="color:#f92672">=</span> <span style="color:#75715e"># e.g. IP=255.255.255.255</span>
-USER<span style="color:#f92672">=</span> <span style="color:#75715e">#e.g. user=ubuntu</span>
-KEY<span style="color:#f92672">=</span>~/.ssh/epi21.pem
-ssh -i <span style="color:#e6db74">${</span>KEY<span style="color:#e6db74">}</span> <span style="color:#e6db74">${</span>USER<span style="color:#e6db74">}</span>@<span style="color:#e6db74">${</span>IP<span style="color:#e6db74">}</span>
-</code></pre></div><ol>
-<li>Activate the conda environment for the workshop:</li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">conda activate epi2021
-</code></pre></div><ol start="2">
-<li>Go to the directory of the day, run jupyter and copy the token displayed in the terminal.</li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">cd ~/Share/day02/
-jupyter notebook --no-browser --port<span style="color:#f92672">=</span><span style="color:#ae81ff">8888</span>
-</code></pre></div><ol start="3">
+<ol>
 <li>Tunnel the port from your local machine</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">ssh -i <span style="color:#e6db74">${</span>KEY<span style="color:#e6db74">}</span> -N -f -L 8000:localhost:8888 <span style="color:#e6db74">${</span>USER<span style="color:#e6db74">}</span>@<span style="color:#e6db74">${</span>IP<span style="color:#e6db74">}</span>
-</code></pre></div><ol start="4">
-<li>
-<p>Open a web browser on the local machine, go to <code>localhost:8000</code> and paste the token</p>
-</li>
-<li>
-<p>Enjoy!</p>
-</li>
+</code></pre></div><ol start="2">
+<li>Open a web browser on the local machine, go to <code>localhost:8000</code> and paste the token we send you.</li>
 </ol>
 <h2 id="rstudio">RStudio</h2>
 <p>Simply go to the following address:</p>
@@ -784,19 +763,19 @@ jupyter notebook --no-browser --port<span style="color:#f92672">=</span><span st
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1610444022"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1610444022"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1610444022"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1610444022"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1610444022"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1610444022"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/clipboard.min.js?1610398999"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.min.js?1610398999"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/perfect-scrollbar.jquery.min.js?1610398999"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/jquery.sticky.js?1610398999"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/featherlight.min.js?1610398999"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/highlight.pack.js?1610398999"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1610444022"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1610444022"></script>
-    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1610444022"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/modernizr.custom-3.6.0.js?1610398999"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/learn.js?1610398999"></script>
+    <script src="/NGS-analysis_Physalia_2021/js/hugo-learn.js?1610398999"></script>
     
         
-            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1610444022"></script>
+            <script src="/NGS-analysis_Physalia_2021/mermaid/mermaid.js?1610398999"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

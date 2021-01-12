@@ -1726,15 +1726,14 @@ div.tocify {
 #chromsize: seq1 60000
 #chromsize: seq2 20000</code></pre>
 <p>So in our case, the header can be generated using the SAM file:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="bu">echo</span> -n <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="st">## pairs format v1.0</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="st">#sorted: readID</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="st">#columns: readID chr1 pos1 chr2 pos2 strand1 strand2</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span> <span class="op">&gt;</span> valid.pairs</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="ex">samtools</span> view -H for.sam <span class="kw">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$1 == &quot;@SQ&quot; {print &quot;#chromsize: &quot;,substr($2,4),substr($3,4)}&#39;</span> <span class="kw">\</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>    <span class="op">&gt;&gt;</span> <span class="ex">valid.pairs</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="bu">echo</span> -n <span class="st">&quot;&quot;&quot;## pairs format v1.0</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="st">#sorted: readID</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="st">#columns: readID chrom1 pos1 chrom2 pos2 strand1 strand2</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span> <span class="op">&gt;</span> valid.pairs</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="ex">samtools</span> view -H for.sam <span class="kw">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>    <span class="kw">|</span> <span class="fu">awk</span> <span class="st">&#39;$1 == &quot;@SQ&quot; {print &quot;#chromsize: &quot;,substr($2,4),substr($3,4)}&#39;</span> <span class="kw">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="op">&gt;&gt;</span> <span class="ex">valid.pairs</span></span></code></pre></div>
 <p>And then we would append the content using bash’s appending redirection operator: <code>&gt;&gt;</code>. Note we use awk to convert SAM flags (0, 16, …) into strands (+/-). &gt; This is done by computing the bitwise AND of the flag and value 16 which means “reverse strand”. If the bit corresponding to that value is set in the flag, the read is on the reverse strand.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">awk</span> <span class="st">&#39;BEGIN{OFS=&quot;\t&quot;}{</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="st">    if(and($6, 16)){ $6=&quot;-&quot; } else $6=&quot;+&quot;;</span></span>
@@ -1778,9 +1777,9 @@ div.tocify {
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="ex">cooler</span> tree demo.cool</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="ex">cooler</span> info demo.cool</span></code></pre></div>
 <p>Although the file format is compressed, the data from each table can always be retrieved in text format using the dump command:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="ex">cooler</span> dump -f pixels demo.cool</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="ex">cooler</span> dump -f bins demo.cool</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="ex">cooler</span> dump -f chroms demo.cool</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="ex">cooler</span> dump -t pixels demo.cool</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="ex">cooler</span> dump -t bins demo.cool</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="ex">cooler</span> dump -t chroms demo.cool</span></code></pre></div>
 <p>This is useful when converting data to custom format or exporting some data for analysis.</p>
 <p>Another useful feature is the visualisation of the contact heatmap:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="ex">cooler</span> show demo.cool chrom1</span></code></pre></div>
