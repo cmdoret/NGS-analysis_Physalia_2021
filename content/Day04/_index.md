@@ -26,7 +26,7 @@ practical3: "day04/clustering_ATACseq"
 
 ## Exercises for {{< param "day" >}}
 
--  **\[1 h\]** Processing ATAC-seq datasets:
+-  **\[1 h 30\]** Processing ATAC-seq datasets:
     [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical1" >}}.Rmd)]
 
     > Data for this part of the course was collected from a research paper from the [Greenleaf lab](https://greenleaf.stanford.edu/), the lab which pioneered ATAC-seq experiments. In this paper, ATAC-seq experiments have been conducted in Yeast, in normal conditions and under osmotic stress.  
@@ -34,7 +34,7 @@ practical3: "day04/clustering_ATACseq"
 
     * Structured nucleosome fingerprints enable high-resolution mapping of chromatin architecture within regulatory regions [(Schep et al., Genome Res. 2015)](https://genome.cshlp.org/content/25/11/1757.short)
 
--  **\[1 h\]** Downstream analysis of ATAC-seq experiments
+-  **\[1 h 30\]** Downstream analysis of ATAC-seq experiments
     [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical2" >}}.Rmd)]
 
     > Upon osmotic stress, chromatin accessibility dynamically changes at specific loci.  
@@ -44,7 +44,7 @@ practical3: "day04/clustering_ATACseq"
 
     * Chromatin accessibility dynamics across C. elegans development and ageing [(Jänes et al., eLife 2018)](https://elifesciences.org/articles/37344)
 
--  **\[1 h\]** Clustering ATAC-seq peaks:
+-  **\[BONUS\]** Clustering ATAC-seq peaks:
     [[HTML](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}}.html) | [Rmd (save to open in RStudio)](/{{<myPackageUrl>}}Exercices/{{< param "practical3" >}}.Rmd)]
 
     > Chromatin accessibility may be increasing *or* decreasing upon osmotic stress.  
