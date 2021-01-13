@@ -10,6 +10,12 @@ This repo contains the instructions related to the 2021 Physalia course entitled
 IP="34.219.124.212"
 ```
 
+## To log in RStudio server: 
+
+[Simply go to the following web page](http://34.219.124.212:8787/): `http://34.219.124.212:8787/`
+
+Username and password are both your user ID (e.g. `user24`).
+
 ## To log in your AWS session: 
 
 ```sh
