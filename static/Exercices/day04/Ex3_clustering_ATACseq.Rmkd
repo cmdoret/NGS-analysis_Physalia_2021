@@ -51,6 +51,15 @@ norm_rlogs <- mcols(ATAC_peaks_DA)[, grepl('rlog_', colnames(mcols(ATAC_peaks)))
     apply(1, function(row) {row - mean(row)}) %>% 
     t() %>% 
     as_tibble()
+# Cluster the data.frame in 8 clusters
+norm_rlogs$cluster <- factor(cluster::pam(x = norm_rlogs, k = 8, cluster.only = TRUE))
+# Cluster the data.frame in 8 clusters
+norm_rlogs$locus <- factor(ATAC_peaks_DA$peakID, levels = ATAC_peaks_DA$peakID)
+# Reformat the data frame into a tidy shape
+norm_rlogs <- norm_rlogs %>% 
+    gather('timepoint', 'mean_centered_rlog', -locus, -cluster) %>% 
+    group_by(cluster) %>% 
+    mutate(timepoint = gsub('rlog_', '', timepoint))
 # Plot results as lines, using `group` argument to link values of accessibility of a locus at each timepoint.
 p <- ggplot(norm_rlogs, aes(x = timepoint, y = mean_centered_rlog, fill = cluster, group = locus, col = cluster)) + 
     geom_line() + 

@@ -20,7 +20,7 @@ E.g., for user1:
 KEY="c1.pem"
 chmod 600 ${KEY}
 USER=user1
-IP=34.220.165.62
+IP=34.219.124.212
 ssh -i ${KEY} ${USER}@${IP}
 ```
 
