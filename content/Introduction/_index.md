@@ -7,12 +7,12 @@ This repo contains the instructions related to the 2021 Physalia course entitled
 ## IP for today (2021-01-14): 
 
 ```sh
-IP="35.166.251.18"
+IP="18.237.81.115"
 ```
 
 ## To log in RStudio server: 
 
-[Simply go to the following web page](http://35.166.251.18:8787/): `http://35.166.251.18:8787/`
+[Simply go to the following web page](http://18.237.81.115:8787/): `http://18.237.81.115:8787/`
 
 Username and password are both your user ID (e.g. `user24`).
 
@@ -22,7 +22,7 @@ Username and password are both your user ID (e.g. `user24`).
 KEY="c1.pem"
 chmod 600 ${KEY}
 USER="user1"
-IP="35.166.251.18"
+IP="18.237.81.115"
 ssh -i ${KEY} ${USER}@${IP}
 ```
 
