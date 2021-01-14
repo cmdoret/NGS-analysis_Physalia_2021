@@ -4,15 +4,15 @@ title: " NGS analysis for gene regulation and epigenomics"
 
 This repo contains the instructions related to the 2021 Physalia course entitled "NGS analysis for gene regulation and epigenomics". 
 
-## IP for today (2021-01-13): 
+## IP for today (2021-01-14): 
 
 ```sh
-IP="34.219.124.212"
+IP="35.166.251.18"
 ```
 
 ## To log in RStudio server: 
 
-[Simply go to the following web page](http://34.219.124.212:8787/): `http://34.219.124.212:8787/`
+[Simply go to the following web page](http://35.166.251.18:8787/): `http://35.166.251.18:8787/`
 
 Username and password are both your user ID (e.g. `user24`).
 
@@ -22,7 +22,7 @@ Username and password are both your user ID (e.g. `user24`).
 KEY="c1.pem"
 chmod 600 ${KEY}
 USER="user1"
-IP="34.219.124.212"
+IP="35.166.251.18"
 ssh -i ${KEY} ${USER}@${IP}
 ```
 
